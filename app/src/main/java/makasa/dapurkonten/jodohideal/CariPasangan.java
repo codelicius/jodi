@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -32,9 +33,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import makasa.dapurkonten.jodohideal.adapter.ListPartnerAdapter;
 import makasa.dapurkonten.jodohideal.app.AppConfig;
 import makasa.dapurkonten.jodohideal.app.AppController;
 import makasa.dapurkonten.jodohideal.app.SQLiteController;
@@ -47,7 +51,9 @@ public class CariPasangan extends AppCompatActivity
     private SQLiteController db;
     private static String INI = CariPasangan.class.getSimpleName();
     private String urlCaPas = "http://jodi.licious.id/api/?userid=22&genderid=0&page=1&jodiPasangan";
-
+    private List<Partner> pasangan= new ArrayList<Partner>();
+    private ListView listView;
+    private ListPartnerAdapter adapter;
     final Context context = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +61,9 @@ public class CariPasangan extends AppCompatActivity
         setContentView(R.layout.activity_cari_pasangan);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        listView = (ListView) findViewById(R.id.listKecocokan);
+        adapter = new ListPartnerAdapter(this, pasangan);
+        listView.setAdapter(adapter);
 
         db = new SQLiteController(getApplicationContext());
         session = new sessionmanager(getApplicationContext());
@@ -94,7 +103,7 @@ public class CariPasangan extends AppCompatActivity
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d(INI, response.toString());
-
+                        progressDialog.dismiss();
                         try {
                             for (int i = 0; i < response.length(); i++) {
 
@@ -112,10 +121,11 @@ public class CariPasangan extends AppCompatActivity
                                 partner.setKecocokan(respon.getInt("match"));
                                 partner.setKetidakcocokan(respon.getInt("not_match"));
                                 partner.setUmur(respon.getInt("umur"));
-
+                                pasangan.add(partner);
                                 Log.d(INI, "sukses tambah pasangan ke object" + partner.getFullName());
 
                             }
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -123,6 +133,7 @@ public class CariPasangan extends AppCompatActivity
                                     "Error: " + e.getMessage(),
                                     Toast.LENGTH_LONG).show();
                         }
+                        adapter.notifyDataSetChanged();
 
                     }
                 }, new Response.ErrorListener() {

@@ -36,7 +36,6 @@ public class Partner {
     }
 
     public String getFullName(){
-        String fullName = firstName + " " + lastName;
         return fullName;
     }
 

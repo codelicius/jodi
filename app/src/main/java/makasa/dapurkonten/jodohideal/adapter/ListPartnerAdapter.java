@@ -12,6 +12,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
 public class ListPartnerAdapter extends BaseAdapter {
+    private static String INI = ListPartnerAdapter.class.getSimpleName();
     private Activity activity;
     private LayoutInflater inflater;
     private List<Partner> PartnerItem;
@@ -49,7 +51,6 @@ public class ListPartnerAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         if (inflater == null)
             inflater = (LayoutInflater) activity
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -92,6 +93,7 @@ public class ListPartnerAdapter extends BaseAdapter {
                 genreStr.length() - 2) : genreStr;
         genre.setText(genreStr);
         **/
+        Log.d(INI,"ok");
 
         return convertView;
     }
