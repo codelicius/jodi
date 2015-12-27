@@ -23,6 +23,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -34,6 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import makasa.dapurkonten.jodohideal.app.AppConfig;
+import makasa.dapurkonten.jodohideal.app.AppController;
 import makasa.dapurkonten.jodohideal.app.SQLiteController;
 import makasa.dapurkonten.jodohideal.object.Partner;
 
@@ -43,6 +46,7 @@ public class CariPasangan extends AppCompatActivity
     sessionmanager session;
     private SQLiteController db;
     private static String INI = CariPasangan.class.getSimpleName();
+    private String urlCaPas = "http://jodi.licious.id/api/?userid=22&genderid=0&page=1&jodiPasangan";
 
     final Context context = this;
     @Override
@@ -85,70 +89,54 @@ public class CariPasangan extends AppCompatActivity
         progressDialog.setMessage("Please Wait...");
         progressDialog.show();
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConfig.urlAPI,
-                new Response.Listener<String>() {
+        JsonArrayRequest req = new JsonArrayRequest(urlCaPas,
+                new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(String response) {
-                        progressDialog.dismiss();
+                    public void onResponse(JSONArray response) {
                         Log.d(INI, response.toString());
 
                         try {
-                            JSONObject jsonResponse = new JSONObject(response);
-                            //ambil nilai dari JSON respon API
-                            String  jodiStatus = jsonResponse.getString("status");
+                            for (int i = 0; i < response.length(); i++) {
 
-                            if(jodiStatus.equals("success")) {
+                                JSONObject respon = (JSONObject) response.get(i);
 
-                                JSONArray jodiPartner = jsonResponse.getJSONArray("partner");
+                                Partner partner = new Partner();
 
-                                for (int i=0; i<jodiPartner.length(); i++){
-                                    JSONObject respon = (JSONObject) jodiPartner.get(i);
+                                partner.setpID(respon.getInt("id_pasangan"));
+                                partner.setFullName(respon.getString("fname"), respon.getString("lname"));
+                                partner.setUrlFoto(respon.getString("foto"));
+                                partner.setGender(respon.getString("jenis_kelamin"));
+                                partner.setSuku(respon.getString("suku"));
+                                partner.setAgama(respon.getString("agama"));
 
-                                    Partner partner = new Partner();
+                                partner.setKecocokan(respon.getInt("match"));
+                                partner.setKetidakcocokan(respon.getInt("not_match"));
+                                partner.setUmur(respon.getInt("umur"));
 
-                                    partner.setpID(respon.getInt("partner_id"));
-                                    partner.setFullName(respon.getString("fname"), respon.getString("lname"));
-                                    partner.setUrlFoto(respon.getString("image"));
-                                    partner.setGender(respon.getString("gender"));
-                                    partner.setSuku(respon.getString("race"));
-                                    partner.setAgama(respon.getString("religion"));
+                                Log.d(INI, "sukses tambah pasangan ke object" + partner.getFullName());
 
-                                    partner.setKecocokan(respon.getInt("match"));
-                                    partner.setKetidakcocokan(respon.getInt("not_match"));
-                                    partner.setUmur(respon.getInt("age"));
-
-
-                                }
                             }
-                            else{
-                                String jodiMessage = jsonResponse.getString("message");
-                                Toast.makeText(CariPasangan.this, jodiMessage, Toast.LENGTH_LONG).show();
-                            }
-
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Toast.makeText(getApplicationContext(),
+                                    "Error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
                         }
+
                     }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(CariPasangan.this,error.toString(),Toast.LENGTH_LONG).show();
-                    }
-                }){
+                }, new Response.ErrorListener() {
             @Override
-            //proses kirim parameter ke
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("jodiLogin","");
-                return params;
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(INI, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+
             }
+        });
 
-        };
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(req);
     }
     @Override
     public void onBackPressed() {
