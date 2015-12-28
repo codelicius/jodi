@@ -8,10 +8,90 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <include
-        layout="@layout/app_bar_chat"
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:context="makasa.dapurkonten.jodohideal.Chat">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </android.support.design.widget.AppBarLayout>
+
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context="makasa.dapurkonten.jodohideal.Chat"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ListView
+                    android:id="@+id/chtView"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:divider="@null"
+                    android:stackFromBottom="false"
+                    android:transcriptMode="alwaysScroll"></ListView>
+
+            </LinearLayout>
+
+
+
+
+            <LinearLayout
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+
+                <EditText
+                    android:id="@+id/txtComposeMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Type Message ...."
+                    android:layout_weight="1.0"
+                    style="@style/edittext_msg" />
+
+                <Button
+                    android:id="@+id/btnSendMessage"
+                    android:background="@drawable/ic_send_dk"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/btn" />
+
+            </LinearLayout>
+        </RelativeLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
 
 
     <android.support.design.widget.NavigationView

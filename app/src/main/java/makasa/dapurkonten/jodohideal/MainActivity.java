@@ -15,11 +15,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,6 +55,13 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         customListView_chat=(ListView)findViewById(R.id.right_nav);
+        customListView_chat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Intent i = new Intent(getApplicationContext(), Chat.class);
+                startActivity(i);
+            }
+        });
 
         db = new SQLiteController(getApplicationContext());
 
