@@ -17,7 +17,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -55,18 +57,42 @@ public class CariPasangan extends AppCompatActivity
     private ListView listView;
     private ListPartnerAdapter adapter;
     final Context context = this;
+    private ProgressDialog pDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cari_pasangan);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        pDialog = new ProgressDialog(this);
+        pDialog.setMessage("Please wait...");
+        pDialog.setCancelable(false);
+
+        db = new SQLiteController(getApplicationContext());
+        session = new sessionmanager(getApplicationContext());
+
+        HashMap<String, String> user = session.getUserDetails();
+        final String userID = user.get(sessionmanager.SES_USER_ID);
+
         listView = (ListView) findViewById(R.id.listKecocokan);
         adapter = new ListPartnerAdapter(this, pasangan);
         listView.setAdapter(adapter);
 
-        db = new SQLiteController(getApplicationContext());
-        session = new sessionmanager(getApplicationContext());
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String pID = ((TextView)view.findViewById(R.id.txtPID)).getText().toString();
+                //Toast.makeText(getApplicationContext(), pID, Toast.LENGTH_LONG).show();
+                //lihatDetailPasangan(pID, userID);
+                Intent i = new Intent(getBaseContext(), OtherProfile.class);
+                i.putExtra("pID", pID);
+                i.putExtra("userID",userID);
+                startActivity(i);
+                finish();
+            }
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCariPasangan);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -91,6 +117,62 @@ public class CariPasangan extends AppCompatActivity
 
         listPasangan();
     }
+
+    private void lihatDetailPasangan(final String pID, final String userID){
+
+        showpDialog();
+
+       StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConfig.urlAPI,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(INI, response.toString());
+
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            //ambil nilai dari JSON respon API
+                            String  subscribe_status = jsonResponse.getString("subscribe_status");
+
+                            if(subscribe_status.equals("true")) {
+                                Toast.makeText(CariPasangan.this, "user berbayar", Toast.LENGTH_LONG).show();
+                            }
+                            else{
+                                Intent i = new Intent(getApplicationContext(), Subscribe.class);
+                                startActivity(i);
+                                Log.d(INI, "user tidak berbayar dan diarahkan ke halaman subscribe");
+                                finish();
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(CariPasangan.this,error.toString(),Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            //proses kirim parameter ke
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("jodiPartnerDetail", "");
+                params.put("userid",userID);
+                params.put("partner_userid",pID);
+                return params;
+            }
+
+
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+
+        hidepDialog();
+    }
+
 
     private void listPasangan(){
         final ProgressDialog progressDialog = new ProgressDialog(CariPasangan.this);
@@ -212,5 +294,15 @@ public class CariPasangan extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void showpDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hidepDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
     }
 }

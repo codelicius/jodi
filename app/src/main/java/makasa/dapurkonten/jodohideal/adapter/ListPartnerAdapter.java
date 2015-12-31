@@ -65,6 +65,7 @@ public class ListPartnerAdapter extends BaseAdapter {
         TextView fullName = (TextView) convertView.findViewById(R.id.txtCocokNama);
         TextView kecocokan = (TextView) convertView.findViewById(R.id.txtCocokPersen);
         TextView detail = (TextView) convertView.findViewById(R.id.txtCocokDetail);
+        TextView pID = (TextView) convertView.findViewById(R.id.txtPID);
 
         // getting movie data for the row
         Partner p = PartnerItem.get(position);
@@ -80,6 +81,8 @@ public class ListPartnerAdapter extends BaseAdapter {
         detail.setText(String.valueOf(p.getUmur()) + ", " +
                         p.getGender() + ", " + p.getSuku() + ", " +
                         p.getAgama());
+
+        pID.setText(String.valueOf(p.getpID()));
 
         /**
          *
