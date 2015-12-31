@@ -19,7 +19,6 @@
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".SplashScreen"
             android:label="@string/title_activity_splash_screen"
@@ -74,10 +73,14 @@
         <activity
             android:name=".Profile"
             android:label="@string/title_activity_profile"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".imageupload"
             android:label="@string/title_activity_profile"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".OtherProfile"
+            android:label="@string/title_activity_other_profile"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

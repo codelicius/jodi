@@ -93,5 +93,6 @@
     <string name="promptAgama">Pilih Agama</string>
     <string name="promptGender">Pilih Gender</string>
     <string name="title_activity_profile">Profile</string>
+    <string name="title_activity_other_profile">Profile</string>
 
 </resources>

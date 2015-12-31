@@ -39,6 +39,11 @@
         android:layout_toRightOf="@+id/thumbnailFoto"
         android:textColor="@color/listProfil"
         android:textSize="@dimen/listProfil" />
-
+    <TextView
+        android:id="@+id/txtPID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        />
 
 </RelativeLayout>
