@@ -52,7 +52,7 @@ public class CariPasangan extends AppCompatActivity
     sessionmanager session;
     private SQLiteController db;
     private static String INI = CariPasangan.class.getSimpleName();
-    private String urlCaPas = "http://jodi.licious.id/api/?userid=22&genderid=0&page=1&jodiPasangan";
+    private String urlCaPas = "http://jodi.licious.id/api/";
     private List<Partner> pasangan= new ArrayList<Partner>();
     private ListView listView;
     private ListPartnerAdapter adapter;
@@ -75,7 +75,7 @@ public class CariPasangan extends AppCompatActivity
 
         HashMap<String, String> user = session.getUserDetails();
         final String userID = user.get(sessionmanager.SES_USER_ID);
-
+        final String genderid=user.get(sessionmanager.SES_GENDER);
         listView = (ListView) findViewById(R.id.listKecocokan);
         adapter = new ListPartnerAdapter(this, pasangan);
         listView.setAdapter(adapter);
@@ -175,11 +175,14 @@ public class CariPasangan extends AppCompatActivity
 
 
     private void listPasangan(){
+        HashMap<String, String> user = session.getUserDetails();
+        String userid = user.get(sessionmanager.SES_USER_ID);
+        String genderid=user.get(sessionmanager.SES_GENDER);
         final ProgressDialog progressDialog = new ProgressDialog(CariPasangan.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Please Wait...");
         progressDialog.show();
-
+        urlCaPas = urlCaPas + "?userid="+userid+"&genderid="+genderid+"&page=1&jodiPasangan";
         JsonArrayRequest req = new JsonArrayRequest(urlCaPas,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -204,7 +207,6 @@ public class CariPasangan extends AppCompatActivity
                                 partner.setKetidakcocokan(respon.getInt("not_match"));
                                 partner.setUmur(respon.getInt("umur"));
                                 pasangan.add(partner);
-                                Log.d(INI, "sukses tambah pasangan ke object" + partner.getFullName());
 
                             }
 
