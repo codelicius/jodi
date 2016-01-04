@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -24,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -48,14 +50,12 @@ public class OtherProfile extends AppCompatActivity
         setContentView(R.layout.activity_other_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Please wait...");
-        pDialog.setCancelable(false);
-
         Bundle bundle = getIntent().getExtras();
         pID = bundle.getString("pID");
         userID = bundle.getString("userID");
+        pDialog = new ProgressDialog(this);
+        pDialog.setCancelable(false);
+
 
 
 
@@ -71,25 +71,43 @@ public class OtherProfile extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        lihatDetailPasangan(pID,userID);
+        lihatDetailPasangan();
     }
 
-    private void lihatDetailPasangan(final String pID, final String userID){
+    private void lihatDetailPasangan(){
+        final String userIDs = userID;
+        final String pIDs=pID;
+        final TextView fullName =(TextView) findViewById(R.id.viewProfileNama),
+                umur =(TextView) findViewById(R.id.viewProfileUmur),
+                gender=(TextView) findViewById(R.id.viewProfileGender),
+                suku=(TextView) findViewById(R.id.viewProfileSuku),
+                tb=(TextView) findViewById(R.id.viewProfileTinggi),
+                lokasi=(TextView) findViewById(R.id.viewProfileLokasi),
+                horoskop=(TextView) findViewById(R.id.viewProfileHoroskop),
+                pekerjaan=(TextView) findViewById(R.id.viewProfilePekerjaan),
+                merokok=(TextView) findViewById(R.id.viewProfileMerokok),
+                alkohol=(TextView) findViewById(R.id.viewProfileAlkohol);
 
         showpDialog();
-
         StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConfig.urlAPI,
+
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d(INI, response.toString());
-
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
                             //ambil nilai dari JSON respon API
                             String  subscribe_status = jsonResponse.getString("subscribe_status");
 
+
                             if(subscribe_status.equals("true")) {
+                                JSONArray d = jsonResponse.getJSONArray("partner_detail");
+                                for (int i=0; i<d.length(); i++){
+                                    JSONObject detail = (JSONObject) d.get(i);
+                                    String fname = detail.getString("fname");
+                                    fullName.setText(fname);
+
+                                }
                                 Toast.makeText(OtherProfile.this, "user berbayar", Toast.LENGTH_LONG).show();
                             }
                             else{
@@ -116,8 +134,8 @@ public class OtherProfile extends AppCompatActivity
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("jodiPartnerDetail", "");
-                params.put("userid",userID);
-                params.put("partner_userid",pID);
+                params.put("userid",userIDs);
+                params.put("partner_userid",pIDs);
                 return params;
             }
 
