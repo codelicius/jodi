@@ -83,6 +83,7 @@ public class OtherProfile extends AppCompatActivity
                 suku=(TextView) findViewById(R.id.viewProfileSuku),
                 tb=(TextView) findViewById(R.id.viewProfileTinggi),
                 lokasi=(TextView) findViewById(R.id.viewProfileLokasi),
+                agama=(TextView) findViewById(R.id.viewProfileAgama),
                 horoskop=(TextView) findViewById(R.id.viewProfileHoroskop),
                 pekerjaan=(TextView) findViewById(R.id.viewProfilePekerjaan),
                 merokok=(TextView) findViewById(R.id.viewProfileMerokok),
@@ -101,14 +102,34 @@ public class OtherProfile extends AppCompatActivity
 
 
                             if(subscribe_status.equals("true")) {
-                                JSONArray d = jsonResponse.getJSONArray("partner_detail");
-                                for (int i=0; i<d.length(); i++){
-                                    JSONObject detail = (JSONObject) d.get(i);
-                                    String fname = detail.getString("fname");
-                                    fullName.setText(fname);
-
-                                }
-                                Toast.makeText(OtherProfile.this, "user berbayar", Toast.LENGTH_LONG).show();
+                                JSONObject pd = jsonResponse.getJSONObject("partner_detail");
+                                String apiFullName = pd.getString("fname") + " " +pd.getString("lname");
+                                String apiId = pd.getString("id_pasangan");
+                                String apiUmur = pd.getString("umur");
+                                String apiFoto = pd.getString("foto");
+                                String apiGender = pd.getString("jenis_kelamin");
+                                String apiSuku = pd.getString("suku");
+                                String apiAgama = pd.getString("agama");
+                                String apiTinggi = pd.getString("tinggi");
+                                String apiLokasi = pd.getString("lokasi");
+                                String apiHoroskop = pd.getString("horoskop");
+                                String apiPekerjaan = pd.getString("pekerjaan");
+                                String apiRokok = pd.getString("rokok");
+                                String apiAlkohol = pd.getString("alkohol");
+                                String apiDetail = pd.getString("detail");
+                                String apiMatch = pd.getString("match");
+                                String apiNotMatch = pd.getString("not_match");
+                                fullName.setText(apiFullName);
+                                umur.setText(apiUmur);
+                                suku.setText(apiSuku);
+                                tb.setText(apiTinggi);
+                                lokasi.setText(apiLokasi);
+                                gender.setText(apiGender);
+                                agama.setText(apiAgama);
+                                horoskop.setText(apiHoroskop);
+                                pekerjaan.setText(apiPekerjaan);
+                                merokok.setText(apiRokok);
+                                alkohol.setText(apiAlkohol);
                             }
                             else{
                                 Intent i = new Intent(getApplicationContext(), Subscribe.class);
