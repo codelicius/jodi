@@ -53,9 +53,10 @@ public class OtherProfile extends AppCompatActivity
         Bundle bundle = getIntent().getExtras();
         pID = bundle.getString("pID");
         userID = bundle.getString("userID");
-        pDialog = new ProgressDialog(this);
-        pDialog.setCancelable(false);
-
+        pDialog = new ProgressDialog(OtherProfile.this);
+        pDialog.setIndeterminate(true);
+        pDialog.setMessage("Please Wait...");
+        pDialog.show();
 
 
 
@@ -89,7 +90,6 @@ public class OtherProfile extends AppCompatActivity
                 merokok=(TextView) findViewById(R.id.viewProfileMerokok),
                 alkohol=(TextView) findViewById(R.id.viewProfileAlkohol);
 
-        showpDialog();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConfig.urlAPI,
 
                 new Response.Listener<String>() {
@@ -138,7 +138,6 @@ public class OtherProfile extends AppCompatActivity
                                 finish();
                             }
 
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -168,15 +167,6 @@ public class OtherProfile extends AppCompatActivity
         hidepDialog();
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,8 +49,9 @@ import makasa.dapurkonten.jodohideal.object.Partner;
 
 public class CariPasangan extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
     sessionmanager session;
+    Button loadMore;
+    int page = 1;
     private SQLiteController db;
     private static String INI = CariPasangan.class.getSimpleName();
     private String urlCaPas = "http://jodi.licious.id/api/";
@@ -65,7 +67,8 @@ public class CariPasangan extends AppCompatActivity
         setContentView(R.layout.activity_cari_pasangan);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        loadMore = (Button) findViewById(R.id.btnLoadMore);
+        loadMore.setVisibility(View.INVISIBLE);
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Please wait...");
         pDialog.setCancelable(false);
@@ -115,66 +118,10 @@ public class CariPasangan extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        listPasangan();
+        listPasangan(page);
     }
 
-    private void lihatDetailPasangan(final String pID, final String userID){
-
-        showpDialog();
-
-       StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConfig.urlAPI,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d(INI, response.toString());
-
-                        try {
-                            JSONObject jsonResponse = new JSONObject(response);
-                            //ambil nilai dari JSON respon API
-                            String  subscribe_status = jsonResponse.getString("subscribe_status");
-
-                            if(subscribe_status.equals("true")) {
-                                Toast.makeText(CariPasangan.this, "user berbayar", Toast.LENGTH_LONG).show();
-                            }
-                            else{
-                                Intent i = new Intent(getApplicationContext(), Subscribe.class);
-                                startActivity(i);
-                                Log.d(INI, "user tidak berbayar dan diarahkan ke halaman subscribe");
-                                finish();
-                            }
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(CariPasangan.this,error.toString(),Toast.LENGTH_LONG).show();
-                    }
-                }){
-            @Override
-            //proses kirim parameter ke
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("jodiPartnerDetail", "");
-                params.put("userid",userID);
-                params.put("partner_userid",pID);
-                return params;
-            }
-
-
-        };
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
-
-        hidepDialog();
-    }
-
-
-    private void listPasangan(){
+    private void listPasangan(int pages){
         HashMap<String, String> user = session.getUserDetails();
         String userid = user.get(sessionmanager.SES_USER_ID);
         String genderid=user.get(sessionmanager.SES_GENDER);
@@ -182,13 +129,14 @@ public class CariPasangan extends AppCompatActivity
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Please Wait...");
         progressDialog.show();
-        urlCaPas = urlCaPas + "?userid="+userid+"&genderid="+genderid+"&page=1&jodiPasangan";
+        urlCaPas = urlCaPas + "?userid="+userid+"&genderid="+genderid+"&page="+pages+"&jodiPasangan";
         JsonArrayRequest req = new JsonArrayRequest(urlCaPas,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d(INI, response.toString());
                         progressDialog.dismiss();
+                        loadMore.setVisibility(View.VISIBLE);
                         try {
                             for (int i = 0; i < response.length(); i++) {
 
@@ -209,7 +157,7 @@ public class CariPasangan extends AppCompatActivity
                                 pasangan.add(partner);
 
                             }
-
+                            page++;
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -241,6 +189,9 @@ public class CariPasangan extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+    }
+    public void loadMoreEvent(View view){
+        listPasangan(page);
     }
 
     @Override
