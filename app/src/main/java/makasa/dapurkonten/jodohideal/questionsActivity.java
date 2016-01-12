@@ -19,7 +19,7 @@ import java.util.HashMap;
 
 public class questionsActivity extends AppCompatActivity{
     private SQLiteController db;
-    TextView pertanyaans,idquestion,error;
+    TextView pertanyaans,idquestion;
     Button goto_next,goto_prev;
     RadioGroup groupQuestion;
     RadioButton question1,question2;
@@ -37,7 +37,6 @@ public class questionsActivity extends AppCompatActivity{
         goto_next = (Button)findViewById(R.id.goto_next);
         goto_prev = (Button)findViewById(R.id.goto_previous);
         groupQuestion = (RadioGroup)findViewById(R.id.groupQuestion);
-        error = (TextView)findViewById(R.id.error);
         question1 = (RadioButton)findViewById(R.id.question1);
         question2 = (RadioButton)findViewById(R.id.question2);
         goto_prev.setVisibility(View.INVISIBLE);
@@ -49,7 +48,7 @@ public class questionsActivity extends AppCompatActivity{
                 answer_ops1=tenQuestion.get("answer_ops1"),
                 answer_ops2=tenQuestion.get("answer_ops2");
         pertanyaans.setText(question);
-        idquestion.setText(id);
+        idquestion.setText("Question " + id + " of 10");
         question1.setText(answer_ops1);
         question2.setText(answer_ops2);
 
@@ -73,15 +72,16 @@ public class questionsActivity extends AppCompatActivity{
                         answer_ops1 = tenQuestion.get("answer_ops1"),
                         answer_ops2 = tenQuestion.get("answer_ops2");
                 pertanyaans.setText(question);
-                idquestion.setText(id);
-                error.setText(t.getText());
+                idquestion.setText("Question " + id + " of 10");
+                //error.setText(t.getText());
+                Toast.makeText(this, t.getText(), Toast.LENGTH_LONG).show();
                 question1.setText(answer_ops1);
                 question2.setText(answer_ops2);
                 goto_prev.setVisibility(View.VISIBLE);
             }
         }
             else{
-                error.setText("silakan pilih salah satu");
+                Toast.makeText(this, "Silahkan pilih salah satu jawaban terlebih dahulu", Toast.LENGTH_LONG).show();
             }
     }
     public void previous (View view){
@@ -98,7 +98,7 @@ public class questionsActivity extends AppCompatActivity{
                     answer_ops1=tenQuestion.get("answer_ops1"),
                     answer_ops2=tenQuestion.get("answer_ops2");
             pertanyaans.setText(question);
-            idquestion.setText(id);
+            idquestion.setText("Question " + id + " of 10");
             question1.setText(answer_ops1);
             question2.setText(answer_ops2);
             goto_next.setText("Next");
