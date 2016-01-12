@@ -1,5 +1,6 @@
 package makasa.dapurkonten.jodohideal;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -23,13 +24,21 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import makasa.dapurkonten.jodohideal.adapter.ListPartnerAdapter;
+import makasa.dapurkonten.jodohideal.app.AppController;
 import makasa.dapurkonten.jodohideal.app.SQLiteController;
 import makasa.dapurkonten.jodohideal.object.Partner;
 
@@ -43,14 +52,15 @@ public class MainActivity extends AppCompatActivity
     TextView txtNama, txtTinggi, txtLokasi,txtHoroskop, txtPekerjaan, txtAgama,
             txtTentang, txtDrawerNama,txtDrawerEmail, txtShortDescription, lblAbout;
     private static String INI = MainActivity.class.getSimpleName();
-    private List<Partner> partnerList = new ArrayList<Partner>();
     private ListView listView;
-    private ListPartnerAdapter adapter;
+    private List<Partner> pasanganArray = new ArrayList<Partner>();
+    private ListPartnerAdapter adapterListPasangan;
     ImageButton btnTglChat;
     ArrayList<String> dataArray_right=new ArrayList<String>();
     ArrayList<Object> objectArray_right=new ArrayList<Object>();
     ChatItemAdapter adapterChat;
     ListView customListView_chat;
+    private String urlAPI = "http://jodi.licious.id/api/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +102,7 @@ public class MainActivity extends AppCompatActivity
         String firstName = user.get(sessionmanager.SES_FIRST_NAME);
         String lastname = user.get(sessionmanager.SES_LAST_NAME);
         String email = user.get(sessionmanager.SES_EMAIL);
+        final String userID = user.get(sessionmanager.SES_USER_ID);
 
 
         //set dalam textview
@@ -117,6 +128,25 @@ public class MainActivity extends AppCompatActivity
         //round = new roundimage(bm);
         //imageView.setImageDrawable(round);
 
+        //list pasangan yang cocok
+        adapterListPasangan = new ListPartnerAdapter(this, pasanganArray);
+        listView = (ListView) findViewById(R.id.listKecocokan);
+        listView.setAdapter(adapterListPasangan);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String pID = ((TextView) view.findViewById(R.id.txtPID)).getText().toString();
+                //Toast.makeText(getApplicationContext(), pID, Toast.LENGTH_LONG).show();
+                //lihatDetailPasangan(pID, userID);
+                Intent i = new Intent(getBaseContext(), OtherProfile.class);
+                i.putExtra("pID", pID);
+                i.putExtra("userID", userID);
+                startActivity(i);
+                finish();
+            }
+        });
+
+        //toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -176,6 +206,7 @@ public class MainActivity extends AppCompatActivity
 
         IsiChat();
         RefreshListChat();
+        listPasangan();
     }
 
     public void RefreshListChat() {
@@ -217,6 +248,66 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }**/
+
+    private void listPasangan(){
+        HashMap<String, String> user = session.getUserDetails();
+        String userid = user.get(sessionmanager.SES_USER_ID);
+        String genderid=user.get(sessionmanager.SES_GENDER);
+        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Please Wait...");
+        progressDialog.show();
+        urlAPI = urlAPI + "?userid="+userid+"&genderid="+genderid+"&page=1&jodiPasangan";
+        JsonArrayRequest req = new JsonArrayRequest(urlAPI,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(INI, response.toString());
+                        progressDialog.dismiss();
+
+                        try {
+                            for (int i = 0; i < response.length(); i++) {
+
+                                JSONObject respon = (JSONObject) response.get(i);
+
+                                Partner partner = new Partner();
+
+                                partner.setpID(respon.getInt("id_pasangan"));
+                                partner.setFullName(respon.getString("fname"), respon.getString("lname"));
+                                partner.setUrlFoto(respon.getString("foto"));
+                                partner.setGender(respon.getString("jenis_kelamin"));
+                                partner.setSuku(respon.getString("suku"));
+                                partner.setAgama(respon.getString("agama"));
+
+                                partner.setKecocokan(respon.getInt("match"));
+                                partner.setKetidakcocokan(respon.getInt("not_match"));
+                                partner.setUmur(respon.getInt("umur"));
+                                pasanganArray.add(partner);
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(),
+                                    "Error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                        adapterListPasangan.notifyDataSetChanged();
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(INI, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(req);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

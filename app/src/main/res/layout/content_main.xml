@@ -181,12 +181,15 @@
                 android:background="@color/white"
                 />
 
-            <ListView
-                android:id="@+id/listKecocokan"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:divider="@color/gray"
-                android:dividerHeight="1dp"/>
+
+
         </LinearLayout>
+        <ListView
+            android:id="@+id/listKecocokan"
+            android:layout_width="fill_parent"
+            android:layout_height="600dp"
+            android:divider="@color/white"
+            android:dividerHeight="1dp"
+            android:background="@null"/>
     </LinearLayout>
 </ScrollView>
