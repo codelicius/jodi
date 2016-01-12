@@ -122,8 +122,6 @@ public class Profile extends AppCompatActivity
             startActivity(hm);
         }
         else if (id == R.id.nav_profile) {
-            Intent prfl = new Intent(this, Profile.class);
-            startActivity(prfl);
         }
         else if (id == R.id.nav_pasangan) {
             Intent psg = new Intent(getApplicationContext(), CariPasangan.class);

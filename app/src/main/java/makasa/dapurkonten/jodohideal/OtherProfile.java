@@ -2,9 +2,12 @@ package makasa.dapurkonten.jodohideal;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.util.LruCache;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -22,6 +25,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -43,6 +48,9 @@ public class OtherProfile extends AppCompatActivity
     private static String INI = CariPasangan.class.getSimpleName();
     private String pID = "";
     private String userID = "";
+    private RequestQueue mRequestQueue;
+    private ImageLoader mImageLoader;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +66,16 @@ public class OtherProfile extends AppCompatActivity
         pDialog.setMessage("Please Wait...");
         pDialog.show();
 
-
+        mRequestQueue = Volley.newRequestQueue(this);
+        mImageLoader = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
+            private final LruCache<String, Bitmap> mCache = new LruCache<String, Bitmap>(10);
+            public void putBitmap(String url, Bitmap bitmap) {
+                mCache.put(url, bitmap);
+            }
+            public Bitmap getBitmap(String url) {
+                return mCache.get(url);
+            }
+        });
 
         db = new SQLiteController(getApplicationContext());
         session = new sessionmanager(getApplicationContext());
@@ -89,6 +106,7 @@ public class OtherProfile extends AppCompatActivity
                 pekerjaan=(TextView) findViewById(R.id.viewProfilePekerjaan),
                 merokok=(TextView) findViewById(R.id.viewProfileMerokok),
                 alkohol=(TextView) findViewById(R.id.viewProfileAlkohol);
+        final NetworkImageView foto = (NetworkImageView)findViewById(R.id.thumbnailFoto);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConfig.urlAPI,
 
@@ -130,6 +148,7 @@ public class OtherProfile extends AppCompatActivity
                                 pekerjaan.setText(apiPekerjaan);
                                 merokok.setText(apiRokok);
                                 alkohol.setText(apiAlkohol);
+                                foto.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + apiFoto, mImageLoader);
                             }
                             else{
                                 Intent i = new Intent(getApplicationContext(), Subscribe.class);

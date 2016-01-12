@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity
 
                                 partner.setpID(respon.getInt("id_pasangan"));
                                 partner.setFullName(respon.getString("fname"), respon.getString("lname"));
-                                partner.setUrlFoto(respon.getString("foto"));
+                                partner.setUrlFoto("http://103.253.112.121/jodohidealxl/upload/"+respon.getString("foto"));
                                 partner.setGender(respon.getString("jenis_kelamin"));
                                 partner.setSuku(respon.getString("suku"));
                                 partner.setAgama(respon.getString("agama"));

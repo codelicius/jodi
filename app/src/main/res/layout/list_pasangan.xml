@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_weight=".70">
 
-        <com.android.volley.toolbox.NetworkImageView
+        <makasa.dapurkonten.jodohideal.object.circleImage
             android:id="@+id/thumbnailFoto"
             android:layout_width="80dp"
             android:layout_height="90dp"
