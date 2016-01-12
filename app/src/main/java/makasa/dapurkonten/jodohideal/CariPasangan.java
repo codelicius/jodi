@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -50,7 +51,7 @@ import makasa.dapurkonten.jodohideal.object.Partner;
 public class CariPasangan extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     sessionmanager session;
-    Button loadMore;
+    Button btnLoadMore;
     int page = 1;
     private SQLiteController db;
     private static String INI = CariPasangan.class.getSimpleName();
@@ -67,8 +68,7 @@ public class CariPasangan extends AppCompatActivity
         setContentView(R.layout.activity_cari_pasangan);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        loadMore = (Button) findViewById(R.id.btnLoadMore);
-        loadMore.setVisibility(View.INVISIBLE);
+
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Please wait...");
         pDialog.setCancelable(false);
@@ -76,12 +76,24 @@ public class CariPasangan extends AppCompatActivity
         db = new SQLiteController(getApplicationContext());
         session = new sessionmanager(getApplicationContext());
 
+        btnLoadMore = new Button(this);
+        btnLoadMore.setText("load more");
+        btnLoadMore.setTextColor(Color.BLACK);
+        btnLoadMore.setBackgroundColor(Color.TRANSPARENT);
+        btnLoadMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listPasangan(page);
+            }
+        });
+
         HashMap<String, String> user = session.getUserDetails();
         final String userID = user.get(sessionmanager.SES_USER_ID);
         final String genderid=user.get(sessionmanager.SES_GENDER);
         listView = (ListView) findViewById(R.id.listKecocokan);
         adapter = new ListPartnerAdapter(this, pasangan);
         listView.setAdapter(adapter);
+        listView.addFooterView(btnLoadMore);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -136,7 +148,7 @@ public class CariPasangan extends AppCompatActivity
                     public void onResponse(JSONArray response) {
                         Log.d(INI, response.toString());
                         progressDialog.dismiss();
-                        loadMore.setVisibility(View.VISIBLE);
+
                         try {
                             for (int i = 0; i < response.length(); i++) {
 

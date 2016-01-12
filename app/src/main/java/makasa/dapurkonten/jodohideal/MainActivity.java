@@ -23,6 +23,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +40,8 @@ public class MainActivity extends AppCompatActivity
     ImageView imageView;
     sessionmanager session;
     private SQLiteController db;
-    TextView txtNama, txtTinggi, txtLokasi,txtHoroskop, txtPekerjaan, txtAgama, txtTentang, txtDrawerNama,txtDrawerEmail;
+    TextView txtNama, txtTinggi, txtLokasi,txtHoroskop, txtPekerjaan, txtAgama,
+            txtTentang, txtDrawerNama,txtDrawerEmail, txtShortDescription, lblAbout;
     private static String INI = MainActivity.class.getSimpleName();
     private List<Partner> partnerList = new ArrayList<Partner>();
     private ListView listView;
@@ -97,12 +100,17 @@ public class MainActivity extends AppCompatActivity
         txtDrawerEmail = (TextView)findViewById(R.id.txtDrawerEmail);
         txtLokasi = (TextView)findViewById(R.id.txtProfilLokasi);
         txtTentang = (TextView)findViewById(R.id.txtProfilTentang);
+        txtShortDescription = (TextView)findViewById(R.id.txtShortDescription) ;
+        lblAbout = (TextView)findViewById(R.id.lblAbout);
 
-        txtNama.setText(firstName + " " + lastname + "," + age);
+        txtNama.setText(firstName + " " + lastname + ", " + age);
         txtDrawerNama.setText(firstName);
         txtDrawerEmail.setText(email);
         txtLokasi.setText(location);
         txtTentang.setText(userDetail);
+        txtShortDescription.setText("Tinggi " + height + " cm, " + horoscope + ", " + job
+                            + ", " + religion);
+        lblAbout.setText("Tentang " + firstName + " " + lastname);
 
         imageView = (ImageView) findViewById(R.id.imageView);
         //Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.avatar);

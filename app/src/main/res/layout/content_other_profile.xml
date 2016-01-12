@@ -30,7 +30,7 @@
             android:layout_toRightOf="@+id/thumbnailFoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Codelicius"
+            android:text=""
             android:textSize="16sp"/>
 
         <TextView
@@ -39,7 +39,7 @@
             android:layout_toRightOf="@+id/thumbnailFoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="31 Thun" />
+            android:text="" />
 
         <TextView
             android:id="@+id/viewProfileGender"
@@ -47,7 +47,7 @@
             android:layout_toRightOf="@+id/thumbnailFoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cewek" />
+            android:text="" />
 
         <TextView
             android:id="@+id/viewProfileSuku"
@@ -55,7 +55,7 @@
             android:layout_toRightOf="@+id/thumbnailFoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Madura / Islam" />
+            android:text="" />
 
     </RelativeLayout>
 
@@ -81,7 +81,7 @@
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_height="wrap_content"
-            android:text=": 175 cm"/>
+            android:text=":"/>
     </LinearLayout>
     <LinearLayout
         android:layout_marginTop="5dp"
@@ -98,7 +98,7 @@
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_height="wrap_content"
-            android:text=": Jakarta"/>
+            android:text=": "/>
     </LinearLayout>
 
     <LinearLayout
@@ -116,7 +116,7 @@
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_height="wrap_content"
-            android:text=": Taurus"/>
+            android:text=": "/>
     </LinearLayout>
 
     <LinearLayout
@@ -134,7 +134,7 @@
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_height="wrap_content"
-            android:text=": Artis"/>
+            android:text=": "/>
     </LinearLayout>
 
     <LinearLayout
@@ -152,7 +152,7 @@
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_height="wrap_content"
-            android:text=": Islam"/>
+            android:text=": "/>
     </LinearLayout>
 
     <LinearLayout
@@ -170,7 +170,7 @@
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_height="wrap_content"
-            android:text=": Ya"/>
+            android:text=": "/>
     </LinearLayout>
 
     <LinearLayout
@@ -188,6 +188,6 @@
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_height="wrap_content"
-            android:text=": Tidak"/>
+            android:text=": "/>
     </LinearLayout>
 </LinearLayout>

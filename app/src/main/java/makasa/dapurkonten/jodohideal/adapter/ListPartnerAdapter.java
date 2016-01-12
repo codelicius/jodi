@@ -54,8 +54,9 @@ public class ListPartnerAdapter extends BaseAdapter {
         if (inflater == null)
             inflater = (LayoutInflater) activity
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //set list row here
         if (convertView == null)
-            convertView = inflater.inflate(R.layout.list_row, null);
+            convertView = inflater.inflate(R.layout.list_pasangan, null);
 
         if (imageLoader == null)
             imageLoader = AppController.getInstance().getImageLoader();
@@ -76,7 +77,7 @@ public class ListPartnerAdapter extends BaseAdapter {
         fullName.setText(p.getFullName());
 
         // jika nilai berupa integer atau double atau float, maka diubah kestring dengan string valueof
-        kecocokan.setText(String.valueOf(p.getKecocokan()) + "% Kecocokan");
+        kecocokan.setText(String.valueOf(p.getKecocokan()) + "%");
 
         detail.setText(String.valueOf(p.getUmur()) + ", " +
                         p.getGender() + ", " + p.getSuku() + ", " +

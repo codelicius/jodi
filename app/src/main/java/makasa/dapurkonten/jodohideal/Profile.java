@@ -118,7 +118,8 @@ public class Profile extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-
+            Intent hm = new Intent(this, MainActivity.class);
+            startActivity(hm);
         }
         else if (id == R.id.nav_profile) {
             Intent prfl = new Intent(this, Profile.class);
