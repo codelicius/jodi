@@ -40,6 +40,7 @@ import makasa.dapurkonten.jodohideal.object.Partner;
 
 public class Subscribe extends AppCompatActivity {
     private static String INI = Subscribe.class.getSimpleName();
+    sessionmanager session;
     final String userIMSI = "user";
     final String passIMSI = "pass";
     final String APIIMSI = "http://103.253.112.121/quiz_api/imsi_api.php";
@@ -53,6 +54,7 @@ public class Subscribe extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subscribe);
+        session = new sessionmanager(getApplicationContext());
         tel = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -95,16 +97,19 @@ public class Subscribe extends AppCompatActivity {
         Random r = new Random();
         int i1 = r.nextInt(max - min + 1) + min;
         int rand=i1+i1;
-        String chargePrice = "300";
-        String timeDuration;
+        HashMap<String,String>user = session.getUserDetails();
+        final String userid=user.get(sessionmanager.SES_USER_ID);
+        String chargePrice = "3000";
+        String timeDuration = "1";
         if(opsi==1){
-            chargePrice = "500";
+            chargePrice = "5000";
             timeDuration = "7"; //days
         }
         else if(opsi==2){
-            chargePrice = "300";
+            chargePrice = "3000";
             timeDuration = "14"; //days
         }
+        final String timeDurations=timeDuration;
         final String APICharge = "http://103.253.112.121/quiz_api/charge_api.php";
         final String url = APICharge+"?mdn="+mdn+"&seqid="+rand+"&charge="+chargePrice+"&user="+userIMSI+"&pass="+passIMSI;
         final String mdns = mdn;
@@ -112,11 +117,20 @@ public class Subscribe extends AppCompatActivity {
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        // the response is already constructed as a JSONObject!
                         try {
                             String status = response.getString("return_code");
-                            sendMsg(mdns);
-                            message.setText(response.toString());
+                            Log.d(INI,response.toString());
+                            if(status.equals("1")) {
+                                sendMsg(mdns);
+                                addDuration(userid, timeDurations);
+                                Toast.makeText(Subscribe.this,"thanks for subscribe",Toast.LENGTH_LONG).show();
+                                Intent i =new Intent(getBaseContext(),MainActivity.class);
+                                startActivity(i);
+                                finish();
+                            }
+                            else{
+                                message.setText("gagal berlangganan");
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -144,7 +158,7 @@ public class Subscribe extends AppCompatActivity {
                         try {
                             String status = response.getString("return_code");
                             message.setText(response.toString());
-                            Log.d(INI,url);
+                            Log.d(INI, url);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -159,5 +173,36 @@ public class Subscribe extends AppCompatActivity {
 
         // Adding request to request queue
         Volley.newRequestQueue(this).add(jsonRequest);
+    }
+    public void addDuration(String userid,String duration){
+        final String userids = userid;
+        final String durations = duration;
+
+        final String API = AppConfig.urlAPI;
+        StringRequest postRequest = new StringRequest(Request.Method.POST, API,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("jodiDuration", "");
+                params.put("userid", userids);
+                params.put("duration", durations);
+                return params;
+            }
+        };
+        Volley.newRequestQueue(this).add(postRequest);
     }
 }

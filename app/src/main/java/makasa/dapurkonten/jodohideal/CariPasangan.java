@@ -235,7 +235,7 @@ public class CariPasangan extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            Intent hm = new Intent(getApplicationContext(), MainActivity.class);
+            Intent hm = new Intent(getApplicationContext(),  MainActivity.class);
             startActivity(hm);
 
         }
