@@ -58,7 +58,7 @@ public class Chat extends AppCompatActivity
     private boolean side = false;
     private ChatArrayAdapter chatArrayAdapter;
     private ListView listView;
-    private String urlAPI;
+    private String urlAPI,partnerID;
     private static String INI = Chat.class.getSimpleName();
 
     @Override
@@ -67,6 +67,8 @@ public class Chat extends AppCompatActivity
         setContentView(R.layout.activity_chat);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Bundle bundle=getIntent().getExtras();
+        partnerID = bundle.getString("pID");
 
         session = new sessionmanager(getApplicationContext());
         //session.checkLogin();
@@ -108,13 +110,17 @@ public class Chat extends AppCompatActivity
 
                 message = txtComposeMessage.getText();
                 if (message.length()>0){
-                    sendChatMessage();
+                    HashMap<String, String> user = session.getUserDetails();
+                    final String userID = user.get(sessionmanager.SES_USER_ID);
+                    final String pID= partnerID;
+                    final String pesan = txtComposeMessage.getText().toString();
+                    sendChatMessage(userID,pID,pesan);
                 }
 
             }
         });
         //set partner id here
-        getChatHistory("2316");
+        getChatHistory(partnerID);
     }
 
     @Override
@@ -181,11 +187,45 @@ public class Chat extends AppCompatActivity
         return true;
     }
 
-    private boolean sendChatMessage() {
-        chatArrayAdapter.add(new ChatMessage(side, txtComposeMessage.getText().toString()));
+    private void sendChatMessage(final String userID,final String partnerID,final String message) {
+        chatArrayAdapter.add(new ChatMessage("right", txtComposeMessage.getText().toString()));
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConfig.urlAPI,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(INI, response.toString());
+
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+
+                            String  jodiStatus = jsonResponse.getString("history");
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(Chat.this,error.toString(),Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            //proses kirim parameter ke
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("userid",userID);
+                params.put("partner_id",partnerID);
+                params.put("txt_message",message);
+                params.put("jodiWriteChat","");
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
         txtComposeMessage.setText("");
-        side = !side;
-        return true;
     }
 
     private void getChatHistory(final String partnerID){
@@ -195,11 +235,10 @@ public class Chat extends AppCompatActivity
         final ProgressDialog progressDialog = new ProgressDialog(Chat.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Please Wait...");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
-        urlAPI = AppConfig.urlAPI + "?userid="+userID+"&partner_id="+partnerID+"&jodiHistoryChat";
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, urlAPI,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConfig.urlAPI,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -211,9 +250,9 @@ public class Chat extends AppCompatActivity
 
                             String  jodiStatus = jsonResponse.getString("history");
 
-                            if(jodiStatus.equals(1)) {
+                            if(jodiStatus.equals("1")) {
 
-                                JSONArray allChat = jsonResponse.getJSONArray("partner");
+                                JSONArray allChat = jsonResponse.getJSONArray("message");
 
                                 for (int i=0; i<allChat.length(); i++){
                                     JSONObject cht = (JSONObject) allChat.get(i);
@@ -221,18 +260,12 @@ public class Chat extends AppCompatActivity
                                     int senderID = cht.getInt("sent_id"),
                                             recipientID = cht.getInt("recipient_id");
                                     String message = cht.getString("message");
-
-                                    chats.setSenderID(senderID);
-                                    chats.setRecipientID(recipientID);
-                                    chats.setChatMessage(message);
-
-
+                                    if(senderID == Integer.parseInt(userID))
+                                        chatArrayAdapter.add(new ChatMessage("right", message));
+                                    else
+                                        chatArrayAdapter.add(new ChatMessage("left", message));
+                                    Log.d(INI,"history" +senderID+recipientID+message);
                                 }
-                            }
-                            else{
-
-                                Toast.makeText(Chat.this, "Have you chat wth them before?", Toast.LENGTH_LONG).show();
-
                             }
 
 
@@ -252,7 +285,7 @@ public class Chat extends AppCompatActivity
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("userid",userID);
-                params.put("partnerID",partnerID);
+                params.put("partner_id",partnerID);
                 params.put("jodiHistoryChat","");
                 return params;
             }

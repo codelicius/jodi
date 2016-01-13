@@ -140,6 +140,7 @@ public class CariPasangan extends AppCompatActivity
         final ProgressDialog progressDialog = new ProgressDialog(CariPasangan.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Please Wait...");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         urlCaPas = urlCaPas + "?userid="+userid+"&genderid="+genderid+"&page="+pages+"&jodiPasangan";
         JsonArrayRequest req = new JsonArrayRequest(urlCaPas,

@@ -56,6 +56,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="" />
+        <Button
+            android:id="@+id/viewProfilePesan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/viewProfileSuku"
+            android:layout_toRightOf="@+id/thumbnailFoto"
+            android:onClick="kirimPesan"
+            android:text="kirim pesan"/>
 
     </RelativeLayout>
 

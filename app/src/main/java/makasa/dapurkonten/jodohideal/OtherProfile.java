@@ -51,7 +51,6 @@ public class OtherProfile extends AppCompatActivity
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +89,12 @@ public class OtherProfile extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         lihatDetailPasangan();
+    }
+    public void kirimPesan(View view){
+        Intent i = new Intent(getBaseContext(), Chat.class);
+        i.putExtra("pID", pID);
+        startActivity(i);
+        finish();
     }
 
     private void lihatDetailPasangan(){

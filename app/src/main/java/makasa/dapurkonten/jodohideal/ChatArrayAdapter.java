@@ -13,8 +13,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
+import makasa.dapurkonten.jodohideal.object.ChatHistory;
 
+class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
+    private static String INI = ChatArrayAdapter.class.getSimpleName();
+    private ChatHistory chat;
     private TextView chatText;
     private List<ChatMessage> chatMessageList = new ArrayList<ChatMessage>();
     private Context context;
@@ -42,11 +45,11 @@ class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
         ChatMessage chatMessageObj = getItem(position);
         View row = convertView;
         LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //if (chatMessageObj.left) {
+        if (chatMessageObj.position.equals("right")) {
             row = inflater.inflate(R.layout.right_msg, parent, false);
-        //}else{
-        //    row = inflater.inflate(R.layout.left_msg, parent, false);
-        //}
+        }else{
+            row = inflater.inflate(R.layout.left_msg, parent, false);
+        }
 
 
         /**
