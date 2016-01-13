@@ -42,11 +42,24 @@ class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
         ChatMessage chatMessageObj = getItem(position);
         View row = convertView;
         LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if (chatMessageObj.left) {
+        //if (chatMessageObj.left) {
             row = inflater.inflate(R.layout.right_msg, parent, false);
-        }else{
-            row = inflater.inflate(R.layout.left_msg, parent, false);
-        }
+        //}else{
+        //    row = inflater.inflate(R.layout.left_msg, parent, false);
+        //}
+
+
+        /**
+         * PS: disini nantinya dibuat kondisi dimana jika getSenderID() dari class ChatHistory
+         * sama dengan userid penguna, maka layout inflaternya adalah R.id.right_msg
+         * selain itu berarti message berasal dari lawan chat dan dibuat di sebelah kiri
+         * dengan layout inflater R.id.left_msg
+         *
+         * saat ini isi dari listview masih mengambil dari class ChatMessage, nanti tolong diubah ke ChatHistory
+         * atau jika ada logic lainnya silahkan diterapkan.
+         */
+
+
         chatText = (TextView) row.findViewById(R.id.msgr);
         chatText.setText(chatMessageObj.message);
         return row;

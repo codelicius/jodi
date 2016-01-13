@@ -1,10 +1,12 @@
 package makasa.dapurkonten.jodohideal;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -21,8 +23,29 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import makasa.dapurkonten.jodohideal.app.AppConfig;
+import makasa.dapurkonten.jodohideal.app.AppController;
 import makasa.dapurkonten.jodohideal.app.SQLiteController;
+import makasa.dapurkonten.jodohideal.object.ChatHistory;
+import makasa.dapurkonten.jodohideal.object.Partner;
 
 public class Chat extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -35,6 +58,8 @@ public class Chat extends AppCompatActivity
     private boolean side = false;
     private ChatArrayAdapter chatArrayAdapter;
     private ListView listView;
+    private String urlAPI;
+    private static String INI = Chat.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +113,8 @@ public class Chat extends AppCompatActivity
 
             }
         });
+        //set partner id here
+        getChatHistory("2316");
     }
 
     @Override
@@ -159,6 +186,81 @@ public class Chat extends AppCompatActivity
         txtComposeMessage.setText("");
         side = !side;
         return true;
+    }
+
+    private void getChatHistory(final String partnerID){
+        HashMap<String, String> user = session.getUserDetails();
+        final String userID = user.get(sessionmanager.SES_USER_ID);
+
+        final ProgressDialog progressDialog = new ProgressDialog(Chat.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Please Wait...");
+        progressDialog.show();
+
+        urlAPI = AppConfig.urlAPI + "?userid="+userID+"&partner_id="+partnerID+"&jodiHistoryChat";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, urlAPI,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        progressDialog.dismiss();
+                        Log.d(INI, response.toString());
+
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+
+                            String  jodiStatus = jsonResponse.getString("history");
+
+                            if(jodiStatus.equals(1)) {
+
+                                JSONArray allChat = jsonResponse.getJSONArray("partner");
+
+                                for (int i=0; i<allChat.length(); i++){
+                                    JSONObject cht = (JSONObject) allChat.get(i);
+                                    ChatHistory chats = new ChatHistory();
+                                    int senderID = cht.getInt("sent_id"),
+                                            recipientID = cht.getInt("recipient_id");
+                                    String message = cht.getString("message");
+
+                                    chats.setSenderID(senderID);
+                                    chats.setRecipientID(recipientID);
+                                    chats.setChatMessage(message);
+
+
+                                }
+                            }
+                            else{
+
+                                Toast.makeText(Chat.this, "Have you chat wth them before?", Toast.LENGTH_LONG).show();
+
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(Chat.this,error.toString(),Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            //proses kirim parameter ke
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("userid",userID);
+                params.put("partnerID",partnerID);
+                params.put("jodiHistoryChat","");
+                return params;
+            }
+
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 
 }
