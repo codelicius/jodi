@@ -27,7 +27,9 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.NetworkImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,15 +48,16 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     roundimage round;
-    ImageView imageView;
     sessionmanager session;
     private SQLiteController db;
     TextView txtNama, txtTinggi, txtLokasi,txtHoroskop, txtPekerjaan, txtAgama,
             txtTentang, txtDrawerNama,txtDrawerEmail, txtShortDescription, lblAbout;
+    NetworkImageView imgFoto,imageView;
     private static String INI = MainActivity.class.getSimpleName();
     private ListView listView;
     private List<Partner> pasanganArray = new ArrayList<Partner>();
     private ListPartnerAdapter adapterListPasangan;
+    private ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
     ImageButton btnTglChat;
     ArrayList<String> dataArray_right=new ArrayList<String>();
     ArrayList<Object> objectArray_right=new ArrayList<Object>();
@@ -94,6 +97,7 @@ public class MainActivity extends AppCompatActivity
         String horoscope = profile.get("horoscope");
         String job = profile.get("job");
         String userDetail = profile.get("user_detail");
+        String foto = profile.get("foto");
 
         // tarik data dari tabel
 
@@ -113,6 +117,9 @@ public class MainActivity extends AppCompatActivity
         txtTentang = (TextView)findViewById(R.id.txtProfilTentang);
         txtShortDescription = (TextView)findViewById(R.id.txtShortDescription) ;
         lblAbout = (TextView)findViewById(R.id.lblAbout);
+        imgFoto = (NetworkImageView)findViewById(R.id.fotoProfile);
+        imageView = (NetworkImageView) findViewById(R.id.imageView);
+
 
         txtNama.setText(firstName + " " + lastname + ", " + age);
         txtDrawerNama.setText(firstName);
@@ -122,8 +129,10 @@ public class MainActivity extends AppCompatActivity
         txtShortDescription.setText("Tinggi " + height + " cm, " + horoscope + ", " + job
                             + ", " + religion);
         lblAbout.setText("Tentang " + firstName + " " + lastname);
+        imgFoto.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto, mImageLoader);
+        imageView.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto, mImageLoader);
 
-        imageView = (ImageView) findViewById(R.id.imageView);
+
         //Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.avatar);
         //round = new roundimage(bm);
         //imageView.setImageDrawable(round);

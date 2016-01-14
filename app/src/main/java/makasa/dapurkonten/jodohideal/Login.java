@@ -243,11 +243,12 @@ public class Login extends AppCompatActivity {
                                                     profileLocation = profileUser.getString("loc_name"),
                                                     profileHoroscope = profileUser.getString("horoscope_name"),
                                                     profileJob = profileUser.getString("job_name"),
-                                                    profileDetail = profileUser.getString("user_detail");
+                                                    profileDetail = profileUser.getString("user_detail"),
+                                                    profileFoto = profileUser.getString("foto_url");
 
                                             db.addUser(jodiUserID, jodiFirstName, jodiLastName, jodiEmail, profileGender,
                                                     profileAge, profileRace, profileReligion, profileHeight, profileLocation,
-                                                    profileHoroscope, profileJob, profileDetail);
+                                                    profileHoroscope, profileJob, profileDetail,profileFoto);
 
                                             Intent i = new Intent(getApplicationContext(), MainActivity.class);
                                             //shownotification();

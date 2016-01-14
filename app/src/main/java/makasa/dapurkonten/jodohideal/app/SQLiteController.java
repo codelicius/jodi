@@ -43,6 +43,8 @@ public class SQLiteController extends SQLiteOpenHelper {
     private static final String COL_HOROSCOPE = "horoscope";
     private static final String COL_JOB = "job";
     private static final String COL_USER_DETAIL = "user_detail";
+    private static final String COL_FOTO = "foto";
+
 
     public SQLiteController(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -64,7 +66,8 @@ public class SQLiteController extends SQLiteOpenHelper {
                 + COL_LOCATION + " TEXT,"
                 + COL_HOROSCOPE + " TEXT,"
                 + COL_JOB + " TEXT,"
-                + COL_USER_DETAIL + " TEXT" +
+                + COL_USER_DETAIL + " TEXT,"
+                + COL_FOTO + " TEXT" +
                 ")";
 
         String CREATE_PARTNER_TABLE = "CREATE TABLE " + TABLE_PARTNER + "(" +
@@ -114,7 +117,7 @@ public class SQLiteController extends SQLiteOpenHelper {
 
     public void addUser(String id, String fname, String lname, String email,
                         String gender, String age, String race, String religion, String height,
-                        String location, String horoscope, String job, String userDetail) {
+                        String location, String horoscope, String job, String userDetail, String foto) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -132,6 +135,8 @@ public class SQLiteController extends SQLiteOpenHelper {
         values.put(COL_HOROSCOPE, horoscope);
         values.put(COL_JOB, job);
         values.put(COL_USER_DETAIL, userDetail);
+        values.put(COL_FOTO, foto);
+
 
         // Insert
         long uid = db.insert(TABLE_USER, null, values);
@@ -205,6 +210,7 @@ public class SQLiteController extends SQLiteOpenHelper {
             user.put("horoscope", cursor.getString(10));
             user.put("job", cursor.getString(11));
             user.put("user_detail", cursor.getString(12));
+            user.put("foto",cursor.getString(13));
 
         }
         cursor.close();
