@@ -148,9 +148,6 @@ public class Chat extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -173,10 +170,7 @@ public class Chat extends AppCompatActivity
             Intent psg = new Intent(getApplicationContext(), CariPasangan.class);
             startActivity(psg);
         }
-        else if (id == R.id.nav_chat){
-            Intent cht = new Intent(getApplicationContext(), Chat.class);
-            startActivity(cht);
-        }
+
         else if (id == R.id.nav_logout) {
             db.deleteUsers();
             session.logoutUser();

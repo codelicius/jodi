@@ -78,6 +78,9 @@ public class OtherProfile extends AppCompatActivity
         pDialog.setMessage("Please Wait...");
         pDialog.show();
 
+        db = new SQLiteController(getApplicationContext());
+        session = new sessionmanager(getApplicationContext());
+
         HashMap<String, String> profile = db.getUserDetails();
         String foto = profile.get("foto");
 
@@ -86,8 +89,8 @@ public class OtherProfile extends AppCompatActivity
         String lastname = user.get(sessionmanager.SES_LAST_NAME);
         String email = user.get(sessionmanager.SES_EMAIL);
 
-        drawerPic = (NetworkImageView) findViewById(R.id.imageView);
-        drawerPic.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto, mImageLoader);
+        /** drawerPic = (NetworkImageView) findViewById(R.id.imageView);
+        drawerPic.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto, mImageLoader); **/
         drawerName = (TextView)findViewById(R.id.txtDrawerNama);
         drawerName.setText(firstName + " " + lastname);
         drawerEmail = (TextView)findViewById(R.id.txtDrawerEmail);
@@ -107,9 +110,6 @@ public class OtherProfile extends AppCompatActivity
                 return mCache.get(url);
             }
         });
-
-        db = new SQLiteController(getApplicationContext());
-        session = new sessionmanager(getApplicationContext());
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -252,9 +252,6 @@ public class OtherProfile extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
