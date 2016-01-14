@@ -52,7 +52,7 @@ public class OtherProfile extends AppCompatActivity
     private ProgressDialog pDialog;
     sessionmanager session;
     private SQLiteController db;
-    private static String INI = CariPasangan.class.getSimpleName();
+    private static String INI = OtherProfile.class.getSimpleName();
     private String pID = "";
     private String userID = "";
     private RequestQueue mRequestQueue;
@@ -73,8 +73,10 @@ public class OtherProfile extends AppCompatActivity
         Bundle bundle = getIntent().getExtras();
         pID = bundle.getString("pID");
         userID = bundle.getString("userID");
+
         pDialog = new ProgressDialog(OtherProfile.this);
         pDialog.setIndeterminate(true);
+        pDialog.setCancelable(false);
         pDialog.setMessage("Please Wait...");
         pDialog.show();
 
@@ -157,6 +159,7 @@ public class OtherProfile extends AppCompatActivity
 
 
                             if(subscribe_status.equals("true")) {
+                                Log.d("Other profile", "Proses berhasil masuk ke tahap parsing");
                                 JSONObject pd = jsonResponse.getJSONObject("partner_detail");
                                 String apiFullName = pd.getString("fname") + " " +pd.getString("lname");
                                 String apiId = pd.getString("id_pasangan");
@@ -178,6 +181,7 @@ public class OtherProfile extends AppCompatActivity
                                 JSONArray semuaPertanyaan = pd.getJSONArray("pertanyaan");
 
                                 for (int i=0; i<semuaPertanyaan.length(); i++){
+                                    Log.d("Other profile", "Proses berhasil masuk ke tahap parsing array pertanyaan");
                                     JSONObject sp = (JSONObject) semuaPertanyaan.get(i);
                                     PencocokanJawaban pj = new PencocokanJawaban();
 
@@ -185,6 +189,7 @@ public class OtherProfile extends AppCompatActivity
                                     pj.setJawabanKamu(sp.getString("jawaban_kamu"));
                                     pj.setJawabanDia(sp.getString("jawaban_dia"));
                                     pj.setNamaDia(apiFullName);
+                                    Log.d("Other profile", "Proses berhasil selesai set data ke object pencocokan jawaban");
                                 }
 
                                 fullName.setText(apiFullName);
@@ -199,6 +204,7 @@ public class OtherProfile extends AppCompatActivity
                                 merokok.setText(apiRokok);
                                 alkohol.setText(apiAlkohol);
                                 foto.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + apiFoto, mImageLoader);
+                                Log.d("Other profile", "Selesai set text");
                             }
                             else{
                                 Intent i = new Intent(getApplicationContext(), Subscribe.class);

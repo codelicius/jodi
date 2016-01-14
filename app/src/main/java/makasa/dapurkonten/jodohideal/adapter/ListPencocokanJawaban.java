@@ -14,18 +14,16 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
 
 import java.util.List;
 
 import makasa.dapurkonten.jodohideal.R;
 import makasa.dapurkonten.jodohideal.app.AppController;
-import makasa.dapurkonten.jodohideal.object.Partner;
 import makasa.dapurkonten.jodohideal.object.PencocokanJawaban;
 
 
 public class ListPencocokanJawaban extends BaseAdapter {
-    private static String INI = ListPartnerAdapter.class.getSimpleName();
+    private static String INI = ListPencocokanJawaban.class.getSimpleName();
     private Activity activity;
     private LayoutInflater inflater;
     private List<PencocokanJawaban> ItemJawaban;
@@ -76,7 +74,7 @@ public class ListPencocokanJawaban extends BaseAdapter {
         txtOtherAnswer.setText(pj.getJawabanDia());
         lblOther.setText(pj.getNamaDia());
 
-        Log.d(INI, "ok");
+        Log.d(INI, "ok di adapter");
 
         return convertView;
     }
