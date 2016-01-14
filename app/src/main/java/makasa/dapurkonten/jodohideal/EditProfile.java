@@ -5,10 +5,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -37,18 +41,17 @@ public class EditProfile extends AppCompatActivity {
         String job = profile.get("job");
         String userDetail = profile.get("user_detail");
 
-        deskripsi= (EditText)findViewById(R.id.deskripsi);
-        tipe_pasangan = (EditText)findViewById(R.id.tipe_pasangan);
-        kegiatan = (EditText)findViewById(R.id.kegiatan);
-        tinggi = (EditText)findViewById(R.id.tinggi);
-        txtRace = (Spinner)findViewById(R.id.suku);
-        txtLocation = (Spinner)findViewById(R.id.lokasi);
-        txtHoroscope = (Spinner)findViewById(R.id.horoskop);
-        txtJob = (Spinner)findViewById(R.id.pekerjaan);
+        deskripsi = (EditText) findViewById(R.id.deskripsi);
+        tipe_pasangan = (EditText) findViewById(R.id.tipe_pasangan);
+        kegiatan = (EditText) findViewById(R.id.kegiatan);
+        tinggi = (EditText) findViewById(R.id.tinggi);
+        txtRace = (Spinner) findViewById(R.id.suku);
+        txtLocation = (Spinner) findViewById(R.id.lokasi);
+        txtHoroscope = (Spinner) findViewById(R.id.horoskop);
+        txtJob = (Spinner) findViewById(R.id.pekerjaan);
 
         tinggi.setText(height);
         deskripsi.setText(userDetail);
-
     }
 
 }

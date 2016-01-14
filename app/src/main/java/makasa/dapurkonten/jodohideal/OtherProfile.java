@@ -189,7 +189,8 @@ public class OtherProfile extends AppCompatActivity
                                     pj.setJawabanKamu(sp.getString("jawaban_kamu"));
                                     pj.setJawabanDia(sp.getString("jawaban_dia"));
                                     pj.setNamaDia(apiFullName);
-                                    Log.d("Other profile", "Proses berhasil selesai set data ke object pencocokan jawaban");
+                                    PencocokanJawaban.add(pj);
+                                    Log.d("Other profile", sp.getString("pertanyaan"));
                                 }
 
                                 fullName.setText(apiFullName);
@@ -216,6 +217,7 @@ public class OtherProfile extends AppCompatActivity
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        adapter.notifyDataSetChanged();
                     }
                 },
                 new Response.ErrorListener() {
