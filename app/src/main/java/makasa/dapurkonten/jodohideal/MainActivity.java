@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity
 
     roundimage round;
     sessionmanager session;
+    imageUpload changeImage;
     private SQLiteController db;
     TextView txtNama, txtTinggi, txtLokasi,txtHoroskop, txtPekerjaan, txtAgama,
             txtTentang, txtDrawerNama,txtDrawerEmail, txtShortDescription, lblAbout;
@@ -257,7 +258,10 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }**/
-
+    public void imgProfile(View v){
+        Intent i = new Intent(getApplicationContext(),imageUpload.class);
+        startActivity(i);
+    }
     private void listPasangan(){
         HashMap<String, String> user = session.getUserDetails();
         String userid = user.get(sessionmanager.SES_USER_ID);
