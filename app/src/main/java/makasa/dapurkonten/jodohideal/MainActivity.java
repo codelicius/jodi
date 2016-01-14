@@ -1,3 +1,5 @@
+
+
 package makasa.dapurkonten.jodohideal;
 
 import android.app.ProgressDialog;
@@ -24,12 +26,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,11 +44,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import makasa.dapurkonten.jodohideal.adapter.ListPartnerAdapter;
+import makasa.dapurkonten.jodohideal.adapter.RecentChatAdapter;
+import makasa.dapurkonten.jodohideal.app.AppConfig;
 import makasa.dapurkonten.jodohideal.app.AppController;
 import makasa.dapurkonten.jodohideal.app.SQLiteController;
 import makasa.dapurkonten.jodohideal.object.Partner;
+import makasa.dapurkonten.jodohideal.object.RecentChat;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -57,12 +67,13 @@ public class MainActivity extends AppCompatActivity
     private static String INI = MainActivity.class.getSimpleName();
     private ListView listView;
     private List<Partner> pasanganArray = new ArrayList<Partner>();
+    private List<RecentChat> rcItem;
+    private List<RecentChat> rcArray = new ArrayList<RecentChat>();
+    private RecentChatAdapter adapter;
+    ImageLoader imageLoader = AppController.getInstance().getImageLoader();
     private ListPartnerAdapter adapterListPasangan;
     private ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
     ImageButton btnTglChat;
-    ArrayList<String> dataArray_right=new ArrayList<String>();
-    ArrayList<Object> objectArray_right=new ArrayList<Object>();
-    ChatItemAdapter adapterChat;
     ListView customListView_chat;
     private String urlAPI = "http://jodi.licious.id/api/";
 
@@ -72,6 +83,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         customListView_chat=(ListView)findViewById(R.id.right_nav);
+        customListView_chat.setAdapter(adapter);
         customListView_chat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
@@ -214,12 +226,13 @@ public class MainActivity extends AppCompatActivity
             }
         } **/
 
-        IsiChat();
-        RefreshListChat();
+        //IsiChat();
+        //RefreshListChat();
+        getRecentPartner(userID);
         listPasangan();
     }
 
-    public void RefreshListChat() {
+    /** public void RefreshListChat() {
 
 
 
@@ -249,7 +262,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    /**@Override
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -258,6 +271,7 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }**/
+
     public void imgProfile(View v){
         Intent i = new Intent(getApplicationContext(),imageUpload.class);
         startActivity(i);
@@ -374,69 +388,66 @@ public class MainActivity extends AppCompatActivity
      * Item Adapter untuk nampilkan daftar orang
      * yang online
      */
-    private class ChatItemAdapter extends ArrayAdapter<Object>
-    {
-        ViewHolder holder1;
 
-        public ChatItemAdapter(List<Object>items,int x) {
-            // TODO Auto-generated constructor stub
-            super(MainActivity.this, android.R.layout.simple_list_item_single_choice, items);
-        }
-
-        @Override
-        public String getItem(int position) {
-            // TODO Auto-generated method stub
-            return dataArray_right.get(position);
-        }
-
-        public int getItemInteger(int pos)
-        {
-            return pos;
-
-        }
-        @Override
-        public int getCount() {
-            // TODO Auto-generated method stub
-            return dataArray_right.size();
-        }
-
-        @Override
-        public long getItemId(int position) {
-            // TODO Auto-generated method stub
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub
-
-            LayoutInflater inflator=getLayoutInflater();
-
-            convertView=inflator.inflate(R.layout.list_chat, null);
-
-
-
-            holder1=new ViewHolder();
-
-            holder1.text=(TextView)convertView.findViewById(R.id.txtListOnlie);
-
-
-            convertView.setTag(holder1);
-
-            String text=dataArray_right.get(position);
-            holder1.text.setText(dataArray_right.get(position));
-
-
-
-
-
-            return convertView;
-        }
-
-    }
 
     private class ViewHolder {
         TextView text,textcounter;
 
+    }
+
+    private void getRecentPartner(final String selfID){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConfig.urlAPI,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(INI, response.toString());
+
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+
+                            String status = jsonResponse.getString("recent_chat");
+
+                            if(status.equals("1")) {
+                                JSONArray lsCht = jsonResponse.getJSONArray("last_chat");
+
+                                for (int i=0; i<lsCht.length(); i++){
+                                    RecentChat recentPpl = new RecentChat();
+
+                                    JSONObject ppl = (JSONObject) lsCht.get(i);
+                                    recentPpl.setPartnerID(ppl.getInt("partner_id"));
+                                    recentPpl.setFirstName(ppl.getString("first_name"));
+                                    recentPpl.setLastName(ppl.getString("last_name"));
+                                    recentPpl.setPic("http://103.253.112.121/jodohidealxl/upload/" + ppl.getString("foto"));
+
+                                    rcArray.add(recentPpl);
+                                    //Toast.makeText(MainActivity.this, recentPpl.getFirstName(), Toast.LENGTH_LONG).show();
+                                }
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MainActivity.this,error.toString(),Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            //proses kirim parameter ke
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("jodiRecentChat","");
+                params.put("userid",selfID);
+                return params;
+            }
+
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 }

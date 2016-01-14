@@ -13,7 +13,7 @@
         android:layout_marginRight="8dp" />
 
     <TextView
-        android:id="@+id/txtListOnlie"
+        android:id="@+id/txtRecentPpl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/thumbnailRightNav"
