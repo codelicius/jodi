@@ -57,7 +57,7 @@ public class RecentChatAdapter extends BaseAdapter{
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //set list row here
         if (convertView == null)
-            convertView = inflater.inflate(R.layout.list_pasangan, null);
+            convertView = inflater.inflate(R.layout.list_chat, null);
 
         if (imageLoader == null)
             imageLoader = AppController.getInstance().getImageLoader();
@@ -69,7 +69,7 @@ public class RecentChatAdapter extends BaseAdapter{
             RecentChat rc = recentChatItem.get(position);
 
             recentPpl.setText(rc.getFirstName() +" "+ rc.getLastName());
-            recentID.setText(rc.getPartnerID());
+            recentID.setText(String.valueOf(rc.getPartnerID()));
             thumbNail.setImageUrl(rc.getPic(), imageLoader);
             return convertView;
         }

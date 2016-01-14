@@ -82,12 +82,15 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        adapter = new RecentChatAdapter(this, rcArray);
         customListView_chat=(ListView)findViewById(R.id.right_nav);
         customListView_chat.setAdapter(adapter);
         customListView_chat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
+                String pID = ((TextView) view.findViewById(R.id.txtPartnerID)).getText().toString();
                 Intent i = new Intent(getApplicationContext(), Chat.class);
+                i.putExtra("pID",pID);
                 startActivity(i);
             }
         });
@@ -428,6 +431,7 @@ public class MainActivity extends AppCompatActivity
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        adapter.notifyDataSetChanged();
                     }
                 },
                 new Response.ErrorListener() {
