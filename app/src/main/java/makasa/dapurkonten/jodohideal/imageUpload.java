@@ -37,13 +37,15 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Hashtable;
         import java.util.Map;
 
+import makasa.dapurkonten.jodohideal.app.AppConfig;
 import makasa.dapurkonten.jodohideal.app.AppController;
 
 public class imageUpload extends AppCompatActivity{
-
+    sessionmanager session;
     private Button buttonChoose;
     private ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
     private Button buttonUpload;
@@ -57,7 +59,7 @@ public class imageUpload extends AppCompatActivity{
 
     private int PICK_IMAGE_REQUEST = 1;
 
-    private String UPLOAD_URL ="http://10.10.10.232/jodi/api/";
+    private String UPLOAD_URL = AppConfig.urlAPI;
 
     private String KEY_IMAGE = "image";
     private String KEY_NAME = "name";
@@ -66,27 +68,12 @@ public class imageUpload extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.imageupload);
-
+        session = new sessionmanager(getApplicationContext());
         buttonChoose = (Button) findViewById(R.id.buttonChoose);
         buttonUpload = (Button) findViewById(R.id.buttonUpload);
 
         editTextName = (EditText) findViewById(R.id.editText);
-        //nImageView = (NetworkImageView)findViewById(R.id.imageView);
         imageView  = (ImageView) findViewById(R.id.imageView);
-        try {
-            URL myFileUrl = new URL ("10.10.10.232/jodi/api/tes.jpg");
-            HttpURLConnection conn =
-                    (HttpURLConnection) myFileUrl.openConnection();
-            conn.setDoInput(true);
-            conn.connect();
-
-            InputStream is = conn.getInputStream();
-            imageView.setImageBitmap(BitmapFactory.decodeStream(is));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public String getStringImage(Bitmap bmp){
@@ -97,8 +84,9 @@ public class imageUpload extends AppCompatActivity{
         return encodedImage;
     }
 
-    private void uploadImage(){
+    private void uploadImage(final String userID){
         //Showing the progress dialog
+
         final ProgressDialog loading = ProgressDialog.show(imageUpload.this,"Uploading...","Please wait...",false,false);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, UPLOAD_URL,
                 new Response.Listener<String>() {
@@ -133,7 +121,7 @@ public class imageUpload extends AppCompatActivity{
 
                 //Adding parameters
                 params.put("image", image);
-                params.put("userid","tes");
+                params.put("userid",userID);
                 params.put("jodiUploadImg","");
 
                 //returning parameters
@@ -177,8 +165,9 @@ public class imageUpload extends AppCompatActivity{
             showFileChooser();
         }
     public void upload(View v) {
-
-        uploadImage();
+        HashMap<String, String> user = session.getUserDetails();
+        String userID = user.get(sessionmanager.SES_USER_ID);
+        uploadImage(userID);
     }
     public class customImageLoader implements ImageLoader.ImageCache {
 

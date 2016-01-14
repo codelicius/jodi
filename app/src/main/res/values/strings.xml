@@ -39,28 +39,29 @@
         <item>Katolik</item>
         <item>Hindu</item>
         <item>Budha</item>
+        <item>Kong Hu Chu</item>
     </string-array>
     <string-array name="list_gender">
         <item>Pria</item>
         <item>Wanita</item>
     </string-array>
     <string-array name="list_ya_tidak">
-        <item>Ya</item>
         <item>Tidak</item>
+        <item>Ya</item>
     </string-array>
     <string-array name="list_horoskop">
-        <item>Aries</item>
+        <item>Capricorn</item>
         <item>Taurus</item>
+        <item>Aries</item>
+        <item>Aquarius</item>
         <item>Gemini</item>
         <item>Cancer</item>
         <item>Leo</item>
         <item>Virgo</item>
         <item>Libra</item>
         <item>Scorpio</item>
-        <item>Sagittarius</item>
-        <item>Capricon</item>
-        <item>Aquarius</item>
-        <item>Pices</item>
+        <item>Sagitarius</item>
+        <item>Pisces</item>
     </string-array>
     <string-array name="list_pekerjaan">
         <item>Aktor/Aktris</item>
