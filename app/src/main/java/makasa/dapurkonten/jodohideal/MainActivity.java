@@ -256,6 +256,7 @@ public class MainActivity extends AppCompatActivity
         final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Please Wait...");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         urlAPI = urlAPI + "?userid="+userid+"&genderid="+genderid+"&page=1&jodiPasangan";
         JsonArrayRequest req = new JsonArrayRequest(urlAPI,

@@ -1,19 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="fill_parent"
-    android:background="#212121">
+    android:layout_height="wrap_content"
+    android:background="#212121"
+    android:padding="5dp">
+
+    <makasa.dapurkonten.jodohideal.object.circleImage
+        android:id="@+id/thumbnailRightNav"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="8dp" />
 
     <TextView
         android:id="@+id/txtListOnlie"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:gravity="center"
-        android:layout_marginTop="16dp"
+        android:layout_toRightOf="@+id/thumbnailRightNav"
+        android:layout_marginTop="12dp"
         android:textColor="@color/white"
-        android:textSize="15dp"
-        android:text="TextView" />
+        android:textSize="15sp"
+        android:text="TextView"
+        />
+
+    <TextView
+        android:id="@+id/txtPartnerID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
 
 </RelativeLayout>
