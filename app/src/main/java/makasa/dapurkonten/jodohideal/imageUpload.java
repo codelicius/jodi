@@ -84,7 +84,7 @@ public class imageUpload extends AppCompatActivity{
         return encodedImage;
     }
 
-    private void uploadImage(final String userID){
+    private void uploadImage(){
         //Showing the progress dialog
 
         final ProgressDialog loading = ProgressDialog.show(imageUpload.this,"Uploading...","Please wait...",false,false);
@@ -115,13 +115,15 @@ public class imageUpload extends AppCompatActivity{
 
                 //Getting Image Name
                 String name = editTextName.getText().toString().trim();
-
+                HashMap<String, String> user = session.getUserDetails();
+                final String userIDs = user.get(sessionmanager.SES_USER_ID);
+                Log.d(INI,"upload image "+userIDs);
                 //Creating parameters
                 Map<String,String> params = new Hashtable<String, String>();
 
                 //Adding parameters
                 params.put("image", image);
-                params.put("userid",userID);
+                params.put("userid",userIDs);
                 params.put("jodiUploadImg","");
 
                 //returning parameters
@@ -165,9 +167,8 @@ public class imageUpload extends AppCompatActivity{
             showFileChooser();
         }
     public void upload(View v) {
-        HashMap<String, String> user = session.getUserDetails();
-        String userID = user.get(sessionmanager.SES_USER_ID);
-        uploadImage(userID);
+
+        uploadImage();
     }
     public class customImageLoader implements ImageLoader.ImageCache {
 
