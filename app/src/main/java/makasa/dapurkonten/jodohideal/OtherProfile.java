@@ -1,6 +1,7 @@
 package makasa.dapurkonten.jodohideal;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.Image;
@@ -18,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,12 +35,17 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import makasa.dapurkonten.jodohideal.adapter.ListPencocokanJawaban;
 import makasa.dapurkonten.jodohideal.app.AppConfig;
 import makasa.dapurkonten.jodohideal.app.SQLiteController;
+import makasa.dapurkonten.jodohideal.object.PencocokanJawaban;
 
 public class OtherProfile extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -50,6 +57,12 @@ public class OtherProfile extends AppCompatActivity
     private String userID = "";
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
+    private ListView listView;
+    private List<PencocokanJawaban> PencocokanJawaban = new ArrayList<PencocokanJawaban>();
+    private ListPencocokanJawaban adapter;
+    final Context context = this;
+    private NetworkImageView drawerPic;
+    private TextView drawerName, drawerEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +77,25 @@ public class OtherProfile extends AppCompatActivity
         pDialog.setIndeterminate(true);
         pDialog.setMessage("Please Wait...");
         pDialog.show();
+
+        HashMap<String, String> profile = db.getUserDetails();
+        String foto = profile.get("foto");
+
+        HashMap<String, String> user = session.getUserDetails();
+        String firstName = user.get(sessionmanager.SES_FIRST_NAME);
+        String lastname = user.get(sessionmanager.SES_LAST_NAME);
+        String email = user.get(sessionmanager.SES_EMAIL);
+
+        drawerPic = (NetworkImageView) findViewById(R.id.imageView);
+        drawerPic.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto, mImageLoader);
+        drawerName = (TextView)findViewById(R.id.txtDrawerNama);
+        drawerName.setText(firstName + " " + lastname);
+        drawerEmail = (TextView)findViewById(R.id.txtDrawerEmail);
+        drawerEmail.setText(email);
+
+        listView = (ListView) findViewById(R.id.listPencocokanJawaban);
+        adapter = new ListPencocokanJawaban(this, PencocokanJawaban);
+        listView.setAdapter(adapter);
 
         mRequestQueue = Volley.newRequestQueue(this);
         mImageLoader = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
@@ -142,6 +174,19 @@ public class OtherProfile extends AppCompatActivity
                                 String apiDetail = pd.getString("detail");
                                 String apiMatch = pd.getString("match");
                                 String apiNotMatch = pd.getString("not_match");
+
+                                JSONArray semuaPertanyaan = pd.getJSONArray("pertanyaan");
+
+                                for (int i=0; i<semuaPertanyaan.length(); i++){
+                                    JSONObject sp = (JSONObject) semuaPertanyaan.get(i);
+                                    PencocokanJawaban pj = new PencocokanJawaban();
+
+                                    pj.setPertanyaan(sp.getString("pertanyaan"));
+                                    pj.setJawabanKamu(sp.getString("jawaban_kamu"));
+                                    pj.setJawabanDia(sp.getString("jawaban_dia"));
+                                    pj.setNamaDia(apiFullName);
+                                }
+
                                 fullName.setText(apiFullName);
                                 umur.setText(apiUmur);
                                 suku.setText(apiSuku);
@@ -220,18 +265,21 @@ public class OtherProfile extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_home) {
+            Intent hm = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(hm);
+        }
+        else if (id == R.id.nav_profile) {
+            Intent prfl = new Intent(this, Profile.class);
+            startActivity(prfl);
+        }
+        else if (id == R.id.nav_pasangan) {
+            Intent psg = new Intent(getApplicationContext(), CariPasangan.class);
+            startActivity(psg);
+        }
+        else if (id == R.id.nav_logout) {
+            db.deleteUsers();
+            session.logoutUser();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

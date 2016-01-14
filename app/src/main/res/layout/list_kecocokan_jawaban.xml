@@ -31,56 +31,41 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content">
-            <makasa.dapurkonten.jodohideal.object.circleImage
-                android:id="@+id/thumbnailUser"
-                android:layout_width="40dp"
-                android:layout_height="45dp"
-                android:layout_alignParentLeft="true"
-                android:layout_marginRight="2dp"
-                />
+
             <TextView
                 android:id="@+id/lblSelf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="You"
                 android:textColor="#999"
-                android:layout_toRightOf="@+id/thumbnailUser"
                 />
             <TextView
                 android:id="@+id/selfAnswer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="lorem ipsum dolor sit amet blah blah blah blah"
-                android:layout_below="@+id/lblSelf"
-                android:layout_toRightOf="@+id/thumbnailUser"/>
+                android:layout_below="@+id/lblSelf"/>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content">
-            <makasa.dapurkonten.jodohideal.object.circleImage
-                android:id="@+id/thumbnailOther"
-                android:layout_width="40dp"
-                android:layout_height="45dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginLeft="2dp"
-                />
+
             <TextView
                 android:id="@+id/lblOther"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="John Doe"
                 android:textColor="#999"
-                android:layout_toLeftOf="@+id/thumbnailOther"
+                android:layout_alignParentRight="true"
                 />
             <TextView
                 android:id="@+id/otherAnswer"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="lorem ipsum dolor sit amet blah blah blah blah"
                 android:layout_below="@+id/lblOther"
-                android:layout_toLeftOf="@+id/thumbnailOther"
-                android:gravity="end"/>
+                android:gravity="right"/>
         </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>

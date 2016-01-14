@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,194 +9,207 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="makasa.dapurkonten.jodohideal.OtherProfile"
     tools:showIn="@layout/app_bar_other_profile">
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         >
 
-        <com.android.volley.toolbox.NetworkImageView
-            android:id="@+id/thumbnailFoto"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_alignParentLeft="true"
-            android:layout_marginRight="8dp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <com.android.volley.toolbox.NetworkImageView
+                android:id="@+id/thumbnailFoto"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginRight="8dp" />
+
+            <TextView
+                android:id="@+id/viewProfileNama"
+                android:layout_toRightOf="@+id/thumbnailFoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/viewProfileUmur"
+                android:layout_below="@+id/viewProfileNama"
+                android:layout_toRightOf="@+id/thumbnailFoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/viewProfileGender"
+                android:layout_below="@+id/viewProfileUmur"
+                android:layout_toRightOf="@+id/thumbnailFoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/viewProfileSuku"
+                android:layout_below="@+id/viewProfileGender"
+                android:layout_toRightOf="@+id/thumbnailFoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" />
+            <Button
+                android:id="@+id/viewProfilePesan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/viewProfileSuku"
+                android:layout_toRightOf="@+id/thumbnailFoto"
+                android:onClick="kirimPesan"
+                android:text="kirim pesan"/>
+
+        </RelativeLayout>
 
         <TextView
-            android:id="@+id/viewProfileNama"
-            android:layout_toRightOf="@+id/thumbnailFoto"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=""
-            android:textSize="16sp"/>
+            android:drawableLeft="@drawable/ic_person_dk"
+            android:text="Tentang"
+            android:gravity="left|center"/>
 
-        <TextView
-            android:id="@+id/viewProfileUmur"
-            android:layout_below="@+id/viewProfileNama"
-            android:layout_toRightOf="@+id/thumbnailFoto"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="" />
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:text="Tinggi Badan"/>
+            <TextView
+                android:id="@+id/viewProfileTinggi"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content"
+                android:text=":"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:text="Lokasi"/>
+            <TextView
+                android:id="@+id/viewProfileLokasi"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content"
+                android:text=": "/>
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/viewProfileGender"
-            android:layout_below="@+id/viewProfileUmur"
-            android:layout_toRightOf="@+id/thumbnailFoto"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="" />
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:text="Horoskop"/>
+            <TextView
+                android:id="@+id/viewProfileHoroskop"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content"
+                android:text=": "/>
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/viewProfileSuku"
-            android:layout_below="@+id/viewProfileGender"
-            android:layout_toRightOf="@+id/thumbnailFoto"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="" />
-        <Button
-            android:id="@+id/viewProfilePesan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/viewProfileSuku"
-            android:layout_toRightOf="@+id/thumbnailFoto"
-            android:onClick="kirimPesan"
-            android:text="kirim pesan"/>
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:text="Pekerjaan"/>
+            <TextView
+                android:id="@+id/viewProfilePekerjaan"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content"
+                android:text=": "/>
+        </LinearLayout>
 
-    </RelativeLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_person_dk"
-        android:text="Tentang"
-        android:gravity="left|center"/>
-
-    <LinearLayout
-        android:layout_marginTop="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="2"
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tinggi Badan"/>
-        <TextView
-            android:id="@+id/viewProfileTinggi"
-            android:layout_width="0dp"
-            android:layout_weight="3"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:text="Agama"/>
+            <TextView
+                android:id="@+id/viewProfileAgama"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content"
+                android:text=": "/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=":"/>
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:text="Merokok"/>
+            <TextView
+                android:id="@+id/viewProfileMerokok"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content"
+                android:text=": "/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:text="Minum Alkohol"/>
+            <TextView
+                android:id="@+id/viewProfileAlkohol"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content"
+                android:text=": "/>
+        </LinearLayout>
+        <ListView
+            android:id="@+id/listPencocokanJawaban"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:layout_gravity="center"
+            android:divider="@android:color/transparent"
+            android:background="@null"
+            android:layout_marginTop="10dp"/>
     </LinearLayout>
-    <LinearLayout
-        android:layout_marginTop="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_height="wrap_content"
-            android:text="Lokasi"/>
-        <TextView
-            android:id="@+id/viewProfileLokasi"
-            android:layout_width="0dp"
-            android:layout_weight="3"
-            android:layout_height="wrap_content"
-            android:text=": "/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_marginTop="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_height="wrap_content"
-            android:text="Horoskop"/>
-        <TextView
-            android:id="@+id/viewProfileHoroskop"
-            android:layout_width="0dp"
-            android:layout_weight="3"
-            android:layout_height="wrap_content"
-            android:text=": "/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_marginTop="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_height="wrap_content"
-            android:text="Pekerjaan"/>
-        <TextView
-            android:id="@+id/viewProfilePekerjaan"
-            android:layout_width="0dp"
-            android:layout_weight="3"
-            android:layout_height="wrap_content"
-            android:text=": "/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_marginTop="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_height="wrap_content"
-            android:text="Agama"/>
-        <TextView
-            android:id="@+id/viewProfileAgama"
-            android:layout_width="0dp"
-            android:layout_weight="3"
-            android:layout_height="wrap_content"
-            android:text=": "/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_marginTop="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_height="wrap_content"
-            android:text="Merokok"/>
-        <TextView
-            android:id="@+id/viewProfileMerokok"
-            android:layout_width="0dp"
-            android:layout_weight="3"
-            android:layout_height="wrap_content"
-            android:text=": "/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_marginTop="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_height="wrap_content"
-            android:text="Minum Alkohol"/>
-        <TextView
-            android:id="@+id/viewProfileAlkohol"
-            android:layout_width="0dp"
-            android:layout_weight="3"
-            android:layout_height="wrap_content"
-            android:text=": "/>
-    </LinearLayout>
-</LinearLayout>
+</ScrollView>

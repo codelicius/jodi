@@ -20,6 +20,8 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_other_profile"
-        app:menu="@menu/activity_other_profile_drawer" />
+        app:menu="@menu/activity_other_profile_drawer"
+        android:background="#212121"
+        app:itemTextColor="@color/white"/>
 
 </android.support.v4.widget.DrawerLayout>
