@@ -22,7 +22,8 @@
         app:headerLayout="@layout/nav_header_profile"
         app:menu="@menu/activity_profile_drawer"
         android:background="#212121"
-        app:itemTextColor="@color/white"/>
+        app:itemTextColor="@color/white"
+        app:itemIconTint="@color/white"/>
     <ListView
         android:id="@+id/right_nav"
         android:layout_width="240dp"

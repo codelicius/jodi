@@ -32,48 +32,44 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import makasa.dapurkonten.jodohideal.adapter.AllChatAdapter;
 import makasa.dapurkonten.jodohideal.adapter.RecentChatAdapter;
 import makasa.dapurkonten.jodohideal.app.AppConfig;
 import makasa.dapurkonten.jodohideal.app.AppController;
 import makasa.dapurkonten.jodohideal.app.SQLiteController;
 import makasa.dapurkonten.jodohideal.object.RecentChat;
 
-public class Profile extends AppCompatActivity
+public class AllChat extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-    sessionmanager session;
+    private sessionmanager session;
     private SQLiteController db;
-    TextView nama,umur,tb,agama,lokasi,horoskop,jk, txtDrawerNama, txtDrawerEmail;
+    TextView txtDrawerNama, txtDrawerEmail;
     NetworkImageView imageView;
     private ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
     private List<RecentChat> rcArray = new ArrayList<RecentChat>();
     private RecentChatAdapter adapter;
+    private List<AllChat> acArray = new ArrayList<AllChat>();
+    private AllChatAdapter adapterAllChat;
     ListView recentChatList;
     ImageButton btnTglChat;
-    private static String INI = Profile.class.getSimpleName();
+    private static String INI = AllChat.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
-        nama=(TextView)findViewById(R.id.viewProfileNama);
-        umur=(TextView)findViewById(R.id.viewProfileUmur);
-        tb=(TextView)findViewById(R.id.viewProfileTinggi);
-        agama=(TextView)findViewById(R.id.viewProfileAgama);
-        lokasi=(TextView)findViewById(R.id.viewProfileLokasi);
-        horoskop=(TextView)findViewById(R.id.viewProfileHoroskop);
-        jk=(TextView)findViewById(R.id.viewProfileGender);
+        setContentView(R.layout.activity_all_chat);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         session = new sessionmanager(getApplicationContext());
-        //session.checkLogin();
         session.checkLoginMain();
+        db = new SQLiteController(getApplicationContext());
 
         // tarik data user dari session
         HashMap<String, String> user = session.getUserDetails();
@@ -117,28 +113,6 @@ public class Profile extends AppCompatActivity
 
         btnTglChat = (ImageButton)findViewById(R.id.tglChat);
 
-
-        nama.setText(fname + ' ' + lname);
-        umur.setText(age);
-        tb.setText(height);
-        agama.setText(religion);
-        lokasi.setText(location);
-        horoskop.setText(horoscope);
-        jk.setText(gender);
-
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabEditProfile);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent ep = new Intent(Profile.this, EditProfile.class);
-                startActivity(ep);
-            }
-        });
-
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -147,6 +121,7 @@ public class Profile extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
         //tgl right nav
         btnTglChat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,7 +149,7 @@ public class Profile extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.profile, menu);
+        getMenuInflater().inflate(R.menu.all_chat, menu);
         return true;
     }
 
@@ -184,9 +159,6 @@ public class Profile extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-
 
         return super.onOptionsItemSelected(item);
     }
@@ -198,10 +170,12 @@ public class Profile extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            Intent hm = new Intent(this, MainActivity.class);
+            Intent hm = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(hm);
         }
         else if (id == R.id.nav_profile) {
+            Intent prfl = new Intent(this, Profile.class);
+            startActivity(prfl);
         }
         else if (id == R.id.nav_pasangan) {
             Intent psg = new Intent(getApplicationContext(), CariPasangan.class);
@@ -211,6 +185,7 @@ public class Profile extends AppCompatActivity
             Intent cht = new Intent(getApplicationContext(), AllChat.class);
             startActivity(cht);
         }
+
         else if (id == R.id.nav_logout) {
             db.deleteUsers();
             session.logoutUser();
@@ -260,7 +235,7 @@ public class Profile extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(Profile.this, error.toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(AllChat.this, error.toString(), Toast.LENGTH_LONG).show();
                     }
                 }){
             @Override

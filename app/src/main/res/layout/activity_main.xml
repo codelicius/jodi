@@ -21,7 +21,7 @@
         android:background="#212121"
         app:headerLayout="@layout/nav_header_main" app:menu="@menu/activity_main_drawer"
         app:itemTextColor="@color/white"
-        />
+        app:itemIconTint="@color/white"/>
 
     <ListView
         android:id="@+id/right_nav"

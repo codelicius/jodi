@@ -120,7 +120,8 @@
         app:headerLayout="@layout/nav_header_chat"
         app:menu="@menu/activity_chat_drawer"
         android:background="#212121"
-        app:itemTextColor="@color/white"/>
+        app:itemTextColor="@color/white"
+        app:itemIconTint="@color/white"/>
 
     <ListView
         android:id="@+id/right_nav"

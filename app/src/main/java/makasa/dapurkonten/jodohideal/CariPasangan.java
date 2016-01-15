@@ -299,7 +299,10 @@ public class CariPasangan extends AppCompatActivity
             Intent psg = new Intent(getApplicationContext(), CariPasangan.class);
             startActivity(psg);
         }
-
+        else if (id == R.id.nav_chat){
+            Intent cht = new Intent(getApplicationContext(), AllChat.class);
+            startActivity(cht);
+        }
         else if (id == R.id.nav_logout) {
             db.deleteUsers();
             session.logoutUser();

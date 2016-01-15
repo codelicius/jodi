@@ -5,7 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="false"
+    android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
     <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context="makasa.dapurkonten.jodohideal.CariPasangan">
+        tools:context="makasa.dapurkonten.jodohideal.AllChat">
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
@@ -27,7 +27,6 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
-
                 <ImageButton
                     android:id="@+id/tglChat"
                     android:layout_width="wrap_content"
@@ -37,7 +36,6 @@
                     android:layout_gravity="end"
                     android:layout_marginRight="10dp"
                     />
-
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.AppBarLayout>
@@ -49,7 +47,7 @@
             android:paddingTop="60dp">
 
             <ListView
-                android:id="@+id/listKecocokan"
+                android:id="@+id/listAllChat"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:divider="@color/white"
@@ -60,14 +58,6 @@
         </LinearLayout>
 
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabCariPasangan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            android:src="@drawable/ic_search" />
-
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView
@@ -76,19 +66,10 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_cari_pasangan"
-        app:menu="@menu/activity_cari_pasangan_drawer"
+        app:headerLayout="@layout/nav_header_all_chat"
+        app:menu="@menu/activity_all_chat_drawer"
         android:background="#212121"
         app:itemTextColor="@color/white"
         app:itemIconTint="@color/white"/>
-
-    <ListView
-        android:id="@+id/right_nav"
-        android:layout_width="240dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="end"
-        android:divider="@android:color/transparent"
-        android:background="@color/navPrimary"
-        android:paddingTop="20dp"/>
 
 </android.support.v4.widget.DrawerLayout>
