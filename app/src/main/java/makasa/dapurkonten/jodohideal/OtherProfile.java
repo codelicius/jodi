@@ -19,6 +19,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,9 +45,12 @@ import java.util.List;
 import java.util.Map;
 
 import makasa.dapurkonten.jodohideal.adapter.ListPencocokanJawaban;
+import makasa.dapurkonten.jodohideal.adapter.RecentChatAdapter;
 import makasa.dapurkonten.jodohideal.app.AppConfig;
+import makasa.dapurkonten.jodohideal.app.AppController;
 import makasa.dapurkonten.jodohideal.app.SQLiteController;
 import makasa.dapurkonten.jodohideal.object.PencocokanJawaban;
+import makasa.dapurkonten.jodohideal.object.RecentChat;
 
 public class OtherProfile extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -56,13 +61,17 @@ public class OtherProfile extends AppCompatActivity
     private String pID = "";
     private String userID = "";
     private RequestQueue mRequestQueue;
-    private ImageLoader mImageLoader;
     private ListView listView;
     private List<PencocokanJawaban> PencocokanJawaban = new ArrayList<PencocokanJawaban>();
     private ListPencocokanJawaban adapter;
     final Context context = this;
     private NetworkImageView drawerPic;
     private TextView drawerName, drawerEmail;
+    private ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
+    private List<RecentChat> rcArray = new ArrayList<RecentChat>();
+    private RecentChatAdapter rcAdapter;
+    ListView recentChatList;
+    ImageButton btnTglChat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,8 +100,8 @@ public class OtherProfile extends AppCompatActivity
         String lastname = user.get(sessionmanager.SES_LAST_NAME);
         String email = user.get(sessionmanager.SES_EMAIL);
 
-        /** drawerPic = (NetworkImageView) findViewById(R.id.imageView);
-        drawerPic.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto, mImageLoader); **/
+        drawerPic = (NetworkImageView) findViewById(R.id.imageView);
+        drawerPic.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto, mImageLoader);
         drawerName = (TextView)findViewById(R.id.txtDrawerNama);
         drawerName.setText(firstName + " " + lastname);
         drawerEmail = (TextView)findViewById(R.id.txtDrawerEmail);
@@ -101,6 +110,22 @@ public class OtherProfile extends AppCompatActivity
         listView = (ListView) findViewById(R.id.listPencocokanJawaban);
         adapter = new ListPencocokanJawaban(this, PencocokanJawaban);
         listView.setAdapter(adapter);
+
+        //right-nav
+        rcAdapter = new RecentChatAdapter(this, rcArray);
+        recentChatList=(ListView)findViewById(R.id.right_nav);
+        recentChatList.setAdapter(rcAdapter);
+        recentChatList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                String pID = ((TextView) view.findViewById(R.id.txtPartnerID)).getText().toString();
+                Intent i = new Intent(getApplicationContext(), Chat.class);
+                i.putExtra("pID", pID);
+                startActivity(i);
+            }
+        });
+
+        btnTglChat = (ImageButton)findViewById(R.id.tglChat);
 
         mRequestQueue = Volley.newRequestQueue(this);
         mImageLoader = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
@@ -113,7 +138,7 @@ public class OtherProfile extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -122,7 +147,18 @@ public class OtherProfile extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        btnTglChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (drawer.isDrawerOpen(recentChatList)) {
+                    drawer.closeDrawer(recentChatList);
+                }
+                drawer.openDrawer(recentChatList);
+            }
+        });
+
         lihatDetailPasangan();
+        getRecentPartner(userID);
     }
     public void kirimPesan(View view){
         Intent i = new Intent(getBaseContext(), Chat.class);
@@ -300,5 +336,62 @@ public class OtherProfile extends AppCompatActivity
     private void hidepDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();
+    }
+
+    private void getRecentPartner(final String selfID){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConfig.urlAPI,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(INI, response.toString());
+
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+
+                            String status = jsonResponse.getString("recent_chat");
+
+                            if(status.equals("1")) {
+                                JSONArray lsCht = jsonResponse.getJSONArray("last_chat");
+
+                                for (int i=0; i<lsCht.length(); i++){
+                                    RecentChat recentPpl = new RecentChat();
+
+                                    JSONObject ppl = (JSONObject) lsCht.get(i);
+                                    recentPpl.setPartnerID(ppl.getInt("partner_id"));
+                                    recentPpl.setFirstName(ppl.getString("first_name"));
+                                    recentPpl.setLastName(ppl.getString("last_name"));
+                                    recentPpl.setPic("http://103.253.112.121/jodohidealxl/upload/" + ppl.getString("foto"));
+
+                                    rcArray.add(recentPpl);
+                                    //Toast.makeText(MainActivity.this, recentPpl.getFirstName(), Toast.LENGTH_LONG).show();
+                                }
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        rcAdapter.notifyDataSetChanged();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(OtherProfile.this, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            //proses kirim parameter ke
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("jodiRecentChat","");
+                params.put("userid",selfID);
+                return params;
+            }
+
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 }

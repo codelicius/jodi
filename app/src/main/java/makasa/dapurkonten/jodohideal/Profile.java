@@ -118,8 +118,6 @@ public class Profile extends AppCompatActivity
         btnTglChat = (ImageButton)findViewById(R.id.tglChat);
 
 
-
-
         nama.setText(fname + ' ' + lname);
         umur.setText(age);
         tb.setText(height);
@@ -149,7 +147,7 @@ public class Profile extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        //tgl right nav
         btnTglChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
