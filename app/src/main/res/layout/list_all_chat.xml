@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <makasa.dapurkonten.jodohideal.object.circleImage
+        android:id="@+id/chatThumbnail"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="8dp" />
+
+    <TextView
+        android:id="@+id/chatPartner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/chatThumbnail"
+        android:layout_toRightOf="@+id/chatThumbnail"
+        android:textSize="19sp"
+        android:text="codelicius"/>
+
+    <TextView
+        android:id="@+id/chatPreviewMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/chatPartner"
+        android:layout_marginTop="1dip"
+        android:layout_toRightOf="@+id/chatThumbnail"
+        android:layout_toLeftOf="@+id/meh"
+        android:textSize="15sp"
+        android:text="lorem ip sakdasdhsa sadhasdhsaopsah sandasdos; sad;sasum dolor sigasi sgoaidgao dobsoudsbofsodgasid sa"
+        android:maxLength="70"/>
+    <ImageView
+        android:id="@+id/meh"
+        android:src="@drawable/ic_menu_exit_dk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/chatPreviewMessage"/>
+
+    <TextView
+        android:id="@+id/chatID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        />
+
+</RelativeLayout>
