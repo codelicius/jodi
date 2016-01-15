@@ -121,6 +121,7 @@ public class EditProfile extends AppCompatActivity {
 
                             if (jodiStatus.equals("success")) {
                                 Intent i = new Intent(getApplicationContext(), imageUpload.class);
+                                i.putExtra("fromActivity","EditProfile");
                                 startActivity(i);
                                 finish();
                             } else {

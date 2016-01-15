@@ -28,6 +28,13 @@
                 android:text="question goes here. Lorem Ipsum Dolor Sit Amet?"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_horizontal"/>
+            <TextView
+                android:id="@+id/questionid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_horizontal"
+                android:visibility="invisible"/>
         </LinearLayout>
 
 
