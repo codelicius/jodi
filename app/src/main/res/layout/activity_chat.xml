@@ -26,7 +26,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                app:popupTheme="@style/AppTheme.PopupOverlay">
+                <ImageButton
+                    android:id="@+id/tglChat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_menu_chat"
+                    android:background="@null"
+                    android:layout_gravity="end"
+                    android:layout_marginRight="10dp"
+                    />
+            </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.AppBarLayout>
 
@@ -111,5 +121,14 @@
         app:menu="@menu/activity_chat_drawer"
         android:background="#212121"
         app:itemTextColor="@color/white"/>
+
+    <ListView
+        android:id="@+id/right_nav"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:divider="@android:color/transparent"
+        android:background="@color/navPrimary"
+        android:paddingTop="20dp"/>
 
 </android.support.v4.widget.DrawerLayout>
