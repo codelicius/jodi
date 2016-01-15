@@ -277,6 +277,7 @@ public class MainActivity extends AppCompatActivity
 
     public void imgProfile(View v){
         Intent i = new Intent(getApplicationContext(),imageUpload.class);
+        i.putExtra("fromActivity","Main");
         startActivity(i);
     }
     private void listPasangan(){

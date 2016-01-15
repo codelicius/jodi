@@ -63,17 +63,19 @@ public class imageUpload extends AppCompatActivity{
 
     private String KEY_IMAGE = "image";
     private String KEY_NAME = "name";
+    private String fromActivity = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.imageupload);
         session = new sessionmanager(getApplicationContext());
-        buttonChoose = (Button) findViewById(R.id.buttonChoose);
-        buttonUpload = (Button) findViewById(R.id.buttonUpload);
 
-        editTextName = (EditText) findViewById(R.id.editText);
+        buttonUpload = (Button) findViewById(R.id.buttonUpload);
         imageView  = (ImageView) findViewById(R.id.imageView);
+
+        Bundle bundle=getIntent().getExtras();
+        fromActivity = bundle.getString("fromActivity");
     }
 
     public String getStringImage(Bitmap bmp){
@@ -95,7 +97,7 @@ public class imageUpload extends AppCompatActivity{
                         //Disimissing the progress dialog
                         loading.dismiss();
                         //Showing toast message of the response
-                        Toast.makeText(imageUpload.this, s , Toast.LENGTH_LONG).show();
+                        Toast.makeText(imageUpload.this, "Foto profil kamu berhasil di perbaharui" , Toast.LENGTH_LONG).show();
                     }
                 },
                 new Response.ErrorListener() {
@@ -112,9 +114,6 @@ public class imageUpload extends AppCompatActivity{
             protected Map<String, String> getParams() throws AuthFailureError {
                 //Converting Bitmap to String
                 String image = getStringImage(bitmap);
-
-                //Getting Image Name
-                String name = editTextName.getText().toString().trim();
 
                 //Creating parameters
                 Map<String,String> params = new Hashtable<String, String>();
@@ -134,6 +133,14 @@ public class imageUpload extends AppCompatActivity{
 
         //Adding request to the queue
         requestQueue.add(stringRequest);
+        if (fromActivity.equals("Main")){
+            Intent m = new Intent(this, MainActivity.class);
+            startActivity(m);
+        }
+        else{
+            Intent q = new Intent(this, questionsActivity.class);
+            startActivity(q);
+        }
     }
 
     private void showFileChooser() {
