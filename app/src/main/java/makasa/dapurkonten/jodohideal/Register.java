@@ -47,6 +47,7 @@ public class Register extends AppCompatActivity {
     private Button btnRegister,inputBirthDay;
     private String urlApi ="http://jodi.licious.id/api/";
     private SQLiteController db;
+    private static String INI = Register.class.getSimpleName();
     sessionmanager session;
 
     @Override
@@ -100,7 +101,7 @@ public class Register extends AppCompatActivity {
                                     JSONObject jsonResponse = new JSONObject(response);
                                     //ambil nilai dari JSON respon API
                                     String  jodiStatus = jsonResponse.getString("status");
-
+                                    String userid = jsonResponse.getString("userid");
                                     if(jodiStatus.equals("success")) {
                                         JSONArray multiQuestions = jsonResponse.getJSONArray("pertanyaan");
                                         for(int i=0;i<multiQuestions.length();i++){
@@ -111,8 +112,9 @@ public class Register extends AppCompatActivity {
                                                     jodiOps2= jodiQuestions.getString("answer_ops2");
                                             db.addQuestion(jodiQuestionId,jodiQuestion,jodiOps1,jodiOps2);
                                         }
-                                        Toast.makeText(Register.this,jodiStatus,Toast.LENGTH_LONG).show();
-                                        //session.buatSesiLogin(inputEmail, inputFirstName, inputLastName, rgSex, inputBirthDay);
+                                        //Toast.makeText(Register.this,userid,Toast.LENGTH_LONG).show();
+                                        Log.d(INI, "register" +firstName+ lastName+ email+phoneNumber+ firstPassword+birthDay+ gender);
+                                        session.buatSesiLogin(userid, email, firstName, lastName, gender, birthDay);
                                         Intent i = new Intent(getApplicationContext(),EditProfile.class);
                                         startActivity(i);
                                         finish();
@@ -170,6 +172,7 @@ public class Register extends AppCompatActivity {
         int selectedID = rgSex.getCheckedRadioButtonId();
         rbGender = (RadioButton)findViewById(selectedID);
         String gender = rbGender.getText().toString().trim();
+//        String gender = rbGender.getText().toString().trim();
 
         //cek untuk pastikan user mengisi seluruh form
         if (!firstName.isEmpty() && !lastName.isEmpty() && !email.isEmpty() && !phoneNumber.isEmpty()
