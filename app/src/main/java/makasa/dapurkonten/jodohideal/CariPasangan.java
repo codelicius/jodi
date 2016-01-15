@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +30,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -43,10 +46,12 @@ import java.util.List;
 import java.util.Map;
 
 import makasa.dapurkonten.jodohideal.adapter.ListPartnerAdapter;
+import makasa.dapurkonten.jodohideal.adapter.RecentChatAdapter;
 import makasa.dapurkonten.jodohideal.app.AppConfig;
 import makasa.dapurkonten.jodohideal.app.AppController;
 import makasa.dapurkonten.jodohideal.app.SQLiteController;
 import makasa.dapurkonten.jodohideal.object.Partner;
+import makasa.dapurkonten.jodohideal.object.RecentChat;
 
 public class CariPasangan extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -61,6 +66,13 @@ public class CariPasangan extends AppCompatActivity
     private ListPartnerAdapter adapter;
     final Context context = this;
     private ProgressDialog pDialog;
+    private NetworkImageView drawerPic;
+    private TextView drawerName, drawerEmail;
+    private ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
+    private List<RecentChat> rcArray = new ArrayList<RecentChat>();
+    private RecentChatAdapter rcAdapter;
+    ListView recentChatList;
+    ImageButton btnTglChat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +102,20 @@ public class CariPasangan extends AppCompatActivity
         HashMap<String, String> user = session.getUserDetails();
         final String userID = user.get(sessionmanager.SES_USER_ID);
         final String genderid=user.get(sessionmanager.SES_GENDER);
+        String firstName = user.get(sessionmanager.SES_FIRST_NAME);
+        String lastname = user.get(sessionmanager.SES_LAST_NAME);
+        String email = user.get(sessionmanager.SES_EMAIL);
+
+        HashMap<String, String> profile = db.getUserDetails();
+        String foto = profile.get("foto");
+
+        drawerPic = (NetworkImageView) findViewById(R.id.imageView);
+        drawerPic.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto, mImageLoader);
+        drawerName = (TextView)findViewById(R.id.txtDrawerNama);
+        drawerName.setText(firstName + " " + lastname);
+        drawerEmail = (TextView)findViewById(R.id.txtDrawerEmail);
+        drawerEmail.setText(email);
+
         listView = (ListView) findViewById(R.id.listKecocokan);
         adapter = new ListPartnerAdapter(this, pasangan);
         listView.setAdapter(adapter);
@@ -98,16 +124,32 @@ public class CariPasangan extends AppCompatActivity
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String pID = ((TextView)view.findViewById(R.id.txtPID)).getText().toString();
+                String pID = ((TextView) view.findViewById(R.id.txtPID)).getText().toString();
                 //Toast.makeText(getApplicationContext(), pID, Toast.LENGTH_LONG).show();
                 //lihatDetailPasangan(pID, userID);
                 Intent i = new Intent(getBaseContext(), OtherProfile.class);
                 i.putExtra("pID", pID);
-                i.putExtra("userID",userID);
+                i.putExtra("userID", userID);
                 startActivity(i);
                 finish();
             }
         });
+
+        //right nav
+        rcAdapter = new RecentChatAdapter(this, rcArray);
+        recentChatList=(ListView)findViewById(R.id.right_nav);
+        recentChatList.setAdapter(rcAdapter);
+        recentChatList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                String pID = ((TextView) view.findViewById(R.id.txtPartnerID)).getText().toString();
+                Intent i = new Intent(getApplicationContext(), Chat.class);
+                i.putExtra("pID", pID);
+                startActivity(i);
+            }
+        });
+
+        btnTglChat = (ImageButton)findViewById(R.id.tglChat);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCariPasangan);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -121,7 +163,7 @@ public class CariPasangan extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -129,6 +171,17 @@ public class CariPasangan extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        btnTglChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (drawer.isDrawerOpen(recentChatList)) {
+                    drawer.closeDrawer(recentChatList);
+                }
+                drawer.openDrawer(recentChatList);
+            }
+        });
+        getRecentPartner(userID);
 
         listPasangan(page);
     }
@@ -265,5 +318,62 @@ public class CariPasangan extends AppCompatActivity
     private void hidepDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();
+    }
+
+    private void getRecentPartner(final String selfID){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConfig.urlAPI,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(INI, response.toString());
+
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+
+                            String status = jsonResponse.getString("recent_chat");
+
+                            if(status.equals("1")) {
+                                JSONArray lsCht = jsonResponse.getJSONArray("last_chat");
+
+                                for (int i=0; i<lsCht.length(); i++){
+                                    RecentChat recentPpl = new RecentChat();
+
+                                    JSONObject ppl = (JSONObject) lsCht.get(i);
+                                    recentPpl.setPartnerID(ppl.getInt("partner_id"));
+                                    recentPpl.setFirstName(ppl.getString("first_name"));
+                                    recentPpl.setLastName(ppl.getString("last_name"));
+                                    recentPpl.setPic("http://103.253.112.121/jodohidealxl/upload/" + ppl.getString("foto"));
+
+                                    rcArray.add(recentPpl);
+                                    //Toast.makeText(MainActivity.this, recentPpl.getFirstName(), Toast.LENGTH_LONG).show();
+                                }
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        rcAdapter.notifyDataSetChanged();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(CariPasangan.this, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            //proses kirim parameter ke
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("jodiRecentChat","");
+                params.put("userid",selfID);
+                return params;
+            }
+
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 }
