@@ -29,5 +29,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="end"
         android:divider="@android:color/transparent"
-        android:background="@color/navPrimary"/>
+        android:background="@color/navPrimary"
+        android:paddingTop="20dp"/>
 </android.support.v4.widget.DrawerLayout>

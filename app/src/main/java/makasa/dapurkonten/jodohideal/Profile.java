@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,20 +14,51 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import makasa.dapurkonten.jodohideal.adapter.RecentChatAdapter;
+import makasa.dapurkonten.jodohideal.app.AppConfig;
+import makasa.dapurkonten.jodohideal.app.AppController;
 import makasa.dapurkonten.jodohideal.app.SQLiteController;
+import makasa.dapurkonten.jodohideal.object.RecentChat;
 
 public class Profile extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     sessionmanager session;
     private SQLiteController db;
-    TextView nama,umur,tb,agama,lokasi,horoskop,jk;
+    TextView nama,umur,tb,agama,lokasi,horoskop,jk, txtDrawerNama, txtDrawerEmail;
+    NetworkImageView imageView;
+    private ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
+    private List<RecentChat> rcArray = new ArrayList<RecentChat>();
+    private RecentChatAdapter adapter;
+    ListView recentChatList;
+    ImageButton btnTglChat;
+    private static String INI = Profile.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,16 +71,55 @@ public class Profile extends AppCompatActivity
         horoskop=(TextView)findViewById(R.id.viewProfileHoroskop);
         jk=(TextView)findViewById(R.id.viewProfileGender);
 
+        session = new sessionmanager(getApplicationContext());
+        //session.checkLogin();
+        session.checkLoginMain();
+
+        // tarik data user dari session
+        HashMap<String, String> user = session.getUserDetails();
+        String firstName = user.get(sessionmanager.SES_FIRST_NAME);
+        String lastname = user.get(sessionmanager.SES_LAST_NAME);
+        String email = user.get(sessionmanager.SES_EMAIL);
+        final String userID = user.get(sessionmanager.SES_USER_ID);
+
         db = new SQLiteController(getApplicationContext());
-        HashMap<String,String> user=db.getUserDetails();
-        String age=user.get("age"),
-                gender=user.get("gender"),
-                fname=user.get("first_name"),
-                lname=user.get("last_name"),
-                height=user.get("height"),
-                location=user.get("location"),
-                horoscope=user.get("horoscope"),
-                religion=user.get("religion");
+        HashMap<String,String> profile=db.getUserDetails();
+        String age=profile.get("age"),
+                gender=profile.get("gender"),
+                fname=profile.get("first_name"),
+                lname=profile.get("last_name"),
+                height=profile.get("height"),
+                location=profile.get("location"),
+                horoscope=profile.get("horoscope"),
+                religion=profile.get("religion"),
+                foto=profile.get("foto");
+
+        //drawer
+        txtDrawerNama = (TextView)findViewById(R.id.txtDrawerNama);
+        txtDrawerEmail = (TextView)findViewById(R.id.txtDrawerEmail);
+        imageView = (NetworkImageView)findViewById(R.id.imageView);
+        txtDrawerNama.setText(firstName + " " + lastname);
+        txtDrawerEmail.setText(email);
+        imageView.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto, mImageLoader);
+
+        adapter = new RecentChatAdapter(this, rcArray);
+        recentChatList=(ListView)findViewById(R.id.right_nav);
+        recentChatList.setAdapter(adapter);
+        recentChatList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                String pID = ((TextView) view.findViewById(R.id.txtPartnerID)).getText().toString();
+                Intent i = new Intent(getApplicationContext(), Chat.class);
+                i.putExtra("pID", pID);
+                startActivity(i);
+            }
+        });
+
+        btnTglChat = (ImageButton)findViewById(R.id.tglChat);
+
+
+
+
         nama.setText(fname + ' ' + lname);
         umur.setText(age);
         tb.setText(height);
@@ -57,6 +128,7 @@ public class Profile extends AppCompatActivity
         horoskop.setText(horoscope);
         jk.setText(gender);
 
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -64,12 +136,12 @@ public class Profile extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent ep = new Intent(Profile.this, EditProfile.class);
+                startActivity(ep);
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -77,6 +149,18 @@ public class Profile extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        btnTglChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (drawer.isDrawerOpen(recentChatList)) {
+                    drawer.closeDrawer(recentChatList);
+                }
+                drawer.openDrawer(recentChatList);
+            }
+        });
+
+        getRecentPartner(userID);
     }
 
     @Override
@@ -134,5 +218,62 @@ public class Profile extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void getRecentPartner(final String selfID){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConfig.urlAPI,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(INI, response.toString());
+
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+
+                            String status = jsonResponse.getString("recent_chat");
+
+                            if(status.equals("1")) {
+                                JSONArray lsCht = jsonResponse.getJSONArray("last_chat");
+
+                                for (int i=0; i<lsCht.length(); i++){
+                                    RecentChat recentPpl = new RecentChat();
+
+                                    JSONObject ppl = (JSONObject) lsCht.get(i);
+                                    recentPpl.setPartnerID(ppl.getInt("partner_id"));
+                                    recentPpl.setFirstName(ppl.getString("first_name"));
+                                    recentPpl.setLastName(ppl.getString("last_name"));
+                                    recentPpl.setPic("http://103.253.112.121/jodohidealxl/upload/" + ppl.getString("foto"));
+
+                                    rcArray.add(recentPpl);
+                                    //Toast.makeText(MainActivity.this, recentPpl.getFirstName(), Toast.LENGTH_LONG).show();
+                                }
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(Profile.this, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            //proses kirim parameter ke
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("jodiRecentChat","");
+                params.put("userid",selfID);
+                return params;
+            }
+
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 }

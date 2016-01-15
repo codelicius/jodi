@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity
 
 
         txtNama.setText(firstName + " " + lastname + ", " + age);
-        txtDrawerNama.setText(firstName);
+        txtDrawerNama.setText(firstName + " " + lastname);
         txtDrawerEmail.setText(email);
         txtLokasi.setText(location);
         txtTentang.setText(userDetail);
