@@ -1,6 +1,8 @@
 package makasa.dapurkonten.jodohideal;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -19,6 +21,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -75,9 +78,17 @@ public class EditProfile extends AppCompatActivity {
         txtLocation = (Spinner)findViewById(R.id.lokasi);
         txtHoroscope = (Spinner)findViewById(R.id.horoskop);
         txtJob = (Spinner)findViewById(R.id.pekerjaan);
-
         tinggi.setText(height);
         deskripsi.setText(userDetail);
+        ArrayList<String> items=getSpinner("pekerjaan");
+        ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,
+                R.layout.spinner_item,R.id.txt,items);
+        txtJob.setAdapter(adapter);
+        ArrayList<String> lokasi=getSpinner("lokasi");
+        ArrayAdapter<String> adapters=new ArrayAdapter<String>(this,
+                R.layout.spinner_item,R.id.txt,lokasi);
+        txtLocation.setAdapter(adapters);
+
     }
     public void save(View v){
         HashMap<String, String> user = sessions.getUserDetails();
@@ -95,8 +106,20 @@ public class EditProfile extends AppCompatActivity {
                 gettxtLocation = String.valueOf(txtLocation.getSelectedItemPosition()),
                 getHalSuka= halsuka.getText().toString().trim(),
                 getMalming= malming.getText().toString().trim();
-        if(!getDeskripsi.isEmpty() && !getTPasangan.isEmpty() && !getKegiatan.isEmpty() && !getHalSuka.isEmpty() && !getMalming.isEmpty()){
+        if(!getTPasangan.isEmpty() && !getKegiatan.isEmpty() && !getHalSuka.isEmpty() && !getMalming.isEmpty()){
             editUser(userid,getTinggi,gettxtRace,gettxtAgama,gettxtRokok,gettxtAlkohol,gettxtHoroscope,gettxtJob,getDeskripsi,getTPasangan,getKegiatan,gettxtLocation,getHalSuka,getMalming);
+        }
+        else{
+            AlertDialog infoPass = new AlertDialog.Builder(EditProfile.this).create();
+            infoPass.setTitle("Alert");
+            infoPass.setMessage("Silahkan isi seluruh form yang tersedia sebelum Anda melanjutkan");
+            infoPass.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            infoPass.show();
         }
        // Toast.makeText(EditProfile.this,gettxtLocation,Toast.LENGTH_LONG).show();
 
@@ -120,6 +143,7 @@ public class EditProfile extends AppCompatActivity {
                             String jodiStatus = jsonResponse.getString("status");
 
                             if (jodiStatus.equals("success")) {
+                                sessions.changeValueRegister("edit_profile",1);
                                 Intent i = new Intent(getApplicationContext(), imageUpload.class);
                                 i.putExtra("fromActivity","EditProfile");
                                 startActivity(i);
@@ -168,5 +192,50 @@ public class EditProfile extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(requestDaftar);
 
+    }
+    private ArrayList<String> getSpinner(String fileName){
+        final JSONArray jsonArray=null;
+        final ArrayList<String> pekerjaan=new ArrayList<String>();
+        final ArrayList<String> lokasi=new ArrayList<String>();
+        final String API = AppConfig.urlAPI;
+        final String url = API+"?jodiSpinner";
+        JsonObjectRequest jsonRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("respon",response.toString());
+                        try{
+                            JSONArray pk = response.getJSONArray("Pekerjaan");
+                            JSONArray lk = response.getJSONArray("Lokasi");
+                            for(int i=0; i<pk.length(); i++){
+                                pekerjaan.add(pk.getString(i));
+                            }
+                            for(int i=0; i<lk.length(); i++){
+                                lokasi.add(lk.getString(i));
+                            }
+                            Log.d("array pekerjaan",pekerjaan.toString());
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        // the response is already constructed as a JSONObject!
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        // Adding request to request queue
+        Volley.newRequestQueue(this).add(jsonRequest);
+        if(fileName.equals("pekerjaan")){
+            return pekerjaan;
+        }
+        else{
+            return lokasi;
+        }
     }
 }

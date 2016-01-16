@@ -11,17 +11,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.util.Log;
 import android.widget.Toast;
 
 public class sessionmanager {
 
     // Shared Preferences reference
-    SharedPreferences pref;
+    SharedPreferences pref,prefRegister;
 
     // Editor reference for Shared preferences
-    Editor editor;
+    Editor editor,register;
 
     // Context
+    private static String INI=sessionmanager.class.getSimpleName();
     Context _context;
 
     // Shared pref mode
@@ -46,6 +48,8 @@ public class sessionmanager {
         this._context = context;
         pref = _context.getSharedPreferences(PREFER_NAME, PRIVATE_MODE);
         editor = pref.edit();
+        prefRegister = _context.getSharedPreferences("jodiRegister", PRIVATE_MODE);
+        register = prefRegister.edit();
     }
 
     //Create login session
@@ -60,11 +64,47 @@ public class sessionmanager {
         editor.putString(SES_LAST_NAME, lastName);
         editor.putString(SES_GENDER, gender);
         editor.putString(SES_BIRTHDAY, birthday);
-
         // simpan nilai atau perubahan
         editor.commit();
     }
-
+    public void changeValueRegister(final String key,final Integer value){
+        register.putInt(key,value).commit();
+    }
+    public void buatSesiDaftar(){
+        register.putInt("register", 1);
+        register.putInt("edit_profile", 0);
+        register.putInt("upload", 0);
+        register.putInt("question", 0);
+        register.commit();
+        Log.d("buat sesi daftar","ok");
+    }
+    public void checkDaftar(){
+        if(this.isUserRegister() == 1){
+            if(this.registerEditProfile() == 0){
+                Intent i = new Intent(_context, EditProfile.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                _context.startActivity(i);
+            }
+            else if(this.registerUpload() == 0){
+                Intent i = new Intent(_context, imageUpload.class);
+                i.putExtra("fromActivity","EditProfile");
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                _context.startActivity(i);
+            }
+            else if(this.registerQuestion() == 0){
+                Intent i = new Intent(_context, questionsActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                _context.startActivity(i);
+            }
+        }
+        else{
+            checkLogin();
+        }
+        Log.d("cek daftar","ok" +isUserRegister());
+    }
     /**
      * Check login method will check user login status
      * If false it will redirect user to login page
@@ -142,6 +182,9 @@ public class sessionmanager {
     /**
      * Clear session details
      * */
+    public void registerDone(){
+        register.clear().commit();
+    }
     public void logoutUser(){
 
         // Clearing all user data from Shared Preferences
@@ -159,6 +202,18 @@ public class sessionmanager {
     // Check for login
     public boolean isUserLoggedIn(){
         return pref.getBoolean(IS_USER_LOGIN, false);
+    }
+    public int isUserRegister(){
+        return prefRegister.getInt("register", 0);
+    }
+    public int registerEditProfile(){
+        return prefRegister.getInt("edit_profile", 0);
+    }
+    public int registerUpload(){
+        return prefRegister.getInt("upload", 0);
+    }
+    public int registerQuestion(){
+        return prefRegister.getInt("question", 0);
     }
 
 
