@@ -85,7 +85,32 @@
     <string name="picture">Picture</string>
     <string name="select_intro">Long-press a thumbnail to add an image</string>
     <string name="show_intro">Press a thumbnail to display at larger size</string>
-
+    <string name="eula">1.Kebijakan\n
+Kami berusaha untuk mematuhi persyaratan Kebijakan Privasi kami yang terletak di Website, tapi kami dapat mengubah dari waktu ke waktu untuk mematuhi hukum yang berlaku dan operasi kami.\n
+\n
+2. Penjualan Layanan\n
+Anda setuju dan persetujuan ini jika Perusahaan dapat mengungkapkan, mengalihkan, atau mentransfer informasi pribadi anda, Informasi tersebut tidak menjadi Sensitif dan informasi lain yang Anda kirimkan di Website atau Layanan (termasuk foto dan profil publik) kepada orang lain. Anda mengakui dan menyetujui bahwa informasi yang ada miliki dapat dilihat dari orang lain, dan anda setuju dengan hal ini. Kami tidak bertanggung jawab atas segala kerugian atau kerusakan, namun disebabkan (termasuk melalui kelalaian), yang mungkin langsung atau tidak langsung menderita sehubungan dengan penggunaan Layanan, Website atau Website Linked, kami juga tidak menerima tanggung jawab untuk setiap kerugian yang timbul dari penggunaan, atau kepercayaan pada informasi yang terkandung dalam atau diakses melalui Layanan atau website. Untuk menghindari keraguan dan tanpa pembatasan umum yang telah disebutkan sebelumnya:\n
+(i) Perusahaan tidak menerima tanggung jawab atau kewajiban untuk kerugian langsung, tidak langsung, tentatif, insidental, khusus atau konsekuensial yang timbul dari atau dengan cara apapun berhubungan dengan penggunaan Layanan atau Website atau dengan keterlambatan atau ketidakmampuan untuk menggunakan Layanan atau website, atau untuk informasi, produk dan layanan lainnya yang diperoleh melalui Layanan atau website, atau yang timbul dari penggunaan situs web ini, apakah berdasarkan berdasarkan kontrak, kelalaian atau kesalahan lainnya, kewajiban yang ketat atau sebaliknya, bahkan jika Perusahaan telah diberitahukan mengenai kemungkinan kerusakan tersebut;\n
+(ii) Perusahaan tidak menerima tanggung jawab atau kewajiban untuk setiap informasi atau materi yang Anda kirimkan ke Layanan atau Website kami juga tidak menerima tanggung jawab untuk setiap penggunaan atau penyalahgunaan informasi atau materi yang Anda kirimkan ke Layanan atau Website oleh anggota atau pengguna lain;\n
+(iii) Perusahaan tidak menerima tanggung jawab atau kewajiban untuk pelaksanaan setiap anggota atau pengguna lain dari Layanan, termasuk namun tidak terbatas pada setiap tindakan yang menyebabkan cedera fisik untuk setiap orang.\n
+\n
+3. Risiko\n
+Anda mengakui bahwa ada resiko yang terlibat dalam kencan online, termasuk tanpa batasan, tanpa sadar berurusan dengan orang-orang di bawah umur atau orang yang bertindak di bawah kepura-puraan palsu atau untuk tujuan kriminal. Anda setuju untuk mengambil semua tindakan pencegahan yang diperlukan ketika berkomunikasi dengan atau pertemuan dengan pengguna lain, terutama jika Anda memutuskan untuk bertemu langsung. Selain itu, Anda setuju untuk meninjau tips keamanan kencan online kami sebelum menggunakan layanan ini. Risiko sendiri Anda mengakui bahwa penggunaan Layanan dan situs web ini semata-mata risiko Anda sendiri.\n
+\n
+4. Tidak ada jaminan atas identitas anggota\n
+Anda mengakui bahwa otentikasi pengguna di internet sangat sulit. Perusahaan tidak dapat dan tidak menjamin bahwa setiap anggota atau pengguna dari Layanan adalah siapa dia mengaku. Selanjutnya, Perusahaan tidak dapat dan tidak menjamin bahwa profil anggota yang terpercaya, akurat atau lengkap. Oleh karena itu, Anda harus berhati-hati dalam berurusan dengan anggota lain atau pengguna Layanan atau Website.\n
+\n
+5. Service\n
+Layanan ini merupakan layanan informasi internet yang memfasilitasi kontak antara anggota yang mungkin atau mungkin tidak mencari persahabatan atau hubungan. Ini bukan layanan pernikahan percaloan, mail order layanan pengantin atau layanan perjodohan. Perusahaan tidak berkewajiban untuk menengahi setiap anggota atau anggota lain untuk Anda.\n
+\n
+6. Komunikasi\n
+Perusahaan berhak untuk mengirim surat elektronik kepada Anda tentang perubahan atau penambahan ke Layanan, atau produk dan jasa Perusahaan dan bisnis afiliasinya.\n
+\n
+7.Pemutusan\n
+1.Perjanjian yang efektif bagi anggota\n
+Perjanjian ini akan tetap berlaku penuh dan efektif saat Anda adalah anggota dari Layanan atau saat Anda sebaliknya menggunakan Website.\n
+2.Pemutusan keanggotaan oleh Anda\n
+Anda dapat mengakhiri keanggotaan Anda setiap saat, untuk alasan apapun, efektif segera setelah kami menerima pemberitahuan tertulis Anda penghentian. Pemberitahuan penghentian dapat dikirimkan ke alamat yang terkandung dalam Hubungi Kami bagian dari situs web ini, dapat dikirim melalui email ke alamat email yang terdaftar di Hubungi Kami bagian dari situs web, atau dapat dilakukan dengan mengklik Switch Off tautan Keanggotaan dalam bagian anggota website. Anda tidak akan berhak mendapatkan pengembalian uang dari biaya keanggotaan Anda sebagai konsekuensi dari pengakhiran keanggotaan Anda.\n</string>
     <string name="lorem_ipusm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent turpis erat, tristique at auctor non, fermentum auctor tellus. Ut nisi elit, luctus sit amet lectus egestas, trices congue lacus. Praesent ut ornare lectus. Suspen tum consequat viverra.</string>
     <string name="title_activity_chat">Chat</string>
     <string name="title_activity_subscribe">Subscribe</string>

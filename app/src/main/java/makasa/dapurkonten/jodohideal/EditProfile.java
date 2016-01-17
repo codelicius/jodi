@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -78,18 +79,36 @@ public class EditProfile extends AppCompatActivity {
         txtLocation = (Spinner)findViewById(R.id.lokasi);
         txtHoroscope = (Spinner)findViewById(R.id.horoskop);
         txtJob = (Spinner)findViewById(R.id.pekerjaan);
+
         tinggi.setText(height);
         deskripsi.setText(userDetail);
         ArrayList<String> items=getSpinner("pekerjaan");
         ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,
                 R.layout.spinner_item,R.id.txt,items);
         txtJob.setAdapter(adapter);
+        txtJob.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                       int position, long arg3) {
+                Log.d("di pilih", Integer.valueOf(position).toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+
+            }
+
+        });
+
+
         ArrayList<String> lokasi=getSpinner("lokasi");
         ArrayAdapter<String> adapters=new ArrayAdapter<String>(this,
                 R.layout.spinner_item,R.id.txt,lokasi);
         txtLocation.setAdapter(adapters);
 
     }
+
     public void save(View v){
         HashMap<String, String> user = sessions.getUserDetails();
         final String userid = user.get(sessionmanager.SES_USER_ID);

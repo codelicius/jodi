@@ -2,7 +2,9 @@
 
 package makasa.dapurkonten.jodohideal;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -175,15 +177,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent ed = new Intent(getApplicationContext(), EditProfile.class);
-                startActivity(ed);
-            }
-        });
-
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -320,9 +313,6 @@ public class MainActivity extends AppCompatActivity
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getApplicationContext(),
-                                    "Error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG).show();
                         }
                         adapterListPasangan.notifyDataSetChanged();
 
@@ -330,7 +320,24 @@ public class MainActivity extends AppCompatActivity
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                progressDialog.dismiss();
                 VolleyLog.d(INI, "Error: " + error.getMessage());
+                AlertDialog infoPass = new AlertDialog.Builder(MainActivity.this).create();
+                infoPass.setTitle("Alert");
+                infoPass.setMessage("Gagal terhubung dengan server, silakan cek koneksi internet anda");
+                infoPass.setButton(AlertDialog.BUTTON_POSITIVE, "Try Again",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                listPasangan();
+                            }
+                        });
+                infoPass.setButton(AlertDialog.BUTTON_NEGATIVE, "OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                infoPass.show();
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_SHORT).show();
 
