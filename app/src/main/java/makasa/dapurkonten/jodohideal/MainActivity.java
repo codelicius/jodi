@@ -283,6 +283,7 @@ public class MainActivity extends AppCompatActivity
         progressDialog.setCancelable(false);
         progressDialog.show();
         urlAPI = urlAPI + "?userid="+userid+"&genderid="+genderid+"&page=1&jodiPasangan";
+        Log.d("url",urlAPI + "?userid="+userid+"&genderid="+genderid+"&page=1&jodiPasangan");
         JsonArrayRequest req = new JsonArrayRequest(urlAPI,
                 new Response.Listener<JSONArray>() {
                     @Override

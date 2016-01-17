@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -82,30 +83,9 @@ public class EditProfile extends AppCompatActivity {
 
         tinggi.setText(height);
         deskripsi.setText(userDetail);
-        ArrayList<String> items=getSpinner("pekerjaan");
-        ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,
-                R.layout.spinner_item,R.id.txt,items);
-        txtJob.setAdapter(adapter);
-        txtJob.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        getSpinner("pekerjaan");
+        getSpinner("lokasi");
 
-            @Override
-            public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                       int position, long arg3) {
-                Log.d("di pilih", Integer.valueOf(position).toString());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-
-            }
-
-        });
-
-
-        ArrayList<String> lokasi=getSpinner("lokasi");
-        ArrayAdapter<String> adapters=new ArrayAdapter<String>(this,
-                R.layout.spinner_item,R.id.txt,lokasi);
-        txtLocation.setAdapter(adapters);
 
     }
 
@@ -113,20 +93,34 @@ public class EditProfile extends AppCompatActivity {
         HashMap<String, String> user = sessions.getUserDetails();
         final String userid = user.get(sessionmanager.SES_USER_ID);
         String getTinggi = tinggi.getText().toString().trim(),
-                gettxtRace= String.valueOf(txtRace.getSelectedItemPosition()),
-                gettxtAgama= String.valueOf(txtReligion.getSelectedItemPosition()),
-                gettxtRokok= String.valueOf(txtRokok.getSelectedItemPosition()),
-                gettxtAlkohol= String.valueOf(txtAlkohol.getSelectedItemPosition()),
-                gettxtHoroscope = String.valueOf(txtHoroscope.getSelectedItemPosition()),
-                gettxtJob = String.valueOf(txtJob.getSelectedItemPosition()),
+                gettxtRace= String.valueOf(txtRace.getSelectedItemPosition()+1),
+                gettxtAgama= String.valueOf(txtReligion.getSelectedItemPosition()+1),
+                gettxtRokok= String.valueOf(txtRokok.getSelectedItemPosition()+1),
+                gettxtAlkohol= String.valueOf(txtAlkohol.getSelectedItemPosition()+1),
+                gettxtHoroscope = String.valueOf(txtHoroscope.getSelectedItemPosition()+1),
+                gettxtJob = String.valueOf(txtJob.getSelectedItemPosition()+1),
                 getDeskripsi = deskripsi.getText().toString().trim(),
                 getTPasangan= tipe_pasangan.getText().toString().trim(),
                 getKegiatan= kegiatan.getText().toString().trim(),
-                gettxtLocation = String.valueOf(txtLocation.getSelectedItemPosition()),
+                gettxtLocation = String.valueOf(txtLocation.getSelectedItemPosition()+1),
                 getHalSuka= halsuka.getText().toString().trim(),
                 getMalming= malming.getText().toString().trim();
-        if(!getTPasangan.isEmpty() && !getKegiatan.isEmpty() && !getHalSuka.isEmpty() && !getMalming.isEmpty()){
+        if(!getTinggi.isEmpty() && !getTPasangan.isEmpty() && !getKegiatan.isEmpty() && !getHalSuka.isEmpty() && !getMalming.isEmpty()){
             editUser(userid,getTinggi,gettxtRace,gettxtAgama,gettxtRokok,gettxtAlkohol,gettxtHoroscope,gettxtJob,getDeskripsi,getTPasangan,getKegiatan,gettxtLocation,getHalSuka,getMalming);
+            Log.d("editprofile","userid:"+userid);
+            Log.d("editprofile","height:"+getTinggi);
+            Log.d("editprofile","suku:"+gettxtRace);
+            Log.d("editprofile","agama:"+gettxtAgama);
+            Log.d("editprofile","rokok:"+gettxtRokok);
+            Log.d("editprofile","alkohol:"+gettxtAlkohol);
+            Log.d("editprofile","horoskop:"+gettxtHoroscope);
+            Log.d("editprofile","pekerjaan:"+gettxtJob);
+            Log.d("editprofile","descdiri:"+getDeskripsi);
+            Log.d("editprofile","tipe_psg:"+getTPasangan);
+            Log.d("editprofile","kegiatan:"+getKegiatan);
+            Log.d("editprofile","lokasi:"+gettxtLocation);
+            Log.d("editprofile","suka:"+getHalSuka);
+            Log.d("editprofile","malming:"+getMalming);
         }
         else{
             AlertDialog infoPass = new AlertDialog.Builder(EditProfile.this).create();
@@ -170,7 +164,6 @@ public class EditProfile extends AppCompatActivity {
                             } else {
                                 Toast.makeText(EditProfile.this, jodiStatus, Toast.LENGTH_LONG).show();
                             }
-                            Log.d(INI,"edit profile"+userid+height+ suku+ agama+rokok+ alkohol+horoskop+ pekerjaan+descdiri+tipe_psg+kegiatan+lokasi+suka+malming );
 
 
 
@@ -212,12 +205,18 @@ public class EditProfile extends AppCompatActivity {
         requestQueue.add(requestDaftar);
 
     }
-    private ArrayList<String> getSpinner(String fileName){
-        final JSONArray jsonArray=null;
+    public void getSpinner(String spin){
+        String API = AppConfig.urlAPI;
+        String url = API+"?jodiSpinner";
         final ArrayList<String> pekerjaan=new ArrayList<String>();
+        final ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item,pekerjaan);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         final ArrayList<String> lokasi=new ArrayList<String>();
-        final String API = AppConfig.urlAPI;
-        final String url = API+"?jodiSpinner";
+        final ArrayAdapter<String> adapters=new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item,lokasi);
+        adapters.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         JsonObjectRequest jsonRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
@@ -232,6 +231,8 @@ public class EditProfile extends AppCompatActivity {
                             for(int i=0; i<lk.length(); i++){
                                 lokasi.add(lk.getString(i));
                             }
+                            adapters.notifyDataSetChanged();
+                            adapter.notifyDataSetChanged();
                             Log.d("array pekerjaan",pekerjaan.toString());
                         }
                         catch (JSONException e) {
@@ -250,11 +251,10 @@ public class EditProfile extends AppCompatActivity {
 
         // Adding request to request queue
         Volley.newRequestQueue(this).add(jsonRequest);
-        if(fileName.equals("pekerjaan")){
-            return pekerjaan;
-        }
-        else{
-            return lokasi;
-        }
+        if(spin.equals("pekerjaan"))
+            txtJob.setAdapter(adapter);
+        else
+            txtLocation.setAdapter(adapters);
+
     }
 }
