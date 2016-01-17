@@ -47,6 +47,7 @@ public class Register extends AppCompatActivity {
     final String passIMSI = "pass";
     final String APIIMSI = "http://103.253.112.121/quiz_api/imsi_api.php";
     private EditText inputFirstName, inputLastName, inputEmail, inputPhoneNumber, inputFpassword, inputLpassword;
+    TextView eula;
     private CheckBox agreement;
     private RadioGroup rgSex;
     private RadioButton rbGender;
@@ -76,6 +77,8 @@ public class Register extends AppCompatActivity {
         rgSex = (RadioGroup)findViewById(R.id.sex);
         btnRegister = (Button)findViewById(R.id.register);
         inputBirthDay = (Button)findViewById(R.id.birthday);
+        eula = (TextView)findViewById(R.id.eula);
+        eula.setMovementMethod(new ScrollingMovementMethod());
 
         agreement.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
