@@ -183,6 +183,10 @@ public class Register extends AppCompatActivity {
         int selectedID = rgSex.getCheckedRadioButtonId();
         rbGender = (RadioButton)findViewById(selectedID);
         String gender = rbGender.getText().toString().trim();
+        if(gender.equals("Male"))
+            gender = "0";
+        else
+            gender = "1";
 //        String gender = rbGender.getText().toString().trim();
 
         //cek untuk pastikan user mengisi seluruh form

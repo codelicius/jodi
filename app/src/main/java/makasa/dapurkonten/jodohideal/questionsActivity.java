@@ -218,7 +218,9 @@ public class questionsActivity extends AppCompatActivity{
                                 db.addUser(jodiUserID, jodiFirstName, jodiLastName, jodiEmail, profileGender,
                                         profileAge, profileRace, profileReligion, profileHeight, profileLocation,
                                         profileHoroscope, profileJob, profileDetail, profileFoto);
-                                Log.d(INI, "success update to server");
+                                Log.d("add db", jodiUserID+jodiFirstName+jodiLastName+jodiEmail+profileGender+
+                                        profileAge+profileRace+profileReligion+profileHeight+profileLocation+
+                                        profileHoroscope+profileJob+profileDetail+profileFoto);
                             }
 
                         } catch (JSONException e) {
