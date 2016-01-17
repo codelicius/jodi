@@ -24,7 +24,8 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void run() {
                 session = new sessionmanager(getApplicationContext());
-                session.checkLogin();
+                session.checkDaftar();
+                //session.checkLogin();
                 finish();
             }
         }, SPLASH_TIME);

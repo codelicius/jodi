@@ -138,6 +138,7 @@ public class imageUpload extends AppCompatActivity{
             startActivity(m);
         }
         else{
+            session.changeValueRegister("upload",1);
             Intent q = new Intent(this, questionsActivity.class);
             startActivity(q);
         }

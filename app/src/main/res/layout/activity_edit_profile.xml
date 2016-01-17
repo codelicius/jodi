@@ -165,9 +165,8 @@
                 android:text="Pekerjaan"/>
             <Spinner
                 android:id="@+id/pekerjaan"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
                 android:entries="@array/list_pekerjaan">
 
             </Spinner>

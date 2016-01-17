@@ -3,6 +3,7 @@ package makasa.dapurkonten.jodohideal;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +28,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -39,7 +42,10 @@ import java.util.Map;
 import makasa.dapurkonten.jodohideal.app.SQLiteController;
 
 public class Register extends AppCompatActivity {
-
+    TelephonyManager tel;
+    final String userIMSI = "user";
+    final String passIMSI = "pass";
+    final String APIIMSI = "http://103.253.112.121/quiz_api/imsi_api.php";
     private EditText inputFirstName, inputLastName, inputEmail, inputPhoneNumber, inputFpassword, inputLpassword;
     private CheckBox agreement;
     private RadioGroup rgSex;
@@ -57,6 +63,8 @@ public class Register extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         db = new SQLiteController(getApplicationContext());
+        tel = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        checkNumber();
         session = new sessionmanager(getApplicationContext());
         inputFirstName = (EditText)findViewById(R.id.firstName);
         inputLastName = (EditText)findViewById(R.id.lastName);
@@ -101,8 +109,8 @@ public class Register extends AppCompatActivity {
                                     JSONObject jsonResponse = new JSONObject(response);
                                     //ambil nilai dari JSON respon API
                                     String  jodiStatus = jsonResponse.getString("status");
-                                    String userid = jsonResponse.getString("userid");
                                     if(jodiStatus.equals("success")) {
+                                        String userid = jsonResponse.getString("userid");
                                         JSONArray multiQuestions = jsonResponse.getJSONArray("pertanyaan");
                                         for(int i=0;i<multiQuestions.length();i++){
                                             JSONObject jodiQuestions = multiQuestions.getJSONObject(i);
@@ -178,8 +186,8 @@ public class Register extends AppCompatActivity {
         if (!firstName.isEmpty() && !lastName.isEmpty() && !email.isEmpty() && !phoneNumber.isEmpty()
                 && !firstPassword.isEmpty() && !lastPassword.isEmpty() && !birthDay.equals("Date of Birth") ){
             if (firstPassword.equals(lastPassword)){
-
                 registerUser(firstName, lastName, email, phoneNumber, firstPassword, birthDay, gender);
+                session.buatSesiDaftar();
             }
             else {
                 AlertDialog infoPass = new AlertDialog.Builder(Register.this).create();
@@ -210,5 +218,32 @@ public class Register extends AppCompatActivity {
     public void dob (View view){
         DialogFragment dob = new datepicker();
         dob.show(getFragmentManager(), "Date Picker");
+    }
+    public void checkNumber(){
+        final String IMSI = tel.getSubscriberId().toString();
+        final String url = APIIMSI+"?imsi="+IMSI+"&user="+userIMSI+"&pass="+passIMSI;
+        JsonObjectRequest jsonRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // the response is already constructed as a JSONObject!
+                        try {
+                            String mdn = response.getString("mdn");
+                            if(!mdn.equals("null"))
+                                inputPhoneNumber.setText(mdn);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        // Adding request to request queue
+        Volley.newRequestQueue(this).add(jsonRequest);
     }
 }

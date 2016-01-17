@@ -82,7 +82,11 @@ public class questionsActivity extends AppCompatActivity{
             if(goto_next.getText().toString().equals("Finish")){
                 jawabPertanyaan(questionId, indexJawabPertanyaan);
                 getDetail();
+                sessions.changeValueRegister("question", 1);
+                sessions.registerDone();
                 Intent i = new Intent(getApplicationContext(),MainActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
             }
             if(idpertanyaan<10) {
