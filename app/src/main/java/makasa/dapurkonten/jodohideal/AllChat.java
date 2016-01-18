@@ -2,8 +2,6 @@ package makasa.dapurkonten.jodohideal;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -43,6 +41,7 @@ import makasa.dapurkonten.jodohideal.adapter.RecentChatAdapter;
 import makasa.dapurkonten.jodohideal.app.AppConfig;
 import makasa.dapurkonten.jodohideal.app.AppController;
 import makasa.dapurkonten.jodohideal.app.SQLiteController;
+import makasa.dapurkonten.jodohideal.object.AllChats;
 import makasa.dapurkonten.jodohideal.object.RecentChat;
 
 public class AllChat extends AppCompatActivity
@@ -54,9 +53,9 @@ public class AllChat extends AppCompatActivity
     private ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
     private List<RecentChat> rcArray = new ArrayList<RecentChat>();
     private RecentChatAdapter adapter;
-    private List<AllChat> acArray = new ArrayList<AllChat>();
+    private List<AllChats> acArray = new ArrayList<AllChats>();
     private AllChatAdapter adapterAllChat;
-    ListView recentChatList;
+    ListView recentChatList, allChatList;
     ImageButton btnTglChat;
     private static String INI = AllChat.class.getSimpleName();
 
@@ -110,6 +109,20 @@ public class AllChat extends AppCompatActivity
                 startActivity(i);
             }
         });
+
+        adapterAllChat = new AllChatAdapter(this, acArray);
+        allChatList=(ListView)findViewById(R.id.listAllChat);
+        allChatList.setAdapter(adapterAllChat);
+        recentChatList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                String pID = ((TextView) view.findViewById(R.id.txtPartnerID)).getText().toString();
+                Intent i = new Intent(getApplicationContext(), Chat.class);
+                i.putExtra("pID", pID);
+                startActivity(i);
+            }
+        });
+
 
         btnTglChat = (ImageButton)findViewById(R.id.tglChat);
 
@@ -213,14 +226,19 @@ public class AllChat extends AppCompatActivity
 
                                 for (int i=0; i<lsCht.length(); i++){
                                     RecentChat recentPpl = new RecentChat();
+                                    AllChats ac = new AllChats();
 
                                     JSONObject ppl = (JSONObject) lsCht.get(i);
                                     recentPpl.setPartnerID(ppl.getInt("partner_id"));
+                                    ac.setChatID(ppl.getInt("partner_id"));
                                     recentPpl.setFirstName(ppl.getString("first_name"));
                                     recentPpl.setLastName(ppl.getString("last_name"));
+                                    ac.setPartnerName(ppl.getString("first_name") + " " + ppl.getString("last_name"));
                                     recentPpl.setPic("http://103.253.112.121/jodohidealxl/upload/" + ppl.getString("foto"));
+                                    ac.setPartnerPic("http://103.253.112.121/jodohidealxl/upload/" + ppl.getString("foto"));
 
                                     rcArray.add(recentPpl);
+                                    acArray.add(ac);
                                     //Toast.makeText(MainActivity.this, recentPpl.getFirstName(), Toast.LENGTH_LONG).show();
                                 }
 
@@ -230,6 +248,7 @@ public class AllChat extends AppCompatActivity
                             e.printStackTrace();
                         }
                         adapter.notifyDataSetChanged();
+                        adapterAllChat.notifyDataSetChanged();
                     }
                 },
                 new Response.ErrorListener() {

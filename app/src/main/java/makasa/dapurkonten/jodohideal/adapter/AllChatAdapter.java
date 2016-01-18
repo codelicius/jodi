@@ -2,7 +2,6 @@ package makasa.dapurkonten.jodohideal.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,7 @@ import java.util.List;
 
 import makasa.dapurkonten.jodohideal.R;
 import makasa.dapurkonten.jodohideal.app.AppController;
-import makasa.dapurkonten.jodohideal.object.AllChat;
+import makasa.dapurkonten.jodohideal.object.AllChats;
 
 /**
  * Created by pr1de on 15/01/16.
@@ -25,22 +24,22 @@ public class AllChatAdapter extends BaseAdapter {
     private static String INI = ListPartnerAdapter.class.getSimpleName();
     private Activity activity;
     private LayoutInflater inflater;
-    private List<AllChat> AllChatItem;
+    private List<AllChats> allChatsItem;
     ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 
-    public AllChatAdapter(Activity activity, List<AllChat> AllChatItem){
+    public AllChatAdapter(Activity activity, List<AllChats> allChatsItem){
         this.activity = activity;
-        this.AllChatItem= AllChatItem;
+        this.allChatsItem = allChatsItem;
     }
 
     @Override
     public int getCount(){
-        return AllChatItem.size();
+        return allChatsItem.size();
     }
 
     @Override
     public Object getItem(int location) {
-        return AllChatItem.get(location);
+        return allChatsItem.get(location);
     }
 
     @Override
@@ -67,13 +66,13 @@ public class AllChatAdapter extends BaseAdapter {
         TextView chatID= (TextView) convertView.findViewById(R.id.chatID);
 
         // getting movie data for the row
-        AllChat ac = AllChatItem.get(position);
+        AllChats ac = allChatsItem.get(position);
 
         // thumbnail image
         thumbNail.setImageUrl(ac.getPartnerPic(), imageLoader);
 
         chatPartner.setText(ac.getPartnerName());
-        chatPreviewMessage.setText(ac.getMessagePreview());
+        chatPreviewMessage.setText("read more ...");
 
         chatID.setText(String.valueOf(ac.getChatID()));
 

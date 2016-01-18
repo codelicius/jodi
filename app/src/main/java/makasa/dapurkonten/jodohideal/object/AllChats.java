@@ -3,15 +3,15 @@ package makasa.dapurkonten.jodohideal.object;
 /**
  * Created by pr1de on 15/01/16.
  */
-public class AllChat {
+public class AllChats {
     private int chatID;
     private String partnerName, partnerPic, messagePreview;
 
-    public AllChat(){
+    public AllChats(){
 
     }
 
-    public AllChat(int chatID, String partnerName, String partnerPic, String messagePreview){
+    public AllChats(int chatID, String partnerName, String partnerPic, String messagePreview){
         this.chatID = chatID;
         this.partnerName = partnerName;
         this.partnerPic = partnerPic;
