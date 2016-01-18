@@ -1,15 +1,23 @@
 package makasa.dapurkonten.jodohideal;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 
-        import android.app.ProgressDialog;
-        import android.content.Intent;
-        import android.graphics.Bitmap;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-        import android.provider.MediaStore;
-        import android.support.v7.app.AppCompatActivity;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
         import android.util.Base64;
 import android.util.Log;
@@ -45,6 +53,7 @@ import makasa.dapurkonten.jodohideal.app.AppConfig;
 import makasa.dapurkonten.jodohideal.app.AppController;
 
 public class imageUpload extends AppCompatActivity{
+    int REQUEST_CAMERA = 0, SELECT_FILE = 1;
     sessionmanager session;
     private Button buttonChoose;
     private ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
@@ -145,29 +154,81 @@ public class imageUpload extends AppCompatActivity{
     }
 
     private void showFileChooser() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        final CharSequence[] items = { "Take Photo", "Choose from Library",
+                "Cancel" };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(imageUpload.this);
+        builder.setTitle("Add Photo!");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (items[item].equals("Take Photo")) {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, REQUEST_CAMERA);
+                } else if (items[item].equals("Choose from Library")) {
+                    Intent intent = new Intent(
+                            Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    intent.setType("image/*");
+                    startActivityForResult(
+                            Intent.createChooser(intent, "Select File"),
+                            SELECT_FILE);
+                } else if (items[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri filePath = data.getData();
-            try {
-                //Getting the Bitmap from Gallery
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                //Setting the Bitmap to ImageView
-                //nImageView.setImageBitmap(BitmapFactory.decodeFile(bitmap));
-                imageView.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == SELECT_FILE)
+                onSelectFromGalleryResult(data);
+            else if (requestCode == REQUEST_CAMERA)
+                onCaptureImageResult(data);
         }
     }
+
+    private void onCaptureImageResult(Intent data) {
+        bitmap = (Bitmap) data.getExtras().get("data");
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        File destination = new File(Environment.getExternalStorageDirectory(),
+                System.currentTimeMillis() + ".jpg");
+        FileOutputStream fo;
+        try {
+            destination.createNewFile();
+            fo = new FileOutputStream(destination);
+            fo.write(bytes.toByteArray());
+            fo.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Log.d("errorimage",e.toString());
+        } catch (IOException e) {
+            Log.d("errorimages",e.toString());
+            e.printStackTrace();
+        }
+        imageView.setImageBitmap(bitmap);
+    }
+
+    @SuppressWarnings("deprecation")
+    private void onSelectFromGalleryResult(Intent data) {
+        Uri filePath = data.getData();
+        try {
+            //Getting the Bitmap from Gallery
+            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+            //Setting the Bitmap to ImageView
+            //nImageView.setImageBitmap(BitmapFactory.decodeFile(bitmap));
+            imageView.setImageBitmap(bitmap);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+}
+
     public void choose(View v) {
 
             showFileChooser();
