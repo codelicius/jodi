@@ -273,6 +273,10 @@ public class MainActivity extends AppCompatActivity
         i.putExtra("fromActivity","Main");
         startActivity(i);
     }
+    public void morePartner(View v){
+        Intent i=new Intent(getApplicationContext(),CariPasangan.class);
+        startActivity(i);
+    }
     private void listPasangan(){
         HashMap<String, String> user = session.getUserDetails();
         String userid = user.get(sessionmanager.SES_USER_ID);

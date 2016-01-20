@@ -197,6 +197,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
-            android:text="More Partner"/>
+            android:text="More Partner"
+            android:onClick="morePartner"/>
     </LinearLayout>
 </ScrollView>
