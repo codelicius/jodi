@@ -51,7 +51,7 @@ public class Profile extends AppCompatActivity
     sessionmanager session;
     private SQLiteController db;
     TextView nama,umur,tb,agama,lokasi,horoskop,jk, txtDrawerNama, txtDrawerEmail;
-    NetworkImageView imageView;
+    NetworkImageView imageView, profileImage;
     private ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
     private List<RecentChat> rcArray = new ArrayList<RecentChat>();
     private RecentChatAdapter adapter;
@@ -64,12 +64,11 @@ public class Profile extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         nama=(TextView)findViewById(R.id.viewProfileNama);
-        umur=(TextView)findViewById(R.id.viewProfileUmur);
         tb=(TextView)findViewById(R.id.viewProfileTinggi);
         agama=(TextView)findViewById(R.id.viewProfileAgama);
         lokasi=(TextView)findViewById(R.id.viewProfileLokasi);
         horoskop=(TextView)findViewById(R.id.viewProfileHoroskop);
-        jk=(TextView)findViewById(R.id.viewProfileGender);
+        profileImage=(NetworkImageView)findViewById(R.id.thumbnailFoto);
 
         session = new sessionmanager(getApplicationContext());
         //session.checkLogin();
@@ -119,13 +118,11 @@ public class Profile extends AppCompatActivity
 
 
         nama.setText(fname + ' ' + lname);
-        umur.setText(age);
         tb.setText(height);
         agama.setText(religion);
         lokasi.setText(location);
         horoskop.setText(horoscope);
-        jk.setText(gender);
-
+        profileImage.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto, mImageLoader);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -135,6 +132,7 @@ public class Profile extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent ep = new Intent(Profile.this, EditProfile.class);
+                ep.putExtra("fromActivity","profile");
                 startActivity(ep);
             }
         });

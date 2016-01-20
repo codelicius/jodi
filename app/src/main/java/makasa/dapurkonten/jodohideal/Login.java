@@ -179,6 +179,7 @@ public class Login extends AppCompatActivity {
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
+        progressDialog.setCancelable(false);
         final String email = editTextUsername.getText().toString().trim();
         final String password = editTextPassword.getText().toString().trim();
 

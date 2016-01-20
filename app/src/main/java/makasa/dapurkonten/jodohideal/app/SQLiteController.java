@@ -67,7 +67,13 @@ public class SQLiteController extends SQLiteOpenHelper {
                 + COL_HOROSCOPE + " TEXT,"
                 + COL_JOB + " TEXT,"
                 + COL_USER_DETAIL + " TEXT,"
-                + COL_FOTO + " TEXT" +
+                + COL_FOTO + " TEXT,"
+                + "merokok TEXT,"
+                + "alkohol TEXT,"
+                + "tipe_pasangan TEXT,"
+                + "kegiatan TEXT,"
+                + "interest TEXT,"
+                + "satnite TEXT" +
                 ")";
 
         String CREATE_PARTNER_TABLE = "CREATE TABLE " + TABLE_PARTNER + "(" +
@@ -211,6 +217,13 @@ public class SQLiteController extends SQLiteOpenHelper {
             user.put("job", cursor.getString(11));
             user.put("user_detail", cursor.getString(12));
             user.put("foto",cursor.getString(13));
+            user.put("merokok", cursor.getString(14));
+            user.put("alkohol", cursor.getString(15));
+            user.put("tipe_pasangan", cursor.getString(16));
+            user.put("kegiatan", cursor.getString(17));
+            user.put("interest", cursor.getString(18));
+            user.put("satnite", cursor.getString(19));
+
 
         }
         cursor.close();
@@ -330,6 +343,30 @@ public class SQLiteController extends SQLiteOpenHelper {
         }
 
         return arrayListPartner;
+    }
+
+    public void updateUser(String id, String race, String religion, String height,
+                           String location, String horoscope, String job, String userDetail, String merokok,
+                           String alkohol, String tipe_pasangan, String kegiatan, String interest, String satnite){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues cp = new ContentValues();
+        cp.put(COL_ID, id);
+        cp.put(COL_RACE, race);
+        cp.put(COL_RELIGION, religion);
+        cp.put(COL_HEIGHT, height);
+        cp.put(COL_LOCATION, location);
+        cp.put(COL_HOROSCOPE, horoscope);
+        cp.put(COL_JOB, job);
+        cp.put(COL_USER_DETAIL, userDetail);
+        cp.put("merokok", merokok);
+        cp.put("alkohol", alkohol);
+        cp.put("tipe_pasangan", tipe_pasangan);
+        cp.put("kegiatan", kegiatan);
+        cp.put("interest", interest);
+        cp.put("satnite", satnite);
+
+        db.update(TABLE_USER,cp,"id="+id,null);
+        db.close();
     }
 
 }

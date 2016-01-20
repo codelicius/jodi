@@ -46,7 +46,7 @@ public class EditProfile extends AppCompatActivity {
     EditText tinggi, deskripsi, tipe_pasangan, kegiatan,halsuka,malming;
     Spinner txtRace,txtLocation,txtHoroscope,txtJob,txtReligion,txtRokok,txtAlkohol;
     private static String INI = EditProfile.class.getSimpleName();
-
+    private String fromActivity ="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +55,10 @@ public class EditProfile extends AppCompatActivity {
         setSupportActionBar(toolbar);
         db = new SQLiteController(getApplicationContext());
         sessions = new sessionmanager(getApplicationContext());
+
+        Bundle bundle=getIntent().getExtras();
+        fromActivity = bundle.getString("fromActivity");
+
         HashMap<String, String> profile = db.getUserDetails();
         String id = profile.get("id");
         String gender = profile.get("gender");
@@ -66,6 +70,12 @@ public class EditProfile extends AppCompatActivity {
         String horoscope = profile.get("horoscope");
         String job = profile.get("job");
         String userDetail = profile.get("user_detail");
+        String roko = profile.get("merokok");
+        String alkohol = profile.get("alkohol");
+        String tps = profile.get("tipe_pasangan");
+        String kgt = profile.get("kegiatan");
+        String interest = profile.get("interest");
+        String satnite = profile.get("satnite");
 
         deskripsi= (EditText)findViewById(R.id.deskripsi);
         tipe_pasangan = (EditText)findViewById(R.id.tipe_pasangan);
@@ -83,6 +93,10 @@ public class EditProfile extends AppCompatActivity {
 
         tinggi.setText(height);
         deskripsi.setText(userDetail);
+        tipe_pasangan.setText(tps);
+        kegiatan.setText(kgt);
+        halsuka.setText(interest);
+        malming.setText(satnite);
         getSpinner("pekerjaan");
         getSpinner("lokasi");
 
@@ -138,11 +152,21 @@ public class EditProfile extends AppCompatActivity {
 
     }
     private void editUser(final String userid,final String height, final String suku, final String agama,
-                              final String rokok, final String alkohol,final String horoskop, final String pekerjaan,final String descdiri,final String tipe_psg,final String kegiatan,final String lokasi,final String suka,final String malming) {
+                              final String rokok, final String alkohol,final String horoskop, final String pekerjaan,
+                          final String descdiri,final String tipe_psg,final String kegiatan,final String lokasi,
+                          final String suka,final String malming) {
         final ProgressDialog progressDialog = new ProgressDialog(EditProfile.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Please wait...");
         progressDialog.show();
+
+        final String etns = txtRace.getSelectedItem().toString();
+        final String agm = txtReligion.getSelectedItem().toString();
+        final String mrk = txtRokok.getSelectedItem().toString();
+        final String alkh = txtAlkohol.getSelectedItem().toString();
+        final String hrskp = txtHoroscope.getSelectedItem().toString();
+        final String pkrj = txtJob.getSelectedItem().toString();
+        final String lksi = txtLocation.getSelectedItem().toString();
 
         StringRequest requestDaftar = new StringRequest(Request.Method.POST, AppConfig.urlAPI,
                 new Response.Listener<String>() {
@@ -156,11 +180,20 @@ public class EditProfile extends AppCompatActivity {
                             String jodiStatus = jsonResponse.getString("status");
 
                             if (jodiStatus.equals("success")) {
-                                sessions.changeValueRegister("edit_profile",1);
-                                Intent i = new Intent(getApplicationContext(), imageUpload.class);
-                                i.putExtra("fromActivity","EditProfile");
-                                startActivity(i);
-                                finish();
+                                sessions.changeValueRegister("edit_profile", 1);
+                                db.updateUser(userid, etns, agm, height, lksi, hrskp, pkrj,descdiri, mrk,
+                                        alkh, tipe_psg, kegiatan, suka, malming);
+                                if (fromActivity.equals("profile")){
+                                    Intent i = new Intent(getApplicationContext(), Profile.class);
+                                    startActivity(i);
+                                    finish();
+                                }
+                                else {
+                                    Intent i = new Intent(getApplicationContext(), imageUpload.class);
+                                    i.putExtra("fromActivity","EditProfile");
+                                    startActivity(i);
+                                    finish();
+                                }
                             } else {
                                 Toast.makeText(EditProfile.this, jodiStatus, Toast.LENGTH_LONG).show();
                             }
