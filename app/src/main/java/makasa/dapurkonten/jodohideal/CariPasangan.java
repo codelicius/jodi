@@ -60,7 +60,7 @@ public class CariPasangan extends AppCompatActivity
     int page = 1;
     private SQLiteController db;
     private static String INI = CariPasangan.class.getSimpleName();
-    private String urlCaPas = "http://jodi.licious.id/api/";
+    private String urlCaPas = AppConfig.urlAPI;
     private List<Partner> pasangan= new ArrayList<Partner>();
     private ListView listView;
     private ListPartnerAdapter adapter;

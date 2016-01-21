@@ -42,11 +42,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import makasa.dapurkonten.jodohideal.app.AppConfig;
 import makasa.dapurkonten.jodohideal.app.SQLiteController;
 
 
 public class Login extends AppCompatActivity {
-    private static final String REGISTER_URL = "http://jodi.licious.id/api/";
+    private static final String REGISTER_URL = AppConfig.urlAPI;
 
     private TextView info;
     private EditText editTextUsername, editTextPassword;

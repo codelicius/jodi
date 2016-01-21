@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity
     private ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
     ImageButton btnTglChat;
     ListView customListView_chat;
-    private String urlAPI = "http://jodi.licious.id/api/";
+    private String urlAPI = AppConfig.urlAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
