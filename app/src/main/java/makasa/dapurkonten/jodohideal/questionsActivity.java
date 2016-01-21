@@ -81,7 +81,6 @@ public class questionsActivity extends AppCompatActivity{
         if(user_question != -1) {
             if(goto_next.getText().toString().equals("Finish")){
                 jawabPertanyaan(questionId, indexJawabPertanyaan);
-                getDetail();
                 sessions.changeValueRegister("question", 1);
                 sessions.registerDone();
                 Intent i = new Intent(getApplicationContext(),MainActivity.class);
@@ -99,6 +98,7 @@ public class questionsActivity extends AppCompatActivity{
                 groupQuestion.clearCheck();
                 if (idpertanyaan == 10) {
                     goto_next.setText("Finish");
+                    getDetail();
                 }
                 HashMap<String, String> tenQuestion = db.getIdQuestion(idpertanyaan);
                 String id = tenQuestion.get("id"),
@@ -213,11 +213,18 @@ public class questionsActivity extends AppCompatActivity{
                                         profileHoroscope = profileUser.getString("horoscope_name"),
                                         profileJob = profileUser.getString("job_name"),
                                         profileDetail = profileUser.getString("user_detail"),
-                                        profileFoto = profileUser.getString("foto_url");
+                                        profileFoto = profileUser.getString("foto_url"),
+                                        profileMerokok = profileUser.getString("smoking"),
+                                        profileAlkohol = profileUser.getString("alcohol"),
+                                        profileTipePasangan = profileUser.getString("partner_desc"),
+                                        profileKegiatan = profileUser.getString("activity"),
+                                        profileInterest = profileUser.getString("hobby"),
+                                        profileSatNite = profileUser.getString("sat_night");
 
                                 db.addUser(jodiUserID, jodiFirstName, jodiLastName, jodiEmail, profileGender,
                                         profileAge, profileRace, profileReligion, profileHeight, profileLocation,
-                                        profileHoroscope, profileJob, profileDetail, profileFoto);
+                                        profileHoroscope, profileJob, profileDetail, profileFoto,profileMerokok,profileAlkohol,
+                                        profileTipePasangan,profileKegiatan,profileInterest,profileSatNite);
                                 Log.d("add db", jodiUserID+jodiFirstName+jodiLastName+jodiEmail+profileGender+
                                         profileAge+profileRace+profileReligion+profileHeight+profileLocation+
                                         profileHoroscope+profileJob+profileDetail+profileFoto);

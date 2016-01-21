@@ -44,6 +44,13 @@ public class SQLiteController extends SQLiteOpenHelper {
     private static final String COL_JOB = "job";
     private static final String COL_USER_DETAIL = "user_detail";
     private static final String COL_FOTO = "foto";
+    private static final String COL_MEROKOK = "merokok";
+    private static final String COL_ALKOHOL = "alkohol";
+    private static final String COL_TIPE_PASANGAN = "tipe_pasangan";
+    private static final String COL_KEGIATAN = "kegiatan";
+    private static final String COL_INTEREST = "interest";
+    private static final String COL_SATNITE = "satnine";
+
 
 
     public SQLiteController(Context context) {
@@ -68,12 +75,12 @@ public class SQLiteController extends SQLiteOpenHelper {
                 + COL_JOB + " TEXT,"
                 + COL_USER_DETAIL + " TEXT,"
                 + COL_FOTO + " TEXT,"
-                + "merokok TEXT,"
-                + "alkohol TEXT,"
-                + "tipe_pasangan TEXT,"
-                + "kegiatan TEXT,"
-                + "interest TEXT,"
-                + "satnite TEXT" +
+                + COL_MEROKOK + " TEXT,"
+                + COL_ALKOHOL + " TEXT,"
+                + COL_TIPE_PASANGAN + " TEXT,"
+                + COL_KEGIATAN + " TEXT,"
+                + COL_INTEREST + " TEXT,"
+                + COL_SATNITE + " TEXT"+
                 ")";
 
         String CREATE_PARTNER_TABLE = "CREATE TABLE " + TABLE_PARTNER + "(" +
@@ -123,7 +130,8 @@ public class SQLiteController extends SQLiteOpenHelper {
 
     public void addUser(String id, String fname, String lname, String email,
                         String gender, String age, String race, String religion, String height,
-                        String location, String horoscope, String job, String userDetail, String foto) {
+                        String location, String horoscope, String job, String userDetail, String foto,String merokok, String alkohol,
+                        String tipePasangan,String kegiatan,String interest, String satNite) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -142,6 +150,14 @@ public class SQLiteController extends SQLiteOpenHelper {
         values.put(COL_JOB, job);
         values.put(COL_USER_DETAIL, userDetail);
         values.put(COL_FOTO, foto);
+        values.put(COL_MEROKOK, merokok);
+        values.put(COL_ALKOHOL, alkohol);
+        values.put(COL_TIPE_PASANGAN, tipePasangan);
+        values.put(COL_KEGIATAN, kegiatan);
+        values.put(COL_INTEREST, interest);
+        values.put(COL_SATNITE, satNite);
+
+
 
 
         // Insert
@@ -358,12 +374,12 @@ public class SQLiteController extends SQLiteOpenHelper {
         cp.put(COL_HOROSCOPE, horoscope);
         cp.put(COL_JOB, job);
         cp.put(COL_USER_DETAIL, userDetail);
-        cp.put("merokok", merokok);
-        cp.put("alkohol", alkohol);
-        cp.put("tipe_pasangan", tipe_pasangan);
-        cp.put("kegiatan", kegiatan);
-        cp.put("interest", interest);
-        cp.put("satnite", satnite);
+        cp.put(COL_MEROKOK, merokok);
+        cp.put(COL_ALKOHOL, alkohol);
+        cp.put(COL_TIPE_PASANGAN, tipe_pasangan);
+        cp.put(COL_KEGIATAN, kegiatan);
+        cp.put(COL_INTEREST, interest);
+        cp.put(COL_SATNITE, satnite);
 
         db.update(TABLE_USER,cp,"id="+id,null);
         db.close();

@@ -128,6 +128,7 @@ public class Register extends AppCompatActivity {
                                         Log.d(INI, "register" +firstName+ lastName+ email+phoneNumber+ firstPassword+birthDay+ gender);
                                         session.buatSesiLogin(userid, email, firstName, lastName, gender, birthDay);
                                         Intent i = new Intent(getApplicationContext(),EditProfile.class);
+                                        i.putExtra("fromActivity","register");
                                         startActivity(i);
                                         finish();
                                     }
