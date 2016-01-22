@@ -10,9 +10,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -21,8 +19,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,11 +36,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
@@ -237,21 +228,5 @@ public class imageUpload extends AppCompatActivity{
         HashMap<String, String> user = session.getUserDetails();
         String userID = user.get(sessionmanager.SES_USER_ID);
         uploadImage(userID);
-    }
-    public class customImageLoader implements ImageLoader.ImageCache {
-
-        @Override
-        public Bitmap getBitmap(String key) {
-            if (key.contains("file://")) {
-                return BitmapFactory.decodeFile(key.substring(key.indexOf("file://") + 7));
-            } else {
-                // Here you can add an actual cache
-                return null;
-            }
-        }
-        @Override
-        public void putBitmap(String key, Bitmap bitmap) {
-            // Here you can add an actual cache
-        }
     }
 }
