@@ -97,7 +97,7 @@ public class imageUpload extends AppCompatActivity{
                         //Disimissing the progress dialog
                         loading.dismiss();
                         //Showing toast message of the response
-                        Toast.makeText(imageUpload.this, "Foto profil kamu berhasil di perbaharui" , Toast.LENGTH_LONG).show();
+                        Toast.makeText(imageUpload.this, s.toString(), Toast.LENGTH_LONG).show();
                     }
                 },
                 new Response.ErrorListener() {
@@ -212,6 +212,8 @@ public class imageUpload extends AppCompatActivity{
         try {
             //Getting the Bitmap from Gallery
             bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
             //Setting the Bitmap to ImageView
             //nImageView.setImageBitmap(BitmapFactory.decodeFile(bitmap));
             imageView.setImageBitmap(bitmap);
@@ -227,6 +229,7 @@ public class imageUpload extends AppCompatActivity{
     public void upload(View v) {
         HashMap<String, String> user = session.getUserDetails();
         String userID = user.get(sessionmanager.SES_USER_ID);
+        Log.d("userid",userID);
         uploadImage(userID);
     }
 }
