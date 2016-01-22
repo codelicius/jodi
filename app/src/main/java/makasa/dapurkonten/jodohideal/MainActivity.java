@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
@@ -73,12 +74,11 @@ public class MainActivity extends AppCompatActivity
     private List<RecentChat> rcItem;
     private List<RecentChat> rcArray = new ArrayList<RecentChat>();
     private RecentChatAdapter adapter;
-    ImageLoader imageLoader = AppController.getInstance().getImageLoader();
     private ListPartnerAdapter adapterListPasangan;
     private ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
     ImageButton btnTglChat;
     ListView customListView_chat;
-    private String urlAPI = "http://jodi.licious.id/api/";
+    private String urlAPI = AppConfig.urlAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -471,5 +471,6 @@ public class MainActivity extends AppCompatActivity
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+
     }
 }

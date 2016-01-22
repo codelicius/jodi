@@ -39,6 +39,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import makasa.dapurkonten.jodohideal.app.AppConfig;
 import makasa.dapurkonten.jodohideal.app.SQLiteController;
 
 public class Register extends AppCompatActivity {
@@ -52,7 +53,7 @@ public class Register extends AppCompatActivity {
     private RadioGroup rgSex;
     private RadioButton rbGender;
     private Button btnRegister,inputBirthDay;
-    private String urlApi ="http://jodi.licious.id/api/";
+    private String urlApi = AppConfig.urlAPI;
     private SQLiteController db;
     private static String INI = Register.class.getSimpleName();
     sessionmanager session;
@@ -128,6 +129,7 @@ public class Register extends AppCompatActivity {
                                         session.buatSesiLogin(userid, email, firstName, lastName, gender, birthDay);
                                         Intent i = new Intent(getApplicationContext(),EditProfile.class);
                                         i.putExtra("fromActivity","Register");
+
                                         startActivity(i);
                                         finish();
                                     }
