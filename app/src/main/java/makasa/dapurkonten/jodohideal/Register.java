@@ -124,9 +124,10 @@ public class Register extends AppCompatActivity {
                                             db.addQuestion(jodiQuestionId,jodiQuestion,jodiOps1,jodiOps2);
                                         }
                                         //Toast.makeText(Register.this,userid,Toast.LENGTH_LONG).show();
-                                        Log.d(INI, "register" +firstName+ lastName+ email+phoneNumber+ firstPassword+birthDay+ gender);
+                                        Log.d(INI, "register" + firstName + lastName + email + phoneNumber + firstPassword + birthDay + gender);
                                         session.buatSesiLogin(userid, email, firstName, lastName, gender, birthDay);
                                         Intent i = new Intent(getApplicationContext(),EditProfile.class);
+                                        i.putExtra("fromActivity","Register");
                                         startActivity(i);
                                         finish();
                                     }

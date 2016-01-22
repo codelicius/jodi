@@ -52,6 +52,7 @@ import makasa.dapurkonten.jodohideal.adapter.ListPartnerAdapter;
 import makasa.dapurkonten.jodohideal.adapter.RecentChatAdapter;
 import makasa.dapurkonten.jodohideal.app.AppConfig;
 import makasa.dapurkonten.jodohideal.app.AppController;
+import makasa.dapurkonten.jodohideal.app.ParseUtils;
 import makasa.dapurkonten.jodohideal.app.SQLiteController;
 import makasa.dapurkonten.jodohideal.object.Partner;
 import makasa.dapurkonten.jodohideal.object.RecentChat;
@@ -126,6 +127,7 @@ public class MainActivity extends AppCompatActivity
         String email = user.get(sessionmanager.SES_EMAIL);
         final String userID = user.get(sessionmanager.SES_USER_ID);
 
+        ParseUtils.subscribeWithEmail(email);
 
         //set dalam textview
         txtNama = (TextView)findViewById(R.id.txtProfilNama);

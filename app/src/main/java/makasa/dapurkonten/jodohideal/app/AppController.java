@@ -18,10 +18,14 @@ public class AppController extends Application {
 
     private static AppController mInstance;
 
+
     @Override
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+
+        // register with parse
+        ParseUtils.registerParse(this);
     }
 
     public static synchronized AppController getInstance() {
@@ -60,4 +64,5 @@ public class AppController extends Application {
             mRequestQueue.cancelAll(tag);
         }
     }
+
 }
