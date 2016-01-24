@@ -16,6 +16,7 @@
             android:id="@+id/thumbnailFoto"
             android:layout_width="80dp"
             android:layout_height="90dp"
+            android:scaleType="fitCenter"
             android:layout_alignParentLeft="true"
             android:layout_marginRight="8dp"
             />

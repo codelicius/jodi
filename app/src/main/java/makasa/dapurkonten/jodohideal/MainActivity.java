@@ -164,7 +164,6 @@ public class MainActivity extends AppCompatActivity
                 i.putExtra("pID", pID);
                 i.putExtra("userID", userID);
                 startActivity(i);
-                finish();
             }
         });
 
