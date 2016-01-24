@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity
         txtLokasi.setText(location);
         txtTentang.setText(userDetail);
         txtShortDescription.setText("Tinggi " + height + " cm, " + horoscope + ", " + job
-                            + ", " + religion);
+                + ", " + religion);
         lblAbout.setText("Tentang " + firstName + " " + lastname);
         imgFoto.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto, mImageLoader);
         imageView.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto, mImageLoader);
@@ -197,25 +197,25 @@ public class MainActivity extends AppCompatActivity
          * coba nampilin data dari sqlite
          *
          * ArrayList<HashMap<String, String>> arrayListPartner = db.getAllPartner();
-        if (arrayListPartner.size() > 0) {
+         if (arrayListPartner.size() > 0) {
 
-            for (int i = 0; i < arrayListPartner.size(); i++) {
+         for (int i = 0; i < arrayListPartner.size(); i++) {
 
-                // ambil masing-masing hasmap dari arrayListPartner
-                HashMap<String, String> hashMapRecordPartner = arrayListPartner
-                        .get(i);
+         // ambil masing-masing hasmap dari arrayListPartner
+         HashMap<String, String> hashMapRecordPartner = arrayListPartner
+         .get(i);
 
-                // JSONObject jsonChildNode = arrayBiodata.getJSONObject(i);
-                String partner_id = hashMapRecordPartner.get("partner_id"),
-                        partner_fname = hashMapRecordPartner.get("partner_fname"),
-                        partner_lname = hashMapRecordPartner.get("partner_lname"),
-                        partner_match = hashMapRecordPartner.get("partner_match"),
-                        partner_notmatch = hashMapRecordPartner.get("partner_notmatch");
-                TextView cocokNama = (TextView)findViewById(R.id.txtCocokNama);
-                cocokNama.setText(partner_fname + " " + lastname);
+         // JSONObject jsonChildNode = arrayBiodata.getJSONObject(i);
+         String partner_id = hashMapRecordPartner.get("partner_id"),
+         partner_fname = hashMapRecordPartner.get("partner_fname"),
+         partner_lname = hashMapRecordPartner.get("partner_lname"),
+         partner_match = hashMapRecordPartner.get("partner_match"),
+         partner_notmatch = hashMapRecordPartner.get("partner_notmatch");
+         TextView cocokNama = (TextView)findViewById(R.id.txtCocokNama);
+         cocokNama.setText(partner_fname + " " + lastname);
 
-            }
-        } **/
+         }
+         } **/
 
         //IsiChat();
         //RefreshListChat();
@@ -227,41 +227,41 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        objectArray_right.clear();
-        for (int i = 0; i < dataArray_right.size(); i++) {
-            Object obj = new Object();
-            objectArray_right.add(obj);
-        }
-        Log.d("object array", "" + objectArray_right.size());
-        adapterChat = new ChatItemAdapter(objectArray_right, 1);
-        customListView_chat.setAdapter(adapterChat);
+     objectArray_right.clear();
+     for (int i = 0; i < dataArray_right.size(); i++) {
+     Object obj = new Object();
+     objectArray_right.add(obj);
+     }
+     Log.d("object array", "" + objectArray_right.size());
+     adapterChat = new ChatItemAdapter(objectArray_right, 1);
+     customListView_chat.setAdapter(adapterChat);
 
-    }
+     }
 
-    public void IsiChat()
-    {
+     public void IsiChat()
+     {
 
-        dataArray_right.clear();
-
-
-        dataArray_right.add("Option 1");
-        dataArray_right.add("Option 2");
-        dataArray_right.add("Option 3");
-        dataArray_right.add("Option 4");
-        dataArray_right.add("Option 5");
+     dataArray_right.clear();
 
 
-    }
+     dataArray_right.add("Option 1");
+     dataArray_right.add("Option 2");
+     dataArray_right.add("Option 3");
+     dataArray_right.add("Option 4");
+     dataArray_right.add("Option 5");
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }**/
+
+     }
+
+     @Override
+     public void onBackPressed() {
+     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+     if (drawer.isDrawerOpen(GravityCompat.START)) {
+     drawer.closeDrawer(GravityCompat.START);
+     } else {
+     super.onBackPressed();
+     }
+     }**/
 
     public void imgProfile(View v){
         Intent i = new Intent(getApplicationContext(),imageUpload.class);
