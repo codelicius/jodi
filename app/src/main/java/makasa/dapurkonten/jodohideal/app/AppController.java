@@ -7,6 +7,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.parse.Parse;
+import com.parse.ParseInstallation;
 
 public class AppController extends Application {
 
@@ -24,8 +26,8 @@ public class AppController extends Application {
         super.onCreate();
         mInstance = this;
 
-        // register with parse
-        ParseUtils.registerParse(this);
+        Parse.initialize(this, "B4ZJi7CuMdX33hpwPWv5sLCcTRMNyb7gEtLHzvGE", "UftgXzH0iSSKYJKiVPKSrN1bW0AmV14l2BbIk4yX");
+        ParseInstallation.getCurrentInstallation().saveInBackground();
     }
 
     public static synchronized AppController getInstance() {

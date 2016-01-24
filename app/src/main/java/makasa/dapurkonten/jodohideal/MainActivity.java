@@ -6,11 +6,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,11 +17,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,7 +47,6 @@ import makasa.dapurkonten.jodohideal.adapter.ListPartnerAdapter;
 import makasa.dapurkonten.jodohideal.adapter.RecentChatAdapter;
 import makasa.dapurkonten.jodohideal.app.AppConfig;
 import makasa.dapurkonten.jodohideal.app.AppController;
-import makasa.dapurkonten.jodohideal.app.ParseUtils;
 import makasa.dapurkonten.jodohideal.app.SQLiteController;
 import makasa.dapurkonten.jodohideal.object.Partner;
 import makasa.dapurkonten.jodohideal.object.RecentChat;
@@ -127,7 +120,7 @@ public class MainActivity extends AppCompatActivity
         String email = user.get(sessionmanager.SES_EMAIL);
         final String userID = user.get(sessionmanager.SES_USER_ID);
 
-        ParseUtils.subscribeWithEmail(email);
+
 
         //set dalam textview
         txtNama = (TextView)findViewById(R.id.txtProfilNama);
@@ -147,7 +140,7 @@ public class MainActivity extends AppCompatActivity
         txtLokasi.setText(location);
         txtTentang.setText(userDetail);
         txtShortDescription.setText("Tinggi " + height + " cm, " + horoscope + ", " + job
-                            + ", " + religion);
+                + ", " + religion);
         lblAbout.setText("Tentang " + firstName + " " + lastname);
         imgFoto.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto, mImageLoader);
         imageView.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto, mImageLoader);
@@ -204,25 +197,25 @@ public class MainActivity extends AppCompatActivity
          * coba nampilin data dari sqlite
          *
          * ArrayList<HashMap<String, String>> arrayListPartner = db.getAllPartner();
-        if (arrayListPartner.size() > 0) {
+         if (arrayListPartner.size() > 0) {
 
-            for (int i = 0; i < arrayListPartner.size(); i++) {
+         for (int i = 0; i < arrayListPartner.size(); i++) {
 
-                // ambil masing-masing hasmap dari arrayListPartner
-                HashMap<String, String> hashMapRecordPartner = arrayListPartner
-                        .get(i);
+         // ambil masing-masing hasmap dari arrayListPartner
+         HashMap<String, String> hashMapRecordPartner = arrayListPartner
+         .get(i);
 
-                // JSONObject jsonChildNode = arrayBiodata.getJSONObject(i);
-                String partner_id = hashMapRecordPartner.get("partner_id"),
-                        partner_fname = hashMapRecordPartner.get("partner_fname"),
-                        partner_lname = hashMapRecordPartner.get("partner_lname"),
-                        partner_match = hashMapRecordPartner.get("partner_match"),
-                        partner_notmatch = hashMapRecordPartner.get("partner_notmatch");
-                TextView cocokNama = (TextView)findViewById(R.id.txtCocokNama);
-                cocokNama.setText(partner_fname + " " + lastname);
+         // JSONObject jsonChildNode = arrayBiodata.getJSONObject(i);
+         String partner_id = hashMapRecordPartner.get("partner_id"),
+         partner_fname = hashMapRecordPartner.get("partner_fname"),
+         partner_lname = hashMapRecordPartner.get("partner_lname"),
+         partner_match = hashMapRecordPartner.get("partner_match"),
+         partner_notmatch = hashMapRecordPartner.get("partner_notmatch");
+         TextView cocokNama = (TextView)findViewById(R.id.txtCocokNama);
+         cocokNama.setText(partner_fname + " " + lastname);
 
-            }
-        } **/
+         }
+         } **/
 
         //IsiChat();
         //RefreshListChat();
@@ -234,41 +227,41 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        objectArray_right.clear();
-        for (int i = 0; i < dataArray_right.size(); i++) {
-            Object obj = new Object();
-            objectArray_right.add(obj);
-        }
-        Log.d("object array", "" + objectArray_right.size());
-        adapterChat = new ChatItemAdapter(objectArray_right, 1);
-        customListView_chat.setAdapter(adapterChat);
+     objectArray_right.clear();
+     for (int i = 0; i < dataArray_right.size(); i++) {
+     Object obj = new Object();
+     objectArray_right.add(obj);
+     }
+     Log.d("object array", "" + objectArray_right.size());
+     adapterChat = new ChatItemAdapter(objectArray_right, 1);
+     customListView_chat.setAdapter(adapterChat);
 
-    }
+     }
 
-    public void IsiChat()
-    {
+     public void IsiChat()
+     {
 
-        dataArray_right.clear();
-
-
-        dataArray_right.add("Option 1");
-        dataArray_right.add("Option 2");
-        dataArray_right.add("Option 3");
-        dataArray_right.add("Option 4");
-        dataArray_right.add("Option 5");
+     dataArray_right.clear();
 
 
-    }
+     dataArray_right.add("Option 1");
+     dataArray_right.add("Option 2");
+     dataArray_right.add("Option 3");
+     dataArray_right.add("Option 4");
+     dataArray_right.add("Option 5");
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }**/
+
+     }
+
+     @Override
+     public void onBackPressed() {
+     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+     if (drawer.isDrawerOpen(GravityCompat.START)) {
+     drawer.closeDrawer(GravityCompat.START);
+     } else {
+     super.onBackPressed();
+     }
+     }**/
 
     public void imgProfile(View v){
         Intent i = new Intent(getApplicationContext(),imageUpload.class);
