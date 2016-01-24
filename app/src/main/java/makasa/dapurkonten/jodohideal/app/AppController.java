@@ -27,7 +27,7 @@ public class AppController extends Application {
         mInstance = this;
 
         Parse.initialize(this, "B4ZJi7CuMdX33hpwPWv5sLCcTRMNyb7gEtLHzvGE", "UftgXzH0iSSKYJKiVPKSrN1bW0AmV14l2BbIk4yX");
-        ParseInstallation.getCurrentInstallation().saveInBackground();
+        //ParseInstallation.getCurrentInstallation().saveInBackground();
     }
 
     public static synchronized AppController getInstance() {

@@ -33,6 +33,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.parse.ParseInstallation;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,6 +51,7 @@ import makasa.dapurkonten.jodohideal.app.AppController;
 import makasa.dapurkonten.jodohideal.app.SQLiteController;
 import makasa.dapurkonten.jodohideal.object.Partner;
 import makasa.dapurkonten.jodohideal.object.RecentChat;
+import makasa.dapurkonten.jodohideal.receiver.parsePush;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -72,6 +74,8 @@ public class MainActivity extends AppCompatActivity
     ImageButton btnTglChat;
     ListView customListView_chat;
     private String urlAPI = AppConfig.urlAPI;
+    parsePush p=new parsePush();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,16 +90,18 @@ public class MainActivity extends AppCompatActivity
                                     int position, long id) {
                 String pID = ((TextView) view.findViewById(R.id.txtPartnerID)).getText().toString();
                 Intent i = new Intent(getApplicationContext(), Chat.class);
-                i.putExtra("pID",pID);
+                i.putExtra("pID", pID);
                 startActivity(i);
             }
         });
 
         db = new SQLiteController(getApplicationContext());
 
+
         session = new sessionmanager(getApplicationContext());
         //session.checkLogin();
         session.checkLoginMain();
+
 
         // tarik data user dari sqlite
         HashMap<String, String> profile = db.getUserDetails();
@@ -120,7 +126,7 @@ public class MainActivity extends AppCompatActivity
         String email = user.get(sessionmanager.SES_EMAIL);
         final String userID = user.get(sessionmanager.SES_USER_ID);
 
-
+        p.insertPush(email,userID,AppConfig.devid);
 
         //set dalam textview
         txtNama = (TextView)findViewById(R.id.txtProfilNama);
@@ -388,6 +394,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(cht);
         }
         else if (id == R.id.nav_logout) {
+            p.deletePush(AppConfig.devid);
             db.deleteUsers();
             session.logoutUser();
         }
