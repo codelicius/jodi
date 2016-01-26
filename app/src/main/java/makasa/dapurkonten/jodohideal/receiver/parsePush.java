@@ -12,6 +12,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
@@ -21,8 +22,11 @@ import java.util.List;
  * Created by abay on 24/01/16.
  */
 public class parsePush {
-    public void deletePush(final String deviceid){
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Installation");
+    public void deletePush(){
+        ParseInstallation delete= ParseInstallation.getCurrentInstallation();
+        delete.remove("islogin");
+        delete.saveInBackground();
+        /**ParseQuery<ParseObject> query = ParseQuery.getQuery("Installation");
         query.whereEqualTo("deviceToken",deviceid);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -32,11 +36,16 @@ public class parsePush {
                     object.saveInBackground();
                 }
             }
-        });
+        });**/
 
     }
-    public void insertPush(final String email,final String userid,final String deviceid){
-        ParseQuery<ParseObject> query1 = ParseQuery.getQuery("Jodi");
+    public void insertPush(final String email,final String userid){
+        ParseInstallation insert = ParseInstallation.getCurrentInstallation();
+        insert.put("email", email);
+        insert.put("userid", userid);
+        insert.put("islogin", "yes");
+        insert.saveInBackground();
+        /**ParseQuery<ParseObject> query1 = ParseQuery.getQuery("Jodi");
         query1.whereEqualTo("email", email);
         query1.whereEqualTo("userid",userid);
         query1.whereEqualTo("deviceid",deviceid);
@@ -55,9 +64,23 @@ public class parsePush {
                     }
                 }
             }
-        });
+        });**/
     }
     public void sendPush(){
+        ParseQuery pushQuery = ParseInstallation.getQuery();
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("title", "3");
+            obj.put("alert", "NAME OF STUDENT");
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        ParsePush push = new ParsePush();
+        push.setQuery(pushQuery);
+        push.setData(obj);
+        push.sendInBackground();
 
     }
 }

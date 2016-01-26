@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity
         String email = user.get(sessionmanager.SES_EMAIL);
         final String userID = user.get(sessionmanager.SES_USER_ID);
 
-        p.insertPush(email,userID,AppConfig.devid);
+        p.insertPush(email,userID);
 
         //set dalam textview
         txtNama = (TextView)findViewById(R.id.txtProfilNama);
@@ -267,7 +267,27 @@ public class MainActivity extends AppCompatActivity
      super.onBackPressed();
      }
      }**/
-
+    public void onBackPressed() {
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setMessage("Do you want to Exit?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //if user pressed "yes", then he is allowed to exit from application
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //if user select "No", just cancel this dialog and continue with app
+                dialog.cancel();
+            }
+        });
+        android.support.v7.app.AlertDialog alert = builder.create();
+        alert.show();
+    }
     public void imgProfile(View v){
         Intent i = new Intent(getApplicationContext(),imageUpload.class);
         i.putExtra("fromActivity","Main");
@@ -390,11 +410,13 @@ public class MainActivity extends AppCompatActivity
             startActivity(psg);
         }
         else if (id == R.id.nav_chat){
-            Intent cht = new Intent(getApplicationContext(), AllChat.class);
-            startActivity(cht);
+            p.sendPush();
+            /**Intent cht = new Intent(getApplicationContext(), AllChat.class);
+            startActivity(cht);**/
         }
         else if (id == R.id.nav_logout) {
-            p.deletePush(AppConfig.devid);
+            p.deletePush();
+            ParseInstallation.getCurrentInstallation().deleteInBackground();
             db.deleteUsers();
             session.logoutUser();
         }

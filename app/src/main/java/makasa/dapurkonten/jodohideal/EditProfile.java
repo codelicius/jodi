@@ -138,7 +138,7 @@ public class EditProfile extends AppCompatActivity {
         }
         else{
             AlertDialog infoPass = new AlertDialog.Builder(EditProfile.this).create();
-            infoPass.setTitle("Alert");
+            infoPass.setTitle("Perhatian");
             infoPass.setMessage("Silahkan isi seluruh form yang tersedia sebelum Anda melanjutkan");
             infoPass.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                     new DialogInterface.OnClickListener() {
