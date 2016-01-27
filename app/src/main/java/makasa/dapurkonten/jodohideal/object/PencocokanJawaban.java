@@ -5,17 +5,19 @@ package makasa.dapurkonten.jodohideal.object;
  */
 public class PencocokanJawaban {
 
-    private String pertanyaan, jawabanKamu, jawabanDia, namaDia;
+    private String pertanyaan, jawabanKamu, jawabanDia, namaDia, fotoKamu, fotoDia;
 
     public PencocokanJawaban(){
 
     }
 
-    public PencocokanJawaban(String pertanyaan, String jawabanKamu, String jawabanDia, String namaDia){
+    public PencocokanJawaban(String pertanyaan, String jawabanKamu, String jawabanDia, String namaDia, String fotoKamu, String fotoDia){
         this.pertanyaan = pertanyaan;
         this.jawabanKamu = jawabanKamu;
         this.jawabanDia = jawabanDia;
         this.namaDia = namaDia;
+        this.fotoKamu = fotoKamu;
+        this.fotoDia = fotoDia;
     }
 
     public String getPertanyaan(){
@@ -49,4 +51,21 @@ public class PencocokanJawaban {
     public void setJawabanDia(String jawabanDia){
         this.jawabanDia = jawabanDia;
     }
+
+    public String getFotoKamu(){
+        return fotoKamu;
+    }
+
+    public void setFotoKamu(String fotoKamu){
+        this.fotoKamu = fotoKamu;
+    }
+
+    public String getFotoDia(){
+        return fotoDia;
+    }
+
+    public void setFotoDia(String fotoDia){
+        this.fotoDia = fotoDia;
+    }
+
 }

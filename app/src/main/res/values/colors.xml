@@ -19,6 +19,9 @@
     <color name="main_color_red">#ffe33124</color>
     <color name="main_color_red_light">#ffe6a9a9</color>
     <color name="main_color_red_dk">#ffc62b1f</color>
+    <color name="main_header_bg">#fbc7b2</color>
+    <color name="main_bg">#FAC7B4</color>
+    <color name="main_header_text">#f5363d</color>
     <color name="holo_blue">#ff33e5b5</color>
     <color name="green">#ff2ecc71</color>
     <color name="theme_black">#ff313031</color>

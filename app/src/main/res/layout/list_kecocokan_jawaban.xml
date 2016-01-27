@@ -10,18 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="question goes here"
-        android:textColor="@color/black"
+        android:background="@color/main_header_bg"
+        android:textColor="@color/main_header_text"
         android:fontFamily="sans-serif-thin"
         android:textSize="20sp"
-        android:gravity="center"
+        android:gravity="start"
+        android:paddingLeft="40dp"
         />
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#888"
-        android:layout_below="@+id/pertanyaan"
-        android:layout_marginTop="3dp"/>
-    <LinearLayout
+        android:id="@+id/aMain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -29,43 +27,72 @@
         android:layout_marginTop="5dp">
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/lblSelf"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="You"
-                android:textColor="#999"
-                />
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <!-- <makasa.dapurkonten.jodohideal.object.circleImage
+                android:id="@+id/thmbSelf"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="30dp"/> -->
             <TextView
                 android:id="@+id/selfAnswer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="untuk hubungan serius dan berkomitmen"
+                android:fontFamily="sans-serif-thin"
+                android:textSize="12sp"
+                android:gravity="left"/>
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="lorem ipsum dolor sit amet blah blah blah blah"
-                android:layout_below="@+id/lblSelf"/>
+                android:text="Kamu"
+                android:textSize="10sp"
+                android:textColor="@color/gray"
+                android:layout_below="@+id/selfAnswer"
+                android:paddingTop="5dp"/>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content">
-
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <makasa.dapurkonten.jodohideal.object.circleImage
+                android:id="@+id/thmbOther"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="5dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="30dp"/>
+            <TextView
+                android:id="@+id/otherAnswer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/thmbOther"
+                android:text="untuk hubungan serius dan berkomitmen"
+                android:fontFamily="sans-serif-thin"
+                android:textSize="12sp"
+                android:gravity="right"/>
             <TextView
                 android:id="@+id/lblOther"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="John Doe"
-                android:textColor="#999"
-                android:layout_alignParentRight="true"
-                />
-            <TextView
-                android:id="@+id/otherAnswer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="lorem ipsum dolor sit amet blah blah blah blah"
-                android:layout_below="@+id/lblOther"
-                android:gravity="right"/>
+                android:textSize="10sp"
+                android:textColor="@color/gray"
+                android:layout_below="@+id/otherAnswer"
+                android:layout_toLeftOf="@+id/thmbOther"
+                android:paddingTop="5dp"/>
+
         </RelativeLayout>
     </LinearLayout>
+    <TextView
+        android:id="@+id/lblCocok"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/aMain"
+        android:gravity="center"
+        android:text="Tidak Cocok"
+        android:textColor="@color/main_header_text"
+        />
 </RelativeLayout>

@@ -225,6 +225,7 @@ public class OtherProfile extends AppCompatActivity
                                     pj.setJawabanKamu(sp.getString("jawaban_kamu"));
                                     pj.setJawabanDia(sp.getString("jawaban_dia"));
                                     pj.setNamaDia(apiFullName);
+                                    pj.setFotoDia(apiFoto);
                                     PencocokanJawaban.add(pj);
                                     Log.d("Other profile", sp.getString("pertanyaan"));
                                 }

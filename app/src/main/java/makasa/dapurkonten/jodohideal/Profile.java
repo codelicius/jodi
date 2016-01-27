@@ -50,7 +50,8 @@ public class Profile extends AppCompatActivity
 
     sessionmanager session;
     private SQLiteController db;
-    TextView nama,umur,tb,agama,lokasi,horoskop,jk, txtDrawerNama, txtDrawerEmail;
+    TextView nama,umur,tb,agama,lokasi,horoskop,jk, about, txtDrawerNama,
+            tipePasangan, kegiatan, interest, satnite, txtDrawerEmail;
     NetworkImageView imageView, profileImage;
     private ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
     private List<RecentChat> rcArray = new ArrayList<RecentChat>();
@@ -69,6 +70,11 @@ public class Profile extends AppCompatActivity
         lokasi=(TextView)findViewById(R.id.viewProfileLokasi);
         horoskop=(TextView)findViewById(R.id.viewProfileHoroskop);
         profileImage=(NetworkImageView)findViewById(R.id.thumbnailFoto);
+        about = (TextView)findViewById(R.id.viewProfileAbout);
+        tipePasangan = (TextView)findViewById(R.id.viewProfileTipePasangan);
+        kegiatan = (TextView)findViewById(R.id.viewProfileKegiatan);
+        interest = (TextView)findViewById(R.id.viewProfileInterst);
+        satnite = (TextView)findViewById(R.id.viewProfileSatnite);
 
         session = new sessionmanager(getApplicationContext());
         //session.checkLogin();
@@ -91,7 +97,13 @@ public class Profile extends AppCompatActivity
                 location=profile.get("location"),
                 horoscope=profile.get("horoscope"),
                 religion=profile.get("religion"),
-                foto=profile.get("foto");
+                foto=profile.get("foto"),
+                user_detail=profile.get("user_detail"),
+                tipeps=profile.get("tipe_pasangan"),
+                kegiatanSH=profile.get("kegiatan"),
+                suka=profile.get("interest"),
+                satnites=profile.get("satnite");
+
 
         //drawer
         txtDrawerNama = (TextView)findViewById(R.id.txtDrawerNama);
@@ -123,6 +135,11 @@ public class Profile extends AppCompatActivity
         lokasi.setText(location);
         horoskop.setText(horoscope);
         profileImage.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto, mImageLoader);
+        about.setText(user_detail);
+        tipePasangan.setText(tipeps);
+        kegiatan.setText(kegiatanSH);
+        interest.setText(suka);
+        satnite.setText(satnites);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
