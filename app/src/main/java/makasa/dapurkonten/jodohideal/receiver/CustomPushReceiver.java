@@ -10,6 +10,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
+import com.parse.ParseAnalytics;
 import com.parse.ParsePushBroadcastReceiver;
 
 import org.json.JSONArray;
@@ -17,18 +18,33 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
+import makasa.dapurkonten.jodohideal.Chat;
 import makasa.dapurkonten.jodohideal.MainActivity;
+import makasa.dapurkonten.jodohideal.Profile;
 import makasa.dapurkonten.jodohideal.R;
 
 
 public class CustomPushReceiver extends ParsePushBroadcastReceiver {
-    public void onReceive(Context context, Intent intent) {
+    public void onPushOpen(Context context, Intent intent) {
+        ParseAnalytics.trackAppOpenedInBackground(intent);
+
+        String uriString = null;
+        try {
+            JSONObject pushData = new JSONObject(intent.getStringExtra("com.parse.Data"));
+            uriString = pushData.optString("uri");
+            Log.d("ok", "receiving push data: ");
+        } catch (JSONException e) {
+            Log.d("errorparse", "receiving push data: ", e);
+        }
+    }
+    public void onPushReceive(Context context, Intent intent) {
         try {
 
             JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
 
             final String notificationTitle = json.getString("title").toString();
             final String notificationContent = json.getString("alert").toString();
+            final String notificationType = json.getString("alert").toString();
 
             Intent resultIntent = null;
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
@@ -58,6 +74,6 @@ public class CustomPushReceiver extends ParsePushBroadcastReceiver {
         } catch (JSONException e) {
             Log.d("error", e.getMessage());
         }
-
     }
+
 }

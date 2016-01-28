@@ -68,10 +68,15 @@ public class parsePush {
     }
     public void sendPush(){
         ParseQuery pushQuery = ParseInstallation.getQuery();
+        pushQuery.whereEqualTo("islogin","yes");
+        pushQuery.whereEqualTo("userid","19");
+
         JSONObject obj = new JSONObject();
         try {
-            obj.put("title", "3");
-            obj.put("alert", "NAME OF STUDENT");
+            obj.put("title", "Jodoh Ideal");
+            obj.put("alert", "You have new message");
+            obj.put("type", "private");
+  //          obj.put("partnerid",userid);
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
