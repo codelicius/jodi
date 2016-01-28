@@ -55,7 +55,8 @@
                 android:divider="@color/white"
                 android:dividerHeight="1dp"
                 android:background="@null"
-                android:transcriptMode="alwaysScroll"/>
+                android:transcriptMode="alwaysScroll"
+                android:focusable="false"/>
 
         </LinearLayout>
 

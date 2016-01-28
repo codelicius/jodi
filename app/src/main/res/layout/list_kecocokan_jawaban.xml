@@ -43,7 +43,8 @@
                 android:text="untuk hubungan serius dan berkomitmen"
                 android:fontFamily="sans-serif-thin"
                 android:textSize="12sp"
-                android:gravity="left"/>
+                android:gravity="left"
+                android:background="@drawable/msg_left"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -72,7 +73,8 @@
                 android:text="untuk hubungan serius dan berkomitmen"
                 android:fontFamily="sans-serif-thin"
                 android:textSize="12sp"
-                android:gravity="right"/>
+                android:gravity="right"
+                android:background="@drawable/msg_right"/>
             <TextView
                 android:id="@+id/lblOther"
                 android:layout_width="wrap_content"
