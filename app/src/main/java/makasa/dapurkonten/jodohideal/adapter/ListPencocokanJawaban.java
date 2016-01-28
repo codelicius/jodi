@@ -66,8 +66,8 @@ public class ListPencocokanJawaban extends BaseAdapter {
             imageLoader = AppController.getInstance().getImageLoader();
 
         //db = new SQLiteController(getApplicationContext());
-        HashMap<String, String> profile = db.getUserDetails();
-        String foto = profile.get("foto");
+       // HashMap<String, String> profile = db.getUserDetails();
+        //String foto = profile.get("foto");
 
         TextView txtPertanyaan = (TextView) convertView.findViewById(R.id.pertanyaan);
         TextView txtSelfAnswer = (TextView) convertView.findViewById(R.id.selfAnswer);
