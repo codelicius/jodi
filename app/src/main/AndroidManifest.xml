@@ -103,21 +103,16 @@
             android:label="@string/title_activity_all_chat"
             android:theme="@style/AppTheme.NoActionBar"></activity>
 
-        <service android:name="com.parse.PushService" />
-        <receiver android:name="com.parse.ParseBroadcastReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.USER_PRESENT" />
-            </intent-filter>
-        </receiver>
         <!--
               <receiver android:name="com.parse.ParsePushBroadcastReceiver"  android:exported="false">
         -->
-
+        <service android:name="com.parse.PushService" />
         <receiver android:name="makasa.dapurkonten.jodohideal.receiver.CustomPushReceiver"
             android:exported="false">
 
             <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
                 <action android:name="com.parse.push.intent.RECEIVE" />
                 <action android:name="com.parse.push.intent.DELETE" />
                 <action android:name="com.parse.push.intent.OPEN" />

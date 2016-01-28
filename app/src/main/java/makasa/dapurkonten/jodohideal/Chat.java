@@ -54,6 +54,7 @@ import makasa.dapurkonten.jodohideal.app.SQLiteController;
 import makasa.dapurkonten.jodohideal.object.ChatHistory;
 import makasa.dapurkonten.jodohideal.object.Partner;
 import makasa.dapurkonten.jodohideal.object.RecentChat;
+import makasa.dapurkonten.jodohideal.receiver.parsePush;
 
 public class Chat extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -75,6 +76,7 @@ public class Chat extends AppCompatActivity
     private RecentChatAdapter adapter;
     ListView recentChatList;
     ImageButton btnTglChat;
+    parsePush p = new parsePush();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,6 +175,8 @@ public class Chat extends AppCompatActivity
                     final String pID= partnerID;
                     final String pesan = txtComposeMessage.getText().toString();
                     sendChatMessage(userID,pID,pesan);
+                    p.sendPush(userID,pID);
+
                 }
 
             }

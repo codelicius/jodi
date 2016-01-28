@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.parse.ParseAnalytics;
 import com.parse.ParsePushBroadcastReceiver;
+import com.parse.PushService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,58 +23,107 @@ import makasa.dapurkonten.jodohideal.Chat;
 import makasa.dapurkonten.jodohideal.MainActivity;
 import makasa.dapurkonten.jodohideal.Profile;
 import makasa.dapurkonten.jodohideal.R;
+import makasa.dapurkonten.jodohideal.app.NotificationUtils;
 
 
 public class CustomPushReceiver extends ParsePushBroadcastReceiver {
-    public void onPushOpen(Context context, Intent intent) {
-        ParseAnalytics.trackAppOpenedInBackground(intent);
+    private final String TAG = CustomPushReceiver.class.getSimpleName();
 
-        String uriString = null;
-        try {
-            JSONObject pushData = new JSONObject(intent.getStringExtra("com.parse.Data"));
-            uriString = pushData.optString("uri");
-            Log.d("ok", "receiving push data: ");
-        } catch (JSONException e) {
-            Log.d("errorparse", "receiving push data: ", e);
-        }
+    private NotificationUtils notificationUtils;
+
+    private Intent parseIntent;
+
+    public CustomPushReceiver() {
+        super();
     }
-    public void onPushReceive(Context context, Intent intent) {
-        try {
 
+    @Override
+    protected void onPushReceive(Context context, Intent intent) {
+        super.onPushReceive(context, intent);
+
+        if (intent == null)
+            return;
+
+        try {
             JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
 
-            final String notificationTitle = json.getString("title").toString();
-            final String notificationContent = json.getString("alert").toString();
-            final String notificationType = json.getString("alert").toString();
+            Log.e(TAG, "Push received: " + json);
 
-            Intent resultIntent = null;
-            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+            parseIntent = intent;
 
-
-            resultIntent = new Intent(context, MainActivity.class);
-            stackBuilder.addParentStack(MainActivity.class);
-
-            stackBuilder.addNextIntent(resultIntent);
-            PendingIntent resultPendingIntent =
-                    stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-
-
-//Customize your notification - sample code
-            NotificationCompat.Builder builder =
-                    new NotificationCompat.Builder(context)
-                            .setSmallIcon(R.mipmap.ic_launcher)
-                            .setContentTitle(notificationTitle)
-                            .setContentText(notificationContent);
-
-            int mNotificationId = 001;
-            NotificationManager mNotifyMgr =
-                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotifyMgr.notify(mNotificationId, builder.build());
-
+            parsePushJson(context, json);
 
         } catch (JSONException e) {
-            Log.d("error", e.getMessage());
+            Log.e(TAG, "Push message json exception: " + e.getMessage());
         }
     }
 
+    @Override
+    protected void onPushDismiss(Context context, Intent intent) {
+        super.onPushDismiss(context, intent);
+    }
+
+    @Override
+    protected void onPushOpen(Context context, Intent intent) {
+        try {
+            super.onPushOpen(context, intent);
+            JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
+            String type= json.getString("type");
+            ParseAnalytics.trackAppOpenedInBackground(intent);
+            if(type.equals("private") && !type.isEmpty()){
+                String partnerid = json.getString("partnerid");
+                Intent i = new Intent(context, Chat.class);
+                i.putExtras(intent.getExtras());
+                i.putExtra("pID",partnerid);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+            }
+            else {
+                Intent i = new Intent(context, MainActivity.class);
+                i.putExtras(intent.getExtras());
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "onPushOpen Error : " + e);
+        }
+    }
+
+    /**
+     * Parses the push notification json
+     *
+     * @param context
+     * @param json
+     */
+    private void parsePushJson(Context context, JSONObject json) {
+        try {
+            JSONObject data = json.getJSONObject("data");
+            String title = data.getString("title");
+            String message = data.getString("alert");
+
+        } catch (JSONException e) {
+            Log.e(TAG, "Push message json exception: " + e.getMessage());
+        }
+    }
+
+
+    /**
+     * Shows the notification message in the notification bar
+     * If the app is in background, launches the app
+     *
+     * @param context
+     * @param title
+     * @param message
+     * @param intent
+     */
+    private void showNotificationMessage(Context context, String title, String message, Intent intent) {
+
+        notificationUtils = new NotificationUtils(context);
+
+        intent.putExtras(parseIntent.getExtras());
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        notificationUtils.showNotificationMessage(title, message, intent);
+    }
 }

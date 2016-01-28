@@ -410,9 +410,8 @@ public class MainActivity extends AppCompatActivity
             startActivity(psg);
         }
         else if (id == R.id.nav_chat){
-            p.sendPush();
-            /**Intent cht = new Intent(getApplicationContext(), AllChat.class);
-            startActivity(cht);**/
+            Intent cht = new Intent(getApplicationContext(), AllChat.class);
+            startActivity(cht);
         }
         else if (id == R.id.nav_logout) {
             p.deletePush();
