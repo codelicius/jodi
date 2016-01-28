@@ -76,7 +76,6 @@ public class MainActivity extends AppCompatActivity
     private String urlAPI = AppConfig.urlAPI;
     parsePush p=new parsePush();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
