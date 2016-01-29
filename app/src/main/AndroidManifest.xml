@@ -101,7 +101,7 @@
         <activity
             android:name=".AllChat"
             android:label="@string/title_activity_all_chat"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <!--
               <receiver android:name="com.parse.ParsePushBroadcastReceiver"  android:exported="false">

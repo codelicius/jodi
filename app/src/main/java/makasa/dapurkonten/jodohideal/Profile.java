@@ -149,8 +149,11 @@ public class Profile extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent ep = new Intent(Profile.this, EditProfile.class);
+                ep.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                ep.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 ep.putExtra("fromActivity","profile");
                 startActivity(ep);
+                finish();
             }
         });
 

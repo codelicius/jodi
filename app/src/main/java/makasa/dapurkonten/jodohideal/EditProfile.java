@@ -90,19 +90,34 @@ public class EditProfile extends AppCompatActivity {
         txtLocation = (Spinner)findViewById(R.id.lokasi);
         txtHoroscope = (Spinner)findViewById(R.id.horoskop);
         txtJob = (Spinner)findViewById(R.id.pekerjaan);
-
+        getSpinner("pekerjaan");
+        getSpinner("lokasi");
         tinggi.setText(height);
         deskripsi.setText(userDetail);
         tipe_pasangan.setText(tps);
         kegiatan.setText(kgt);
         halsuka.setText(interest);
         malming.setText(satnite);
-        getSpinner("pekerjaan");
-        getSpinner("lokasi");
-
+        getIndex(txtRokok, roko);
+        getIndex(txtAlkohol,alkohol);
+        getIndex(txtRace, race);
+        getIndex(txtLocation,location);
+        getIndex(txtHoroscope,horoscope);
+        getIndex(txtJob,job);
+        getIndex(txtReligion,religion);
 
     }
+    private void getIndex(Spinner spinner, String myString){
 
+        int index = 0;
+
+        for (int i=0;i<spinner.getCount();i++){
+            if (spinner.getItemAtPosition(i).equals(myString)){
+                index = i;
+            }
+        }
+        spinner.setSelection(index);
+    }
     public void save(View v){
         HashMap<String, String> user = sessions.getUserDetails();
         final String userid = user.get(sessionmanager.SES_USER_ID);
@@ -239,6 +254,7 @@ public class EditProfile extends AppCompatActivity {
 
     }
     public void getSpinner(String spin){
+        final HashMap<String, String> profile = db.getUserDetails();
         String API = AppConfig.urlAPI;
         String url = API+"?jodiSpinner";
         final ArrayList<String> pekerjaan=new ArrayList<String>();
@@ -258,6 +274,10 @@ public class EditProfile extends AppCompatActivity {
                         try{
                             JSONArray pk = response.getJSONArray("Pekerjaan");
                             JSONArray lk = response.getJSONArray("Lokasi");
+                            if(profile.get("job")!=null)
+                                pekerjaan.add(profile.get("job"));
+                            if(profile.get("location")!=null)
+                                lokasi.add(profile.get("location"));
                             for(int i=0; i<pk.length(); i++){
                                 pekerjaan.add(pk.getString(i));
                             }

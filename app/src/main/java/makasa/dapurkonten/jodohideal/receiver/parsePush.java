@@ -44,7 +44,16 @@ public class parsePush {
         insert.put("email", email);
         insert.put("userid", userid);
         insert.put("islogin", "yes");
-        insert.saveInBackground();
+        insert.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(com.parse.ParseException e) {
+                if (e == null) {
+                    Log.d("successparse", "success");
+                } else {
+                    Log.d("errorparse", "error" + e.getMessage());
+                }
+            }
+        });
         /**ParseQuery<ParseObject> query1 = ParseQuery.getQuery("Jodi");
         query1.whereEqualTo("email", email);
         query1.whereEqualTo("userid",userid);
