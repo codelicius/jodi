@@ -87,14 +87,14 @@ public class Login extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_login);
         info = (TextView) findViewById(R.id.message);
-        loginButton = (LoginButton) findViewById(R.id.login_button);
+        //loginButton = (LoginButton) findViewById(R.id.login_button);
         editTextUsername = (EditText) findViewById(R.id.email);
         editTextPassword = (EditText) findViewById(R.id.password);
         //info.setText(tel.getSubscriberId().toString()); //IMSI
         //tel.getLine1Number()//phonenumber
 
         // login dengan facebook
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+/**        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 final Profile profile = Profile.getCurrentProfile();
@@ -125,7 +125,16 @@ public class Login extends AppCompatActivity {
                                         finish();
                                     } else {
                                         String jodiMessage = jsonResponse.getString("message");
-                                        info.setText(jodiMessage);
+                                        android.app.AlertDialog alert = new android.app.AlertDialog.Builder(Login.this).create();
+                                        alert.setTitle("Jodoh Ideal");
+                                        alert.setMessage(jodiMessage);
+                                        alert.setButton(android.app.AlertDialog.BUTTON_NEUTRAL, "OK",
+                                                new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        dialog.dismiss();
+                                                    }
+                                                });
+                                        alert.show();
                                     }
 
 
@@ -164,7 +173,7 @@ public class Login extends AppCompatActivity {
             public void onError(FacebookException e) {
                 info.setText("Login attempt failed.");
             }
-        });
+        });**/
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
@@ -278,7 +287,16 @@ public class Login extends AppCompatActivity {
                                 }
                             } else {
                                 String jodiMessage = jsonResponse.getString("message");
-                                info.setText(jodiMessage);
+                                android.app.AlertDialog alert = new android.app.AlertDialog.Builder(Login.this).create();
+                                alert.setTitle("Jodoh Ideal");
+                                alert.setMessage(jodiMessage);
+                                alert.setButton(android.app.AlertDialog.BUTTON_NEUTRAL, "OK",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        });
+                                alert.show();
                             }
 
 
@@ -337,6 +355,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //if user pressed "yes", then he is allowed to exit from application
+                finish();
 
             }
         });

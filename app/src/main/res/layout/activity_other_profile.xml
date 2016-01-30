@@ -25,6 +25,7 @@
         app:itemTextColor="@color/white"
         app:itemIconTint="@color/white"/>
     <ListView
+        android:scrollbars="none"
         android:id="@+id/right_nav"
         android:layout_width="240dp"
         android:layout_height="match_parent"

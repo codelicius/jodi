@@ -47,7 +47,6 @@ public class ListPencocokanJawaban extends BaseAdapter {
     public Object getItem(int location) {
         return ItemJawaban.get(location);
     }
-
     @Override
     public long getItemId(int position) {
         return position;

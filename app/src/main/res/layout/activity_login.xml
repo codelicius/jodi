@@ -15,6 +15,7 @@
         android:padding="10dp" >oid studio
 
         <LinearLayout
+            android:id="@+id/rootLayout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -78,7 +79,7 @@
                 android:text=""/>
 
             <!-- Link to Login Screen -->
-            <com.facebook.login.widget.LoginButton
+            <!--<com.facebook.login.widget.LoginButton
                 android:id="@+id/login_button"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -91,11 +92,11 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="10dp"
-                />
+                />-->
 
 
         </LinearLayout>
-        <Button
+        <!--<Button
             android:id="@+id/btnForgot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -103,7 +104,7 @@
             android:background="@null"
             android:onClick="main"
             android:textColor="@color/white"
-            android:text="Lupa Password?"/>
+            android:text="Lupa Password?"/>-->
         <Button
             android:id="@+id/btnRegiter"
             android:layout_width="wrap_content"
