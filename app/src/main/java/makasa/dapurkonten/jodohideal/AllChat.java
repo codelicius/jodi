@@ -51,11 +51,9 @@ public class AllChat extends AppCompatActivity
     TextView txtDrawerNama, txtDrawerEmail;
     NetworkImageView imageView;
     private ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
-    private List<RecentChat> rcArray = new ArrayList<RecentChat>();
-    private RecentChatAdapter adapter;
     private List<AllChats> acArray = new ArrayList<AllChats>();
     private AllChatAdapter adapterAllChat;
-    ListView recentChatList, allChatList;
+    ListView allChatList;
     ImageButton btnTglChat;
     private static String INI = AllChat.class.getSimpleName();
 
@@ -97,34 +95,18 @@ public class AllChat extends AppCompatActivity
         txtDrawerEmail.setText(email);
         imageView.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto, mImageLoader);
 
-        adapter = new RecentChatAdapter(this, rcArray);
-        recentChatList=(ListView)findViewById(R.id.right_nav);
-        recentChatList.setAdapter(adapter);
-        recentChatList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                String pID = ((TextView) view.findViewById(R.id.txtPartnerID)).getText().toString();
-                Intent i = new Intent(getApplicationContext(), Chat.class);
-                i.putExtra("pID", pID);
-                startActivity(i);
-            }
-        });
-
         adapterAllChat = new AllChatAdapter(this, acArray);
         allChatList=(ListView)findViewById(R.id.listAllChat);
         allChatList.setAdapter(adapterAllChat);
-        recentChatList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        allChatList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                String pID = ((TextView) view.findViewById(R.id.txtPartnerID)).getText().toString();
+                String pID = ((TextView) view.findViewById(R.id.chatID)).getText().toString();
                 Intent i = new Intent(getApplicationContext(), Chat.class);
                 i.putExtra("pID", pID);
                 startActivity(i);
             }
         });
-
-
-        btnTglChat = (ImageButton)findViewById(R.id.tglChat);
 
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -136,16 +118,6 @@ public class AllChat extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         //tgl right nav
-        btnTglChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (drawer.isDrawerOpen(recentChatList)) {
-                    drawer.closeDrawer(recentChatList);
-                }
-                drawer.openDrawer(recentChatList);
-            }
-        });
-
         getRecentPartner(userID);
     }
 
@@ -225,19 +197,13 @@ public class AllChat extends AppCompatActivity
                                 JSONArray lsCht = jsonResponse.getJSONArray("last_chat");
 
                                 for (int i=0; i<lsCht.length(); i++){
-                                    RecentChat recentPpl = new RecentChat();
                                     AllChats ac = new AllChats();
 
                                     JSONObject ppl = (JSONObject) lsCht.get(i);
-                                    recentPpl.setPartnerID(ppl.getInt("partner_id"));
                                     ac.setChatID(ppl.getInt("partner_id"));
-                                    recentPpl.setFirstName(ppl.getString("first_name"));
-                                    recentPpl.setLastName(ppl.getString("last_name"));
                                     ac.setPartnerName(ppl.getString("first_name") + " " + ppl.getString("last_name"));
-                                    recentPpl.setPic("http://103.253.112.121/jodohidealxl/upload/" + ppl.getString("foto"));
                                     ac.setPartnerPic("http://103.253.112.121/jodohidealxl/upload/" + ppl.getString("foto"));
 
-                                    rcArray.add(recentPpl);
                                     acArray.add(ac);
                                     //Toast.makeText(MainActivity.this, recentPpl.getFirstName(), Toast.LENGTH_LONG).show();
                                 }
@@ -247,7 +213,6 @@ public class AllChat extends AppCompatActivity
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        adapter.notifyDataSetChanged();
                         adapterAllChat.notifyDataSetChanged();
                     }
                 },
@@ -263,6 +228,7 @@ public class AllChat extends AppCompatActivity
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("jodiRecentChat","");
                 params.put("userid",selfID);
+                params.put("unlimit","");
                 return params;
             }
 

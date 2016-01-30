@@ -317,14 +317,12 @@ public class Chat extends AppCompatActivity
                                 for (int i=0; i<allChat.length(); i++){
                                     JSONObject cht = (JSONObject) allChat.get(i);
                                     ChatHistory chats = new ChatHistory();
-                                    int senderID = cht.getInt("sent_id"),
-                                            recipientID = cht.getInt("recipient_id");
+                                    int senderID = cht.getInt("sent_id");
                                     String message = cht.getString("message");
                                     if(senderID == Integer.parseInt(userID))
                                         chatArrayAdapter.add(new ChatMessage("right", message));
                                     else
                                         chatArrayAdapter.add(new ChatMessage("left", message));
-                                    Log.d(INI,"history" +senderID+recipientID+message);
                                 }
                             }
 

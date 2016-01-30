@@ -27,15 +27,6 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
-                <ImageButton
-                    android:id="@+id/tglChat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_menu_chat"
-                    android:background="@null"
-                    android:layout_gravity="end"
-                    android:layout_marginRight="10dp"
-                    />
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.AppBarLayout>

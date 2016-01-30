@@ -93,7 +93,7 @@ public class OtherProfile extends AppCompatActivity
         session = new sessionmanager(getApplicationContext());
 
         HashMap<String, String> profile = db.getUserDetails();
-        String foto = profile.get("foto");
+        final String myFoto = profile.get("foto");
 
         HashMap<String, String> user = session.getUserDetails();
         String firstName = user.get(sessionmanager.SES_FIRST_NAME);
@@ -101,7 +101,7 @@ public class OtherProfile extends AppCompatActivity
         String email = user.get(sessionmanager.SES_EMAIL);
 
         drawerPic = (NetworkImageView) findViewById(R.id.imageView);
-        drawerPic.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto, mImageLoader);
+        drawerPic.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + myFoto, mImageLoader);
         drawerName = (TextView)findViewById(R.id.txtDrawerNama);
         drawerName.setText(firstName + " " + lastname);
         drawerEmail = (TextView)findViewById(R.id.txtDrawerEmail);
@@ -195,6 +195,8 @@ public class OtherProfile extends AppCompatActivity
 
 
                             if(subscribe_status.equals("true")) {
+                                HashMap<String, String> profile = db.getUserDetails();
+                                String myFoto = profile.get("foto");
                                 Log.d("Other profile", "Proses berhasil masuk ke tahap parsing");
                                 JSONObject pd = jsonResponse.getJSONObject("partner_detail");
                                 String apiFullName = pd.getString("fname") + " " +pd.getString("lname");
@@ -226,6 +228,7 @@ public class OtherProfile extends AppCompatActivity
                                     pj.setJawabanDia(sp.getString("jawaban_dia"));
                                     pj.setNamaDia(apiFullName);
                                     pj.setFotoDia(apiFoto);
+                                    pj.setFotoKamu(myFoto);
                                     PencocokanJawaban.add(pj);
                                     Log.d("Other profile", sp.getString("pertanyaan"));
                                 }

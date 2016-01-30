@@ -1,8 +1,13 @@
 package makasa.dapurkonten.jodohideal.object;
 
+import java.util.HashMap;
+
+import makasa.dapurkonten.jodohideal.app.SQLiteController;
+
 /**
  * Created by pr1de on 14/01/16.
  */
+
 public class PencocokanJawaban {
 
     private String pertanyaan, jawabanKamu, jawabanDia, namaDia, fotoKamu, fotoDia;

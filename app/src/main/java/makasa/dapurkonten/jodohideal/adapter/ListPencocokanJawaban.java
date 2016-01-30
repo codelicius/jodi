@@ -74,7 +74,7 @@ public class ListPencocokanJawaban extends BaseAdapter {
         TextView txtOtherAnswer = (TextView) convertView.findViewById(R.id.otherAnswer);
         TextView lblOther = (TextView) convertView.findViewById(R.id.lblOther);
         NetworkImageView thmbOther = (NetworkImageView) convertView.findViewById(R.id.thmbOther);
-        //NetworkImageView thmbSelf = (NetworkImageView) convertView.findViewById(R.id.thmbSelf);
+        NetworkImageView thmbSelf = (NetworkImageView) convertView.findViewById(R.id.thmbSelf);
         TextView lblCocok = (TextView) convertView.findViewById(R.id.lblCocok);
 
         // getting movie data for the row
@@ -85,6 +85,7 @@ public class ListPencocokanJawaban extends BaseAdapter {
         txtOtherAnswer.setText(pj.getJawabanDia());
         lblOther.setText(pj.getNamaDia());
         thmbOther.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + pj.getFotoDia(), imageLoader);
+        thmbSelf.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + pj.getFotoKamu(), imageLoader);
 
         if (pj.getJawabanKamu().equals(pj.getJawabanDia())){
             lblCocok.setText("Cocok");

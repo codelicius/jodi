@@ -54,7 +54,7 @@ public class AllChatAdapter extends BaseAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //set list row here
         if (convertView == null)
-            convertView = inflater.inflate(R.layout.list_pasangan, null);
+            convertView = inflater.inflate(R.layout.list_all_chat, null);
 
         if (imageLoader == null)
             imageLoader = AppController.getInstance().getImageLoader();

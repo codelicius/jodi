@@ -11,6 +11,7 @@
     tools:context="makasa.dapurkonten.jodohideal.OtherProfile"
     tools:showIn="@layout/app_bar_other_profile">
     <LinearLayout
+        android:focusableInTouchMode="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
