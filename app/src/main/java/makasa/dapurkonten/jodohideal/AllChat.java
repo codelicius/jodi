@@ -156,6 +156,7 @@ public class AllChat extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             Intent hm = new Intent(getApplicationContext(), MainActivity.class);
+            hm.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(hm);
         }
         else if (id == R.id.nav_profile) {

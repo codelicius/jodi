@@ -33,7 +33,7 @@
             <TextView
                 android:id="@+id/selfAnswer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 android:textSize="10sp"
                 android:background="@drawable/msg_left"/>
             <TextView
@@ -59,7 +59,7 @@
             <TextView
                 android:id="@+id/otherAnswer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 android:textSize="10sp"
                 android:background="@drawable/msg_right"/>
             <TextView
