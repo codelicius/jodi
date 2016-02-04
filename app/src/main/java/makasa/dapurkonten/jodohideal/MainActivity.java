@@ -2,8 +2,11 @@
 
 package makasa.dapurkonten.jodohideal;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,6 +43,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +55,7 @@ import makasa.dapurkonten.jodohideal.app.AppController;
 import makasa.dapurkonten.jodohideal.app.SQLiteController;
 import makasa.dapurkonten.jodohideal.object.Partner;
 import makasa.dapurkonten.jodohideal.object.RecentChat;
+import makasa.dapurkonten.jodohideal.receiver.AlarmReceiver;
 import makasa.dapurkonten.jodohideal.receiver.parsePush;
 
 public class MainActivity extends AppCompatActivity
@@ -225,6 +230,7 @@ public class MainActivity extends AppCompatActivity
         //RefreshListChat();
         getRecentPartner(userID);
         listPasangan();
+        callUserToBack(7);
     }
 
     /** public void RefreshListChat() {
@@ -491,5 +497,21 @@ public class MainActivity extends AppCompatActivity
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
 
+    }
+
+    private void callUserToBack (int day){
+
+        //set waktu
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.SECOND, day);
+
+        //set id bebas
+        int rID = 1;
+        Intent intent = new Intent(getBaseContext(), AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(), rID, intent, PendingIntent.FLAG_ONE_SHOT);
+
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
     }
 }
