@@ -4,10 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 import android.view.View;
@@ -19,8 +16,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,7 +36,6 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +46,7 @@ import makasa.dapurkonten.jodohideal.adapter.ListPencocokanJawaban;
 import makasa.dapurkonten.jodohideal.adapter.RecentChatAdapter;
 import makasa.dapurkonten.jodohideal.app.AppConfig;
 import makasa.dapurkonten.jodohideal.app.AppController;
+import makasa.dapurkonten.jodohideal.app.AppHelper;
 import makasa.dapurkonten.jodohideal.app.SQLiteController;
 import makasa.dapurkonten.jodohideal.object.PencocokanJawaban;
 import makasa.dapurkonten.jodohideal.object.RecentChat;
@@ -111,6 +110,7 @@ public class OtherProfile extends AppCompatActivity
         adapter = new ListPencocokanJawaban(this, PencocokanJawaban);
         listView.setAdapter(adapter);
 
+
         //right-nav
         rcAdapter = new RecentChatAdapter(this, rcArray);
         recentChatList=(ListView)findViewById(R.id.right_nav);
@@ -159,6 +159,7 @@ public class OtherProfile extends AppCompatActivity
 
         lihatDetailPasangan();
         getRecentPartner(userID);
+
     }
     public void kirimPesan(View view){
         Intent i = new Intent(getBaseContext(), Chat.class);
@@ -258,6 +259,7 @@ public class OtherProfile extends AppCompatActivity
                             e.printStackTrace();
                         }
                         adapter.notifyDataSetChanged();
+                        AppHelper.listViewDynamicHeight(listView);
                     }
                 },
                 new Response.ErrorListener() {
@@ -312,7 +314,6 @@ public class OtherProfile extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             Intent hm = new Intent(getApplicationContext(), MainActivity.class);
-            hm.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(hm);
         }
         else if (id == R.id.nav_profile) {
@@ -403,4 +404,6 @@ public class OtherProfile extends AppCompatActivity
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
+
+
 }

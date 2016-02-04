@@ -176,30 +176,28 @@
                 android:text="Syarat Dan Ketentuan"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"/>
-            <ScrollView android:id="@+id/textAreaScroller"
-                android:layout_width="fill_parent"
-                android:layout_height="173px"
-                android:layout_x="0px"
-                android:layout_y="25px"
-                android:scrollbars="vertical">
-                <TextView
-                    android:id="@+id/eula"
-                    android:background="@color/white"
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <CheckBox
+                    android:id="@+id/agreement"
+                    android:checked="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/sk"
-                    android:layout_marginTop="22dp"
-                    android:lines="7"
-                    android:text="@string/eula" />
-            </ScrollView>
-            <CheckBox
-                android:id="@+id/agreement"
-                android:checked="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Saya setuju dengan kebijakan yang berlaku"/>
+                    android:layout_gravity="center"
+                    android:text="Saya setuju dengan"/>
+
+                <TextView
+                    android:id="@+id/lblAgreement"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/agreement"
+                    android:paddingTop="7dp"
+                    android:textColor="@color/main_color_red"
+                    android:text=" kebijakan yang berlaku"
+                    android:onClick="tos"/>
+            </RelativeLayout>
             <Button
                 android:id="@+id/register"
                 android:layout_width="match_parent"

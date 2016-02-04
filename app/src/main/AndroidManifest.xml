@@ -7,26 +7,26 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-
     <uses-permission android:name="android.permission.GET_TASKS" />
 
-    <permission android:protectionLevel="signature"
-        android:name="makasa.dapurkonten.jodohideal.permission.C2D_MESSAGE" />
-    <uses-permission android:name="makasa.dapurkonten.jodohideal.permission.C2D_MESSAGE" />
+    <permission
+        android:name="makasa.dapurkonten.jodohideal.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
 
+    <uses-permission android:name="makasa.dapurkonten.jodohideal.permission.C2D_MESSAGE" />
 
     <application
         android:name=".app.AppController"
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:hardwareAccelerated="false"
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -101,15 +101,14 @@
         <activity
             android:name=".AllChat"
             android:label="@string/title_activity_all_chat"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
 
-        <!--
-              <receiver android:name="com.parse.ParsePushBroadcastReceiver"  android:exported="false">
-        -->
+        <!--               <receiver android:name="com.parse.ParsePushBroadcastReceiver"  android:exported="false"> -->
         <service android:name="com.parse.PushService" />
-        <receiver android:name="makasa.dapurkonten.jodohideal.receiver.CustomPushReceiver"
-            android:exported="false">
 
+        <receiver
+            android:name=".receiver.CustomPushReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
@@ -118,18 +117,19 @@
                 <action android:name="com.parse.push.intent.OPEN" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.parse.GcmBroadcastReceiver"
+        <receiver
+            android:name="com.parse.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <!--
-                  IMPORTANT: Change "com.parse.starter" to match your app's package name.
-                -->
+                <!--                   IMPORTANT: Change "com.parse.starter" to match your app's package name. -->
                 <category android:name="makasa.dapurkonten.jodohideal" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".Tos"></activity>
     </application>
 
 </manifest>
