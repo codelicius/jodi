@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity
         //RefreshListChat();
         getRecentPartner(userID);
         listPasangan();
-        callUserToBack(7);
+        callUserToBack(60);
     }
 
     /** public void RefreshListChat() {
@@ -499,19 +499,19 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void callUserToBack (int day){
+    private void callUserToBack (int minutes){
 
         //set waktu
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.SECOND, day);
+        cal.add(Calendar.MINUTE, minutes);
 
-        //set id bebas
+        //set id proses, bebas
         int rID = 1;
         Intent intent = new Intent(getBaseContext(), AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(), rID, intent, PendingIntent.FLAG_ONE_SHOT);
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-
-        alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis()*24*7, pendingIntent);
+        //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), AlarmManager.INTERVAL_DAY * 7, pendingIntent);
     }
 }

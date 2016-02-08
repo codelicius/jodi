@@ -21,17 +21,22 @@ public class AppHelper {
         //in px
 
         int totalHeight = 0;
-        int firstItem = 380;
-        int lstItem = 380;
+        int loop = listAdapter.getCount();
         for (int i = 0; i < listAdapter.getCount(); i++) {
             View listItem = listAdapter.getView(i, null, listView);
             listItem.measure(0, 0);
             totalHeight += listItem.getMeasuredHeight();
+            totalHeight += 20;
             Log.d("lsheight", String.valueOf(totalHeight));
         }
 
+        View listItem = listAdapter.getView(1, null, listView);
+        listItem.measure(0, 0);
+        totalHeight += listItem.getMeasuredHeight();
+        totalHeight += 30;
+
         ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = firstItem + lstItem + totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
 
     }

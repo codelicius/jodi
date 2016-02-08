@@ -130,6 +130,7 @@
         </receiver>
 
         <activity android:name=".Tos"></activity>
+        <receiver android:name=".receiver.AlarmReceiver" android:process=":remote" />
     </application>
 
 </manifest>
