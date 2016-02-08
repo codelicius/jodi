@@ -135,6 +135,7 @@ public class imageUpload extends AppCompatActivity{
         requestQueue.add(stringRequest);
         if (fromActivity.equals("Main")){
             Intent m = new Intent(this, MainActivity.class);
+            m.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(m);
         }
         else{
