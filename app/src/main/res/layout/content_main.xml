@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
-    android:layout_marginTop="60dp"
+    android:layout_marginTop="55dp"
     android:id="@+id/s"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,56 +11,62 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#EE0000"
-            android:text="Profilku"
-            android:textSize="20sp"
-            android:paddingLeft="25dp"/>
+            android:orientation="vertical"
+            android:background="@drawable/profile_bg">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#FCD1B9">
-            <com.android.volley.toolbox.NetworkImageView
-                android:id="@+id/fotoProfile"
-                android:layout_width="130dp"
-                android:layout_height="150dp"
-                android:layout_alignParentLeft="true"
-                android:onClick="imgProfile"
-                android:layout_margin="8dp" />
             <TextView
-                android:id="@+id/txtProfilNama"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/fotoProfile"
-                android:layout_marginTop="25dp"
-                android:textColor="@color/main_color_red"
-                android:text="Nama"
-                android:textSize="20sp"/>
+                android:textColor="#EE0000"
+                android:text="Profilku"
+                android:textSize="20sp"
+                android:paddingLeft="25dp"/>
 
-            <TextView
-                android:id="@+id/txtProfilLokasi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/txtProfilNama"
-                android:layout_toRightOf="@+id/fotoProfile"
-                android:gravity="center"
-                android:text="Lokasi"
-                android:drawableLeft="@drawable/ic_place_dk"
-                android:drawablePadding="@dimen/pad_3dp"
-                style="@style/lbl_14gray" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#80FCD1B9">
+                <com.android.volley.toolbox.NetworkImageView
+                    android:id="@+id/fotoProfile"
+                    android:layout_width="130dp"
+                    android:layout_height="150dp"
+                    android:layout_alignParentLeft="true"
+                    android:onClick="imgProfile"
+                    android:layout_margin="8dp" />
+                <TextView
+                    android:id="@+id/txtProfilNama"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/fotoProfile"
+                    android:layout_marginTop="25dp"
+                    android:textColor="@color/main_color_red"
+                    android:text="Nama"
+                    android:textSize="20sp"/>
 
-            <TextView
-                android:id="@+id/txtShortDescription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/fotoProfile"
-                android:layout_below="@+id/txtProfilLokasi"
-                android:text="Sort description goes here"/>
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/txtProfilLokasi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txtProfilNama"
+                    android:layout_toRightOf="@+id/fotoProfile"
+                    android:gravity="center"
+                    android:text="Lokasi"
+                    android:drawableLeft="@drawable/ic_place_dk"
+                    android:drawablePadding="@dimen/pad_3dp"
+                    style="@style/lbl_14gray" />
+
+                <TextView
+                    android:id="@+id/txtShortDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/fotoProfile"
+                    android:layout_below="@+id/txtProfilLokasi"
+                    android:text="Sort description goes here"/>
+            </RelativeLayout>
+        </LinearLayout>
 
         <!-- <android.support.v4.view.ViewPager
             android:id="@+id/pager"
