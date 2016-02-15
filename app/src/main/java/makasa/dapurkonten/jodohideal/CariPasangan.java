@@ -151,7 +151,7 @@ public class CariPasangan extends AppCompatActivity
 
         btnTglChat = (ImageButton)findViewById(R.id.tglChat);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCariPasangan);
+        /**FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCariPasangan);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -161,7 +161,7 @@ public class CariPasangan extends AppCompatActivity
                 dialog.show();
 
             }
-        });
+        }); **/
 
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

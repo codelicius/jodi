@@ -27,7 +27,7 @@
             <com.android.volley.toolbox.NetworkImageView
                 android:id="@+id/thumbnailFoto"
                 android:layout_width="130dp"
-                android:layout_height="140dp"
+                android:layout_height="150dp"
                 android:layout_alignParentLeft="true"
                 android:layout_marginRight="8dp" />
 
@@ -36,54 +36,58 @@
                 android:layout_toRightOf="@+id/thumbnailFoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="16sp"/>
+                android:text="Name"
+                android:textColor="@color/main_color_red"
+                android:textSize="20sp"/>
 
             <TextView
-                android:id="@+id/viewProfileUmur"
+                android:id="@+id/viewProfileShortdec"
                 android:layout_below="@+id/viewProfileNama"
                 android:layout_toRightOf="@+id/thumbnailFoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="" />
+                android:text="umur"
+                android:layout_marginTop="5dp"/>
 
             <TextView
-                android:id="@+id/viewProfileGender"
-                android:layout_below="@+id/viewProfileUmur"
-                android:layout_toRightOf="@+id/thumbnailFoto"
+                android:id="@+id/viewProfileLokasi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="" />
+                android:layout_below="@+id/viewProfileShortdec"
+                android:layout_toRightOf="@+id/thumbnailFoto"
+                android:gravity="center"
+                android:text="Lokasi"
+                android:drawableLeft="@drawable/ic_place_dk"
+                android:drawablePadding="@dimen/pad_3dp"
+                style="@style/lbl_14gray" />
 
-            <TextView
-                android:id="@+id/viewProfileSuku"
-                android:layout_below="@+id/viewProfileGender"
-                android:layout_toRightOf="@+id/thumbnailFoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="" />
+
+
             <Button
                 android:id="@+id/viewProfilePesan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/viewProfileSuku"
+                android:layout_below="@+id/viewProfileLokasi"
                 android:layout_toRightOf="@+id/thumbnailFoto"
                 android:background="@drawable/button"
                 android:onClick="kirimPesan"
                 android:textColor="@color/white"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
+                android:layout_marginTop="20dp"
                 android:text="kirim pesan"/>
 
         </RelativeLayout>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_person_dk"
+            android:drawableLeft="@drawable/icon_about"
             android:background="@color/main_header_bg"
             android:padding="5dp"
             android:text="Tentang"
-            android:gravity="left|center"/>
+            android:gravity="left|center"
+            android:textStyle="bold"
+            android:textColor="@color/main_color_red"/>
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -106,23 +110,6 @@
                     android:layout_weight="3"
                     android:layout_height="wrap_content"
                     android:text=":"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_marginTop="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="wrap_content"
-                    android:text="Lokasi"/>
-                <TextView
-                    android:id="@+id/viewProfileLokasi"
-                    android:layout_width="0dp"
-                    android:layout_weight="3"
-                    android:layout_height="wrap_content"
-                    android:text=": "/>
             </LinearLayout>
 
             <LinearLayout

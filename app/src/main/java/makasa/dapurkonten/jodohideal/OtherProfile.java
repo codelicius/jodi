@@ -172,9 +172,7 @@ public class OtherProfile extends AppCompatActivity
         final String userIDs = userID;
         final String pIDs=pID;
         final TextView fullName =(TextView) findViewById(R.id.viewProfileNama),
-                umur =(TextView) findViewById(R.id.viewProfileUmur),
-                gender=(TextView) findViewById(R.id.viewProfileGender),
-                suku=(TextView) findViewById(R.id.viewProfileSuku),
+                shortdesc =(TextView) findViewById(R.id.viewProfileShortdec),
                 tb=(TextView) findViewById(R.id.viewProfileTinggi),
                 lokasi=(TextView) findViewById(R.id.viewProfileLokasi),
                 agama=(TextView) findViewById(R.id.viewProfileAgama),
@@ -235,11 +233,9 @@ public class OtherProfile extends AppCompatActivity
                                 }
 
                                 fullName.setText(apiFullName);
-                                umur.setText(apiUmur);
-                                suku.setText(apiSuku);
+                                shortdesc.setText(apiUmur + " tahun, " + apiGender + ", " + apiSuku);
                                 tb.setText(apiTinggi);
                                 lokasi.setText(apiLokasi);
-                                gender.setText(apiGender);
                                 agama.setText(apiAgama);
                                 horoskop.setText(apiHoroskop);
                                 pekerjaan.setText(apiPekerjaan);
