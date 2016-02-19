@@ -36,7 +36,7 @@
                 android:layout_toRightOf="@+id/thumbnailFoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Name"
+                android:text=""
                 android:textColor="@color/main_color_red"
                 android:textSize="20sp"/>
 
@@ -46,7 +46,7 @@
                 android:layout_toRightOf="@+id/thumbnailFoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="umur"
+                android:text=""
                 android:layout_marginTop="5dp"/>
 
             <TextView
@@ -56,7 +56,7 @@
                 android:layout_below="@+id/viewProfileShortdec"
                 android:layout_toRightOf="@+id/thumbnailFoto"
                 android:gravity="center"
-                android:text="Lokasi"
+                android:text=""
                 android:drawableLeft="@drawable/ic_place_dk"
                 android:drawablePadding="@dimen/pad_3dp"
                 style="@style/lbl_14gray" />
