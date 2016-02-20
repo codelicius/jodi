@@ -237,8 +237,10 @@ public class Register extends AppCompatActivity {
                         // the response is already constructed as a JSONObject!
                         try {
                             String mdn = response.getString("mdn");
-                            if(!mdn.equals("null"))
+                            if(!mdn.equals("null")) {
                                 inputPhoneNumber.setText(mdn);
+                                inputPhoneNumber.setEnabled(false);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
