@@ -57,7 +57,9 @@ public class EditProfile extends AppCompatActivity {
         sessions = new sessionmanager(getApplicationContext());
 
         Bundle bundle=getIntent().getExtras();
+        if (bundle != null)
         fromActivity = bundle.getString("fromActivity");
+
 
         HashMap<String, String> profile = db.getUserDetails();
         String id = profile.get("id");

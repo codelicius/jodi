@@ -50,8 +50,10 @@ import makasa.dapurkonten.jodohideal.adapter.ListPartnerAdapter;
 import makasa.dapurkonten.jodohideal.adapter.RecentChatAdapter;
 import makasa.dapurkonten.jodohideal.app.AppConfig;
 import makasa.dapurkonten.jodohideal.app.AppController;
+import makasa.dapurkonten.jodohideal.app.AppHelper;
 import makasa.dapurkonten.jodohideal.app.SQLiteController;
 import makasa.dapurkonten.jodohideal.object.Partner;
+import makasa.dapurkonten.jodohideal.object.PencocokanJawaban;
 import makasa.dapurkonten.jodohideal.object.RecentChat;
 
 public class CariPasangan extends AppCompatActivity
@@ -128,10 +130,7 @@ public class CariPasangan extends AppCompatActivity
                 String pID = ((TextView) view.findViewById(R.id.txtPID)).getText().toString();
                 //Toast.makeText(getApplicationContext(), pID, Toast.LENGTH_LONG).show();
                 //lihatDetailPasangan(pID, userID);
-                Intent i = new Intent(getBaseContext(), OtherProfile.class);
-                i.putExtra("pID", pID);
-                i.putExtra("userID", userID);
-                startActivity(i);
+                cekSubscribe(userID, pID);
             }
         });
 
@@ -143,6 +142,7 @@ public class CariPasangan extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 String pID = ((TextView) view.findViewById(R.id.txtPartnerID)).getText().toString();
+
                 Intent i = new Intent(getApplicationContext(), Chat.class);
                 i.putExtra("pID", pID);
                 startActivity(i);
@@ -380,4 +380,63 @@ public class CariPasangan extends AppCompatActivity
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
+
+    private void cekSubscribe(String ui, final String pi){
+
+        final String userIDs = ui;
+        final String pIDs = pi;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConfig.urlAPI,
+
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            //ambil nilai dari JSON respon API
+                            String  subscribe_status = jsonResponse.getString("subscribe_status");
+
+                            if(subscribe_status.equals("true")) {
+                                Intent i = new Intent(getBaseContext(), OtherProfile.class);
+                                i.putExtra("pID", pIDs);
+                                i.putExtra("userID", userIDs);
+                                startActivity(i);
+                            }
+                            else{
+                                Intent i = new Intent(getApplicationContext(), Subscribe.class);
+                                startActivity(i);
+                                Log.d(INI, "user tidak berbayar dan diarahkan ke halaman subscribe");
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        adapter.notifyDataSetChanged();
+                        AppHelper.listViewDynamicHeight(listView);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(CariPasangan.this,error.toString(),Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            //proses kirim parameter ke
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("jodiPartnerDetail", "");
+                params.put("userid",userIDs);
+                params.put("partner_userid",pIDs);
+                return params;
+            }
+
+
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+
+        hidepDialog();
+    }
 }
+
