@@ -51,7 +51,7 @@ public class Profile extends AppCompatActivity
     sessionmanager session;
     private SQLiteController db;
     TextView nama,umur,tb,agama,lokasi,horoskop,jk, about, txtDrawerNama,
-            tipePasangan, kegiatan, interest, satnite, txtDrawerEmail;
+            tipePasangan, kegiatan, interest, satnite, txtDrawerEmail,txtMerokok,txtAlkohol;
     NetworkImageView imageView, profileImage;
     private ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
     private List<RecentChat> rcArray = new ArrayList<RecentChat>();
@@ -65,6 +65,8 @@ public class Profile extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         nama=(TextView)findViewById(R.id.viewProfileNama);
+        txtMerokok = (TextView)findViewById(R.id.viewProfileMerokok);
+        txtAlkohol = (TextView)findViewById(R.id.viewProfileAlkohol);
         tb=(TextView)findViewById(R.id.viewProfileTinggi);
         agama=(TextView)findViewById(R.id.viewProfileAgama);
         lokasi=(TextView)findViewById(R.id.viewProfileLokasi);
@@ -99,6 +101,8 @@ public class Profile extends AppCompatActivity
                 religion=profile.get("religion"),
                 foto=profile.get("foto"),
                 user_detail=profile.get("user_detail"),
+                merokok=profile.get("merokok"),
+                alkohol=profile.get("alkohol"),
                 tipeps=profile.get("tipe_pasangan"),
                 kegiatanSH=profile.get("kegiatan"),
                 suka=profile.get("interest"),
@@ -141,6 +145,8 @@ public class Profile extends AppCompatActivity
         kegiatan.setText(kegiatanSH);
         interest.setText(suka);
         satnite.setText(satnites);
+        txtMerokok.setText(merokok);
+        txtAlkohol.setText(alkohol);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
