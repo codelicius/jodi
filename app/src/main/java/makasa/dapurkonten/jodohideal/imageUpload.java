@@ -42,10 +42,12 @@ import java.util.Map;
 
 import makasa.dapurkonten.jodohideal.app.AppConfig;
 import makasa.dapurkonten.jodohideal.app.AppController;
+import makasa.dapurkonten.jodohideal.app.SQLiteController;
 
 public class imageUpload extends AppCompatActivity{
     int REQUEST_CAMERA = 0, SELECT_FILE = 1;
     sessionmanager session;
+    private SQLiteController db;
     private Button buttonChoose;
     private ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
     private Button buttonUpload;
@@ -64,23 +66,30 @@ public class imageUpload extends AppCompatActivity{
     private String KEY_IMAGE = "image";
     private String KEY_NAME = "name";
     private String fromActivity = "";
+    private String uid ="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.imageupload);
         session = new sessionmanager(getApplicationContext());
+        db = new SQLiteController(getApplicationContext());
 
         buttonUpload = (Button) findViewById(R.id.buttonUpload);
         imageView  = (ImageView) findViewById(R.id.imageView);
 
         Bundle bundle=getIntent().getExtras();
         fromActivity = bundle.getString("fromActivity");
+
+        HashMap<String, String> user = session.getUserDetails();
+        String id = user.get(sessionmanager.SES_USER_ID);
+
+        uid = id;
     }
 
     public String getStringImage(Bitmap bmp){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 50, baos);
         byte[] imageBytes = baos.toByteArray();
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
@@ -94,10 +103,22 @@ public class imageUpload extends AppCompatActivity{
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
+                        db.fotoUpdate(uid);
                         //Disimissing the progress dialog
                         loading.dismiss();
                         //Showing toast message of the response
                         Toast.makeText(imageUpload.this, "Foto profil kamu berhasil di perbaharui", Toast.LENGTH_LONG).show();
+
+                        if (fromActivity.equals("Main")){
+                            Intent m = new Intent(imageUpload.this, MainActivity.class);
+                            m.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(m);
+                        }
+                        else{
+                            session.changeValueRegister("upload",1);
+                            Intent q = new Intent(imageUpload.this, questionsActivity.class);
+                            startActivity(q);
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -133,7 +154,8 @@ public class imageUpload extends AppCompatActivity{
 
         //Adding request to the queue
         requestQueue.add(stringRequest);
-        if (fromActivity.equals("Main")){
+
+        /** if (fromActivity.equals("Main")){
             Intent m = new Intent(this, MainActivity.class);
             m.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(m);
@@ -142,7 +164,7 @@ public class imageUpload extends AppCompatActivity{
             session.changeValueRegister("upload",1);
             Intent q = new Intent(this, questionsActivity.class);
             startActivity(q);
-        }
+        } **/
     }
 
     private void showFileChooser() {

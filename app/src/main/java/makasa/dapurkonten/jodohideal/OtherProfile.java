@@ -99,8 +99,10 @@ public class OtherProfile extends AppCompatActivity
         String lastname = user.get(sessionmanager.SES_LAST_NAME);
         String email = user.get(sessionmanager.SES_EMAIL);
 
+        int time = (int) (System.currentTimeMillis());
+
         drawerPic = (NetworkImageView) findViewById(R.id.imageView);
-        drawerPic.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + myFoto, mImageLoader);
+        drawerPic.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + myFoto  +"?time=" + time, mImageLoader);
         drawerName = (TextView)findViewById(R.id.txtDrawerNama);
         drawerName.setText(firstName + " " + lastname);
         drawerEmail = (TextView)findViewById(R.id.txtDrawerEmail);

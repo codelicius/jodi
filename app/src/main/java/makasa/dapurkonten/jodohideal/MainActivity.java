@@ -144,6 +144,7 @@ public class MainActivity extends AppCompatActivity
         imgFoto = (NetworkImageView)findViewById(R.id.fotoProfile);
         imageView = (NetworkImageView) findViewById(R.id.imageView);
 
+        int time = (int) (System.currentTimeMillis());
 
         txtNama.setText(firstName + " " + lastname + ", " + age);
         txtDrawerNama.setText(firstName + " " + lastname);
@@ -153,8 +154,9 @@ public class MainActivity extends AppCompatActivity
         txtShortDescription.setText("Tinggi " + height + " cm, " + horoscope + ", " + job
                 + ", " + religion);
         lblAbout.setText("Tentang " + firstName + " " + lastname);
-        imgFoto.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto, mImageLoader);
-        imageView.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto, mImageLoader);
+        imgFoto.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto +"?time=" + time, mImageLoader);
+        imageView.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto +"?time=" + time, mImageLoader);
+
 
 
         //Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.avatar);
@@ -367,12 +369,12 @@ public class MainActivity extends AppCompatActivity
                             }
                         });
                 infoPass.show();
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),
+                //        error.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
         });
-
+        req.setShouldCache(false);
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(req);
     }
@@ -492,7 +494,7 @@ public class MainActivity extends AppCompatActivity
             }
 
         };
-
+        stringRequest.setShouldCache(false);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
 

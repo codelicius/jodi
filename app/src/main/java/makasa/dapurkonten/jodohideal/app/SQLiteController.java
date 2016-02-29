@@ -301,8 +301,8 @@ public class SQLiteController extends SQLiteOpenHelper {
     public void updateQuestion(int id,int user_answer){
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues c=new ContentValues();
-        c.put("user_answer",user_answer);
-        db.update(TABLE_QUESTION,c,"id="+id,null);
+        c.put("user_answer", user_answer);
+        db.update(TABLE_QUESTION, c, "id=" + id, null);
         db.close();
     }
 
@@ -383,6 +383,16 @@ public class SQLiteController extends SQLiteOpenHelper {
 
         db.update(TABLE_USER,cp,"id="+id,null);
         db.close();
+    }
+
+    public void fotoUpdate(String uid){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues cp = new ContentValues();
+        cp.put(COL_FOTO, uid+".jpg");
+
+        db.update(TABLE_USER, cp, "id="+uid, null);
+        db.close();
+
     }
 
 }

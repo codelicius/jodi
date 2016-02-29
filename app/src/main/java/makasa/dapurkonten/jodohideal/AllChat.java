@@ -1,5 +1,8 @@
 package makasa.dapurkonten.jodohideal;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +25,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
@@ -87,13 +91,15 @@ public class AllChat extends AppCompatActivity
                 religion=profile.get("religion"),
                 foto=profile.get("foto");
 
+        int time = (int) (System.currentTimeMillis());
+
         //drawer
         txtDrawerNama = (TextView)findViewById(R.id.txtDrawerNama);
         txtDrawerEmail = (TextView)findViewById(R.id.txtDrawerEmail);
         imageView = (NetworkImageView)findViewById(R.id.imageView);
         txtDrawerNama.setText(firstName + " " + lastname);
         txtDrawerEmail.setText(email);
-        imageView.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto, mImageLoader);
+        imageView.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto +"?time=" + time, mImageLoader);
 
         adapterAllChat = new AllChatAdapter(this, acArray);
         allChatList=(ListView)findViewById(R.id.listAllChat);
@@ -183,11 +189,19 @@ public class AllChat extends AppCompatActivity
     }
 
     private void getRecentPartner(final String selfID){
+
+        final ProgressDialog progressDialog = new ProgressDialog(AllChat.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Please Wait...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConfig.urlAPI,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Log.d(INI, response.toString());
+                        progressDialog.dismiss();
 
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
@@ -220,7 +234,24 @@ public class AllChat extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(AllChat.this, error.toString(), Toast.LENGTH_LONG).show();
+                        progressDialog.dismiss();
+                        VolleyLog.d(INI, "Error: " + error.getMessage());
+                        AlertDialog infoPass = new AlertDialog.Builder(AllChat.this).create();
+                        infoPass.setTitle("Alert");
+                        infoPass.setMessage("Gagal terhubung dengan server, silakan cek koneksi internet anda");
+                        infoPass.setButton(AlertDialog.BUTTON_POSITIVE, "Try Again",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        getRecentPartner(selfID);
+                                    }
+                                });
+                        infoPass.setButton(AlertDialog.BUTTON_NEGATIVE, "OK",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        infoPass.show();
                     }
                 }){
             @Override

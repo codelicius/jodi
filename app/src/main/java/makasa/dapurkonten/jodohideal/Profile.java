@@ -104,6 +104,8 @@ public class Profile extends AppCompatActivity
                 suka=profile.get("interest"),
                 satnites=profile.get("satnite");
 
+        int time = (int) (System.currentTimeMillis());
+
 
         //drawer
         txtDrawerNama = (TextView)findViewById(R.id.txtDrawerNama);
@@ -111,7 +113,7 @@ public class Profile extends AppCompatActivity
         imageView = (NetworkImageView)findViewById(R.id.imageView);
         txtDrawerNama.setText(firstName + " " + lastname);
         txtDrawerEmail.setText(email);
-        imageView.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto, mImageLoader);
+        imageView.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto  +"?time=" + time, mImageLoader);
 
         adapter = new RecentChatAdapter(this, rcArray);
         recentChatList=(ListView)findViewById(R.id.right_nav);
@@ -128,13 +130,12 @@ public class Profile extends AppCompatActivity
 
         btnTglChat = (ImageButton)findViewById(R.id.tglChat);
 
-
         nama.setText(fname + ' ' + lname);
         tb.setText(height);
         agama.setText(religion);
         lokasi.setText(location);
         horoskop.setText(horoscope);
-        profileImage.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto, mImageLoader);
+        profileImage.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto +"?time=" + time, mImageLoader);
         about.setText(user_detail);
         tipePasangan.setText(tipeps);
         kegiatan.setText(kegiatanSH);

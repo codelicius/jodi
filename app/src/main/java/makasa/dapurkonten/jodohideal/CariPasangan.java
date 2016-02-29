@@ -112,8 +112,10 @@ public class CariPasangan extends AppCompatActivity
         HashMap<String, String> profile = db.getUserDetails();
         String foto = profile.get("foto");
 
+        int time = (int) (System.currentTimeMillis());
+
         drawerPic = (NetworkImageView) findViewById(R.id.imageView);
-        drawerPic.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto, mImageLoader);
+        drawerPic.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto +"?time=" + time, mImageLoader);
         drawerName = (TextView)findViewById(R.id.txtDrawerNama);
         drawerName.setText(firstName + " " + lastname);
         drawerEmail = (TextView)findViewById(R.id.txtDrawerEmail);
