@@ -148,7 +148,7 @@ public class Subscribe extends AppCompatActivity {
     }
     public void sendMsg(String mdn){
         final String APISendMsg = "http://103.253.112.121/quiz_api/sms_api.php";
-        final String msg = "sukses";
+        final String msg = "Selamat anda telah terdaftar di layanan aplikasi Jodoh ideal mingguan. Temukan Jodohmu hari ini.";
         final String url = APISendMsg+"?sender=93827&recipient="+mdn+"&message="+msg+"&user="+userIMSI+"&pass="+passIMSI+"&operator=1";
         JsonObjectRequest jsonRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
