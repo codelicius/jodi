@@ -46,8 +46,9 @@ public class Subscribe extends AppCompatActivity {
     final String APIIMSI = "http://103.253.112.121/quiz_api/imsi_api.php";
     RadioGroup paket;
     Button submitPaket;
-    int paketID;
+    int paketID,idx;
     TextView message;
+    IMSI getimsi;
     TelephonyManager tel;
 
     @Override
@@ -61,34 +62,42 @@ public class Subscribe extends AppCompatActivity {
         paket = (RadioGroup) findViewById(R.id.rgCharge);
         submitPaket = (Button)findViewById(R.id.submitPaket);
         message = (TextView)findViewById(R.id.message);
+        getimsi = new IMSI(getApplicationContext());
     }
     public void submit(View v){
         paketID=paket.getCheckedRadioButtonId();
+        View radioButton = paket.findViewById(paketID);
+        idx = paket.indexOfChild(radioButton);
         if(paketID!=-1){
             final String IMSI = tel.getSubscriberId().toString();
-            final String url = APIIMSI+"?imsi="+IMSI+"&user="+userIMSI+"&pass="+passIMSI;
-            JsonObjectRequest jsonRequest = new JsonObjectRequest
-                    (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            // the response is already constructed as a JSONObject!
-                            try {
-                                String mdn = response.getString("mdn");
-                                charge(mdn,paketID);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+            boolean s = getimsi.getProvider(IMSI,idx,session.getUserDetails().get(sessionmanager.SES_USER_ID));
+            if(s) {
+                Log.d("lanjut","ke smart");
+                final String url = APIIMSI + "?imsi=" + IMSI + "&user=" + userIMSI + "&pass=" + passIMSI;
+                JsonObjectRequest jsonRequest = new JsonObjectRequest
+                        (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                // the response is already constructed as a JSONObject!
+                                try {
+                                    String mdn = response.getString("mdn");
+
+                                    charge(mdn, idx);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        }
-                    }, new Response.ErrorListener() {
+                        }, new Response.ErrorListener() {
 
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            error.printStackTrace();
-                        }
-                    });
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                error.printStackTrace();
+                            }
+                        });
 
-            // Adding request to request queue
-            Volley.newRequestQueue(this).add(jsonRequest);
+                // Adding request to request queue
+                Volley.newRequestQueue(this).add(jsonRequest);
+            }
         }
     }
     public void charge(String mdn,int opsi){
