@@ -51,7 +51,7 @@ public class Profile extends AppCompatActivity
     sessionmanager session;
     private SQLiteController db;
     TextView nama,umur,tb,agama,lokasi,horoskop,jk, about, txtDrawerNama,
-            tipePasangan, kegiatan, interest, satnite, txtDrawerEmail,txtMerokok,txtAlkohol;
+            tipePasangan, kegiatan, interest, satnite, txtDrawerEmail,txtMerokok,txtAlkohol,suku,jobs;
     NetworkImageView imageView, profileImage;
     private ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
     private List<RecentChat> rcArray = new ArrayList<RecentChat>();
@@ -72,6 +72,8 @@ public class Profile extends AppCompatActivity
         lokasi=(TextView)findViewById(R.id.viewProfileLokasi);
         horoskop=(TextView)findViewById(R.id.viewProfileHoroskop);
         profileImage=(NetworkImageView)findViewById(R.id.thumbnailFoto);
+        jobs = (TextView)findViewById(R.id.viewProfilePekerjaan);
+        suku = (TextView)findViewById(R.id.viewProfileSuku);
         about = (TextView)findViewById(R.id.viewProfileAbout);
         tipePasangan = (TextView)findViewById(R.id.viewProfileTipePasangan);
         kegiatan = (TextView)findViewById(R.id.viewProfileKegiatan);
@@ -93,8 +95,10 @@ public class Profile extends AppCompatActivity
         HashMap<String,String> profile=db.getUserDetails();
         String age=profile.get("age"),
                 gender=profile.get("gender"),
+                job=profile.get("job"),
                 fname=profile.get("first_name"),
                 lname=profile.get("last_name"),
+                race=profile.get("race"),
                 height=profile.get("height"),
                 location=profile.get("location"),
                 horoscope=profile.get("horoscope"),
@@ -117,7 +121,7 @@ public class Profile extends AppCompatActivity
         imageView = (NetworkImageView)findViewById(R.id.imageView);
         txtDrawerNama.setText(firstName + " " + lastname);
         txtDrawerEmail.setText(email);
-        imageView.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto  +"?time=" + time, mImageLoader);
+        imageView.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto + "?time=" + time, mImageLoader);
 
         adapter = new RecentChatAdapter(this, rcArray);
         recentChatList=(ListView)findViewById(R.id.right_nav);
@@ -139,7 +143,7 @@ public class Profile extends AppCompatActivity
         agama.setText(religion);
         lokasi.setText(location);
         horoskop.setText(horoscope);
-        profileImage.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto +"?time=" + time, mImageLoader);
+        profileImage.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + foto + "?time=" + time, mImageLoader);
         about.setText(user_detail);
         tipePasangan.setText(tipeps);
         kegiatan.setText(kegiatanSH);
@@ -147,6 +151,8 @@ public class Profile extends AppCompatActivity
         satnite.setText(satnites);
         txtMerokok.setText(merokok);
         txtAlkohol.setText(alkohol);
+        suku.setText(race);
+        jobs.setText(job);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

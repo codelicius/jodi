@@ -1,5 +1,6 @@
 package makasa.dapurkonten.jodohideal;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -11,8 +12,11 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +40,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
@@ -82,11 +89,35 @@ public class imageUpload extends AppCompatActivity{
         fromActivity = bundle.getString("fromActivity");
 
         HashMap<String, String> user = session.getUserDetails();
+        String foto = db.getUserDetails().get("foto");
         String id = user.get(sessionmanager.SES_USER_ID);
-
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+        try {
+            URL thumb_u = new URL("http://103.253.112.121/jodohidealxl/upload/" + foto);
+            Drawable thumb_d = Drawable.createFromStream(thumb_u.openStream(), "src");
+            imageView.setImageDrawable(thumb_d);
+        }
+        catch (Exception e) {
+            Log.d("imageview","error "+e);
+        }
         uid = id;
     }
+    public String getStringImage(Uri imgUri) {
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imgUri);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] imageBytes = baos.toByteArray();
+            String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+            return encodedImage;
+        } catch (Exception e) {
+        }
 
+        return "";
+    }
     public String getStringImage(Bitmap bmp){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.JPEG, 50, baos);
