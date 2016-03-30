@@ -328,6 +328,8 @@ public class OtherProfile extends AppCompatActivity
             startActivity(cht);
         }
         else if (id == R.id.nav_logout) {
+            AppConfig logoutfb = new AppConfig();
+            logoutfb.fbLogout(getApplicationContext());
             db.deleteUsers();
             session.logoutUser();
         }

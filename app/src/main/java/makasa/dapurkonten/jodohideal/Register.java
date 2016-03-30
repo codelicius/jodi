@@ -56,6 +56,7 @@ public class Register extends AppCompatActivity {
     private String urlApi = AppConfig.urlAPI;
     private SQLiteController db;
     private static String INI = Register.class.getSimpleName();
+    private TextView src,opt;
     sessionmanager session;
 
     @Override
@@ -64,6 +65,10 @@ public class Register extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Intent i= getIntent();
+
+
+
         db = new SQLiteController(getApplicationContext());
         tel = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         checkNumber();
@@ -78,7 +83,17 @@ public class Register extends AppCompatActivity {
         rgSex = (RadioGroup)findViewById(R.id.sex);
         btnRegister = (Button)findViewById(R.id.register);
         inputBirthDay = (Button)findViewById(R.id.birthday);
+        src = (TextView)findViewById(R.id.src);
+        opt = (TextView)findViewById(R.id.opt);
+        String source = i.getStringExtra("source");
+        if(!source.isEmpty()){
+            String option = i.getStringExtra("option");
+            src.setText(source);
+            opt.setText(option);
+            Log.d("src", "source " + option);
+            Log.d("src","source "+source);
 
+        }
         agreement.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -95,7 +110,7 @@ public class Register extends AppCompatActivity {
 
 
     private void registerUser(final String firstName, final String lastName, final String email,
-                              final String phoneNumber, final String firstPassword,final String birthDay, final String gender){
+                              final String phoneNumber, final String firstPassword,final String birthDay, final String gender,final String option,final String source){
         final ProgressDialog progressDialog = new ProgressDialog(Register.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Please wait...");
@@ -159,6 +174,8 @@ public class Register extends AppCompatActivity {
                 params.put("jodiPassword", firstPassword);
                 params.put("jodiDOB", birthDay);
                 params.put("jodiGender", gender);
+                params.put("option", option);
+                params.put("src", source);
                 params.put("jodiRegister","");
 
                 return params;
@@ -179,6 +196,8 @@ public class Register extends AppCompatActivity {
         String phoneNumber = inputPhoneNumber.getText().toString().trim();
         String firstPassword= inputFpassword.getText().toString();
         String lastPassword = inputLpassword.getText().toString();
+        String option = opt.getText().toString();
+        String source = src.getText().toString();
         String birthDay = inputBirthDay.getText().toString().trim();
 
         int selectedID = rgSex.getCheckedRadioButtonId();
@@ -194,7 +213,7 @@ public class Register extends AppCompatActivity {
         if (!firstName.isEmpty() && !lastName.isEmpty() && !email.isEmpty() && !phoneNumber.isEmpty()
                 && !firstPassword.isEmpty() && !lastPassword.isEmpty() && !birthDay.equals("Date of Birth") ){
             if (firstPassword.equals(lastPassword)){
-                registerUser(firstName, lastName, email, phoneNumber, firstPassword, birthDay, gender);
+                registerUser(firstName, lastName, email, phoneNumber, firstPassword, birthDay, gender,option,source);
                 session.buatSesiDaftar();
             }
             else {

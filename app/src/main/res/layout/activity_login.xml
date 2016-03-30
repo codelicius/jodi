@@ -79,7 +79,7 @@
                 android:text=""/>
 
             <!-- Link to Login Screen -->
-            <!--<com.facebook.login.widget.LoginButton
+            <com.facebook.login.widget.LoginButton
                 android:id="@+id/login_button"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
                 android:paddingBottom="12dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"/>
-            <com.google.android.gms.common.SignInButton
+            <!--<com.google.android.gms.common.SignInButton
                 android:id="@+id/sign_in_button"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"

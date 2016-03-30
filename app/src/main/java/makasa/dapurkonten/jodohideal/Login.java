@@ -1,5 +1,6 @@
 package makasa.dapurkonten.jodohideal;
 
+import com.android.datetimepicker.Utils;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -10,13 +11,18 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.Profile;
+import com.facebook.ProfileTracker;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -87,81 +93,36 @@ public class Login extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_login);
         info = (TextView) findViewById(R.id.message);
-        //loginButton = (LoginButton) findViewById(R.id.login_button);
-        editTextUsername = (EditText) findViewById(R.id.email);
-        editTextPassword = (EditText) findViewById(R.id.password);
-        //info.setText(tel.getSubscriberId().toString()); //IMSI
-        //tel.getLine1Number()//phonenumber
+        loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions("user_friends");
+        ;
+        // Other app specific specialization
 
-        // login dengan facebook
-/**        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        // Callback registration
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            private ProfileTracker mProfileTracker;
+            String idfb;
             @Override
             public void onSuccess(LoginResult loginResult) {
-                final Profile profile = Profile.getCurrentProfile();
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, REGISTER_URL,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                Log.d(INI, response.toString());
+                if(Profile.getCurrentProfile() == null) {
+                    mProfileTracker = new ProfileTracker() {
+                        @Override
+                        protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
+                            // profile2 is the new profile
+                            idfb = profile2.getId();
+                            loginFB(idfb);
+                            mProfileTracker.stopTracking();
+                        }
+                    };
+                    mProfileTracker.startTracking();
+                }
+                else {
+                    Profile profile = Profile.getCurrentProfile();
+                    Log.d("baru","lama "+profile.getId());
+                    idfb = profile.getId();
+                    loginFB(idfb);
 
-                                try {
-                                    JSONObject jsonResponse = new JSONObject(response);
-                                    //ambil nilai dari JSON respon API
-                                    String jodiStatus = jsonResponse.getString("status");
-
-                                    if (jodiStatus.equals("success")) {
-                                        JSONObject dataUser = jsonResponse.getJSONObject("data");
-                                        String jodiUserID = dataUser.getString("user_id"),
-                                                jodiEmail = dataUser.getString("email"),
-                                                jodiFirstName = dataUser.getString("first_name"),
-                                                jodiLastName = dataUser.getString("last_name"),
-                                                jodiGender = dataUser.getString("gender"),
-                                                jodiBirthday = dataUser.getString("birth_date");
-                                        session.buatSesiLogin(jodiUserID, jodiEmail, jodiFirstName, jodiLastName, jodiGender, jodiBirthday);
-                                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                                        Log.d(INI, response.toString());
-                                        //shownotification();
-                                        startActivity(i);
-                                        finish();
-                                    } else {
-                                        String jodiMessage = jsonResponse.getString("message");
-                                        android.app.AlertDialog alert = new android.app.AlertDialog.Builder(Login.this).create();
-                                        alert.setTitle("Jodoh Ideal");
-                                        alert.setMessage(jodiMessage);
-                                        alert.setButton(android.app.AlertDialog.BUTTON_NEUTRAL, "OK",
-                                                new DialogInterface.OnClickListener() {
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        dialog.dismiss();
-                                                    }
-                                                });
-                                        alert.show();
-                                    }
-
-
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(Login.this, error.toString(), Toast.LENGTH_LONG).show();
-                            }
-                        }) {
-                    @Override
-                    //proses kirim parameter ke
-                    protected Map<String, String> getParams() {
-                        Map<String, String> params = new HashMap<String, String>();
-                        params.put("jodiIDSocmed", profile.getId());
-                        params.put("jodiFName", profile.getFirstName());
-                        params.put("jodiLName", profile.getLastName());
-                        params.put("jodiLoginFB", "");
-                        return params;
-                    }
-
-
-                };
+                }
             }
 
             @Override
@@ -173,7 +134,12 @@ public class Login extends AppCompatActivity {
             public void onError(FacebookException e) {
                 info.setText("Login attempt failed.");
             }
-        });**/
+        });
+        editTextUsername = (EditText) findViewById(R.id.email);
+        editTextPassword = (EditText) findViewById(R.id.password);
+        //info.setText(tel.getSubscriberId().toString()); //IMSI
+        //tel.getLine1Number()//phonenumber
+
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
@@ -184,6 +150,127 @@ public class Login extends AppCompatActivity {
     }
 
     // link menuju register
+    protected void loginFB(final String id){
+        final ProgressDialog progressDialog = new ProgressDialog(Login.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Authenticating...");
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, REGISTER_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        progressDialog.dismiss();
+                        Log.d(INI,"respons "+response);
+
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            //ambil nilai dari JSON respon API
+                            String jodiStatus = jsonResponse.getString("status");
+
+                            if (jodiStatus.equals("success")) {
+                                JSONObject dataUser = jsonResponse.getJSONObject("data");
+                                JSONObject profileUser = jsonResponse.getJSONObject("profile");
+
+                                String jodiUserID = dataUser.getString("user_id"),
+                                        jodiEmail = dataUser.getString("email"),
+                                        jodiFirstName = dataUser.getString("first_name"),
+                                        jodiLastName = dataUser.getString("last_name"),
+                                        jodiGender = dataUser.getString("gender"),
+                                        jodiBirthday = dataUser.getString("birth_date"),
+                                        jodiIsFillProfile = dataUser.getString("is_fillprofile");
+
+                                JSONArray jodiPartner = jsonResponse.getJSONArray("partner");
+
+                                for (int i = 0; i < jodiPartner.length(); i++) {
+                                    JSONObject partner = (JSONObject) jodiPartner.get(i);
+                                    String partner_id = partner.getString("partner_id"),
+                                            partner_fname = partner.getString("fname"),
+                                            partner_lname = partner.getString("lname"),
+                                            partner_image = partner.getString("image"),
+                                            partner_gender = partner.getString("gender"),
+                                            partner_race = partner.getString("race"),
+                                            partner_religion = partner.getString("religion");
+                                    int partner_match = partner.getInt("match"),
+                                            partner_notmatch = partner.getInt("not_match"),
+                                            partner_age = partner.getInt("age");
+
+                                    db.addPartner(partner_id, partner_fname, partner_lname, partner_match,
+                                            partner_notmatch, partner_image, partner_age, partner_gender, partner_race, partner_religion);
+
+
+                                }
+
+                                session.buatSesiLogin(jodiUserID, jodiEmail, jodiFirstName,
+                                        jodiLastName, jodiGender, jodiBirthday);
+                                if (jodiIsFillProfile.equals("0")) {
+                                    Intent i = new Intent(getApplicationContext(), EditProfile.class);
+                                    i.putExtra("fromActivity","profile");
+                                    startActivity(i);
+                                    finish();
+                                } else {
+                                    String profileAge = profileUser.getString("age"),
+                                            profileGender = profileUser.getString("gender"),
+                                            profileRace = profileUser.getString("race_name"),
+                                            profileReligion = profileUser.getString("religion"),
+                                            profileHeight = profileUser.getString("height"),
+                                            profileLocation = profileUser.getString("loc_name"),
+                                            profileHoroscope = profileUser.getString("horoscope_name"),
+                                            profileJob = profileUser.getString("job_name"),
+                                            profileDetail = profileUser.getString("self_desc"),
+                                            profileFoto = profileUser.getString("foto_url"),
+                                            profileMerokok = profileUser.getString("smoking"),
+                                            profileAlkohol = profileUser.getString("alcohol"),
+                                            profileTipePasangan = profileUser.getString("partner_desc"),
+                                            profileKegiatan = profileUser.getString("activity"),
+                                            profileInterest = profileUser.getString("hobby"),
+                                            profileSatNite = profileUser.getString("sat_night");
+
+                                    db.addUser(jodiUserID, jodiFirstName, jodiLastName, jodiEmail, profileGender,
+                                            profileAge, profileRace, profileReligion, profileHeight, profileLocation,
+                                            profileHoroscope, profileJob, profileDetail, profileFoto, profileMerokok, profileAlkohol,
+                                            profileTipePasangan, profileKegiatan, profileInterest, profileSatNite);
+
+                                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                                    //shownotification();
+                                    startActivity(i);
+                                    finish();
+                                }
+                            } else {
+                                Intent i = new Intent(getApplicationContext(),Register.class);
+                                i.putExtra("source","fb");
+                                i.putExtra("option",id);
+                                startActivity(i);
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progressDialog.dismiss();
+                        Log.d("error ", "error " + error.toString());
+                        //Toast.makeText(Login.this, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            //proses kirim parameter ke
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("id", id);
+                params.put("jodiLoginFB", "");
+                return params;
+            }
+
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
     public void register(View view) {
         Intent i = new Intent(Login.this, Register.class);
         startActivity(i);
@@ -308,6 +395,7 @@ public class Login extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        LoginManager.getInstance().logOut();
                         Toast.makeText(Login.this, error.toString(), Toast.LENGTH_LONG).show();
                     }
                 }) {

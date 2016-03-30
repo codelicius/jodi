@@ -422,6 +422,8 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.nav_logout) {
             p.deletePush();
             ParseInstallation.getCurrentInstallation().deleteInBackground();
+            AppConfig logoutfb = new AppConfig();
+            logoutfb.fbLogout(getApplicationContext());
             db.deleteUsers();
             session.logoutUser();
         }

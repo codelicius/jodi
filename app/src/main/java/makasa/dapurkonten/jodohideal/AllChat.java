@@ -179,6 +179,8 @@ public class AllChat extends AppCompatActivity
         }
 
         else if (id == R.id.nav_logout) {
+            AppConfig logoutfb = new AppConfig();
+            logoutfb.fbLogout(getApplicationContext());
             db.deleteUsers();
             session.logoutUser();
         }
