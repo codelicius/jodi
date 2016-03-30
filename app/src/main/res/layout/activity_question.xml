@@ -15,7 +15,8 @@
         <ImageView
             android:id="@+id/imgQuestion"
             android:layout_width="match_parent"
-            android:layout_height="200dp"/>
+            android:layout_height="200dp"
+            android:src="@drawable/question_default"/>
 
         <TextView
             android:id="@+id/questiont"

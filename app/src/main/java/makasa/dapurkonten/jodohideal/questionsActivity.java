@@ -1,7 +1,9 @@
 package makasa.dapurkonten.jodohideal;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +28,7 @@ import org.w3c.dom.Text;
 import makasa.dapurkonten.jodohideal.app.AppConfig;
 import makasa.dapurkonten.jodohideal.app.SQLiteController;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +37,7 @@ public class questionsActivity extends AppCompatActivity{
     private static String INI=questionsActivity.class.getSimpleName();
     private SQLiteController db;
     TextView pertanyaans,idquestion,questionid;
+    ImageView imageQue;
     Button goto_next,goto_prev;
     RadioGroup groupQuestion;
     RadioButton question1,question2;
@@ -56,6 +60,7 @@ public class questionsActivity extends AppCompatActivity{
         question1 = (RadioButton)findViewById(R.id.question1);
         question2 = (RadioButton)findViewById(R.id.question2);
         sessions = new sessionmanager(getApplicationContext());
+        imageQue = (ImageView)findViewById(R.id.imgQuestion);
         goto_prev.setVisibility(View.INVISIBLE);
         db = new SQLiteController(getApplicationContext());
         HashMap<String,String> tenQuestion = db.getIdQuestion(idpertanyaan);
@@ -69,6 +74,10 @@ public class questionsActivity extends AppCompatActivity{
         questionid.setText(question_id);
         question1.setText(answer_ops1);
         question2.setText(answer_ops2);
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
 
     }
@@ -115,6 +124,16 @@ public class questionsActivity extends AppCompatActivity{
                 question1.setText(answer_ops1);
                 question2.setText(answer_ops2);
                 questionid.setText(question_id);
+
+                try {
+                    URL thumb_u = new URL("http://103.253.112.121/jodohidealxl/upload/question_" + question_id+".jpg");
+                    Drawable thumb_d = Drawable.createFromStream(thumb_u.openStream(), "src");
+                    imageQue.setImageDrawable(thumb_d);
+                }
+                catch (Exception e) {
+                    imageQue.setImageResource(R.drawable.question_default);
+                    Log.d("imageview","error "+e);
+                }
                 goto_prev.setVisibility(View.VISIBLE);
             }
         }
@@ -142,6 +161,15 @@ public class questionsActivity extends AppCompatActivity{
             question1.setText(answer_ops1);
             question2.setText(answer_ops2);
             questionid.setText(question_id);
+            try {
+                URL thumb_u = new URL("http://103.253.112.121/jodohidealxl/upload/question_" + question_id+".jpg");
+                Drawable thumb_d = Drawable.createFromStream(thumb_u.openStream(), "src");
+                imageQue.setImageDrawable(thumb_d);
+            }
+            catch (Exception e) {
+                imageQue.setImageResource(R.drawable.question_default);
+                Log.d("imageview","error "+e);
+            }
             goto_next.setText("Next");
 
         }
