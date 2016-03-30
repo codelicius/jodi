@@ -92,6 +92,7 @@ public class EditProfile extends AppCompatActivity {
         txtLocation = (Spinner)findViewById(R.id.lokasi);
         txtHoroscope = (Spinner)findViewById(R.id.horoskop);
         txtJob = (Spinner)findViewById(R.id.pekerjaan);
+        getSpinner("suku");
         getSpinner("pekerjaan");
         getSpinner("lokasi");
         tinggi.setText(height);
@@ -259,14 +260,21 @@ public class EditProfile extends AppCompatActivity {
         final HashMap<String, String> profile = db.getUserDetails();
         String API = AppConfig.urlAPI;
         String url = API+"?jodiSpinner";
+
         final ArrayList<String> pekerjaan=new ArrayList<String>();
         final ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item,pekerjaan);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         final ArrayList<String> lokasi=new ArrayList<String>();
         final ArrayAdapter<String> adapters=new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item,lokasi);
         adapters.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        final ArrayList<String> suku =new ArrayList<String>();
+        final ArrayAdapter<String> adapterSuku =new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item,suku);
+        adapterSuku.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -276,18 +284,30 @@ public class EditProfile extends AppCompatActivity {
                         try{
                             JSONArray pk = response.getJSONArray("Pekerjaan");
                             JSONArray lk = response.getJSONArray("Lokasi");
+                            JSONArray sk = response.getJSONArray("Suku");
+
                             if(profile.get("job")!=null)
                                 pekerjaan.add(profile.get("job"));
                             if(profile.get("location")!=null)
                                 lokasi.add(profile.get("location"));
+                            if (profile.get("suku") != null)
+                                suku.add(profile.get("suku"));
+
                             for(int i=0; i<pk.length(); i++){
                                 pekerjaan.add(pk.getString(i));
                             }
+
                             for(int i=0; i<lk.length(); i++){
                                 lokasi.add(lk.getString(i));
                             }
+
+                            for (int i=0; i<sk.length(); i++){
+                                suku.add(sk.getString(i));
+                            }
+
                             adapters.notifyDataSetChanged();
                             adapter.notifyDataSetChanged();
+                            adapterSuku.notifyDataSetChanged();
                             Log.d("array pekerjaan",pekerjaan.toString());
                         }
                         catch (JSONException e) {
@@ -308,8 +328,10 @@ public class EditProfile extends AppCompatActivity {
         Volley.newRequestQueue(this).add(jsonRequest);
         if(spin.equals("pekerjaan"))
             txtJob.setAdapter(adapter);
-        else
+        else if (spin.equals("lokasi"))
             txtLocation.setAdapter(adapters);
+        else
+            txtRace.setAdapter(adapterSuku);
 
     }
 }

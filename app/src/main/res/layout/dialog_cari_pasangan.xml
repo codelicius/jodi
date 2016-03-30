@@ -4,26 +4,13 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="5dp">
+    android:padding="20dp">
+
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Gender"/>
-
-    <Spinner
-        android:id="@+id/pilihGender"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:entries="@array/list_gender"
-        android:prompt="@string/promptGender"
-        android:minHeight="40dp"
-        />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Agama"/>
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Agama"/>
 
     <Spinner
         android:id="@+id/pilihAgama"
@@ -34,11 +21,28 @@
         android:minHeight="40dp"
         />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Suku"
+        android:layout_marginTop="8dp"/>
+
+    <Spinner
+        android:id="@+id/pilihSuku"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/list_gender"
+        android:prompt="@string/promptGender"
+        android:minHeight="40dp"
+        />
+
     <Button
+        android:id="@+id/search_pasangan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:text="Cari"
-        android:textColor="@color/white"/>
+        android:textColor="@color/white"
+        android:layout_marginTop="10dp"/>
 
 </LinearLayout>

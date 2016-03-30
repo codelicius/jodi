@@ -20,9 +20,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +35,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -59,7 +62,7 @@ import makasa.dapurkonten.jodohideal.object.RecentChat;
 public class CariPasangan extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     sessionmanager session;
-    Button btnLoadMore;
+    Button btnLoadMore, btnSearch;
     int page = 1;
     private SQLiteController db;
     private static String INI = CariPasangan.class.getSimpleName();
@@ -76,6 +79,7 @@ public class CariPasangan extends AppCompatActivity
     private RecentChatAdapter rcAdapter;
     ListView recentChatList;
     ImageButton btnTglChat;
+    private Spinner spinReligion, spinRace;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +115,7 @@ public class CariPasangan extends AppCompatActivity
 
         HashMap<String, String> profile = db.getUserDetails();
         String foto = profile.get("foto");
+        String suku = profile.get("race");
 
         int time = (int) (System.currentTimeMillis());
 
@@ -153,14 +158,31 @@ public class CariPasangan extends AppCompatActivity
 
         btnTglChat = (ImageButton)findViewById(R.id.tglChat);
 
+        /** dialoug are here **/
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCariPasangan);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                page = 1;
+
                 final Dialog dialog = new Dialog(context);
                 dialog.setTitle("Cari Pasangan Ideal");
                 dialog.setContentView(R.layout.dialog_cari_pasangan);
                 dialog.show();
+
+                spinReligion = (Spinner)dialog.findViewById(R.id.pilihAgama);
+                spinRace = (Spinner)dialog.findViewById(R.id.pilihSuku);
+                getSpin("suku");
+                btnSearch = (Button)dialog.findViewById(R.id.search_pasangan);
+                btnSearch.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String agama = spinReligion.getSelectedItem().toString(),
+                                suku = spinRace.getSelectedItem().toString();
+
+
+                    }
+                });
 
             }
         });
@@ -441,6 +463,129 @@ public class CariPasangan extends AppCompatActivity
         requestQueue.add(stringRequest);
 
         hidepDialog();
+    }
+
+    private void getIndex(Spinner spinner, String myString){
+
+        int index = 0;
+
+        for (int i=0;i<spinner.getCount();i++){
+            if (spinner.getItemAtPosition(i).equals(myString)){
+                index = i;
+            }
+        }
+        spinner.setSelection(index);
+    }
+
+    private void getSpin(String spin){
+        final HashMap<String, String> profile = db.getUserDetails();
+        String API = AppConfig.urlAPI;
+        String url = API+"?jodiSpinner";
+
+        final ArrayList<String> suku =new ArrayList<String>();
+        final ArrayAdapter<String> adapterSuku =new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item,suku);
+        adapterSuku.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("respon",response.toString());
+                        try{
+                            JSONArray sk = response.getJSONArray("Suku");
+
+
+                            if (profile.get("suku") != null)
+                                suku.add(profile.get("suku"));
+
+                            for (int i=0; i<sk.length(); i++){
+                                suku.add(sk.getString(i));
+                            }
+
+
+                            adapterSuku.notifyDataSetChanged();
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        // the response is already constructed as a JSONObject!
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        Volley.newRequestQueue(this).add(jsonRequest);
+
+        spinRace.setAdapter(adapterSuku);
+
+    }
+
+    private void customSearch(int pages){
+        HashMap<String, String> user = session.getUserDetails();
+        String userid = user.get(sessionmanager.SES_USER_ID);
+        String genderid=user.get(sessionmanager.SES_GENDER);
+        final ProgressDialog progressDialog = new ProgressDialog(CariPasangan.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Please Wait...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        urlCaPas = urlCaPas + "?userid="+userid+"&genderid="+genderid+"&page="+pages+"&jodiPasangan";
+        JsonArrayRequest req = new JsonArrayRequest(urlCaPas,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(INI, response.toString());
+                        progressDialog.dismiss();
+
+                        try {
+                            for (int i = 0; i < response.length(); i++) {
+
+                                JSONObject respon = (JSONObject) response.get(i);
+
+                                Partner partner = new Partner();
+
+                                partner.setpID(respon.getInt("id_pasangan"));
+                                partner.setFullName(respon.getString("fname"), respon.getString("lname"));
+                                partner.setUrlFoto("http://103.253.112.121/jodohidealxl/upload/"+respon.getString("foto"));
+                                partner.setGender(respon.getString("jenis_kelamin"));
+                                partner.setSuku(respon.getString("suku"));
+                                partner.setAgama(respon.getString("agama"));
+
+                                partner.setKecocokan(respon.getInt("match"));
+                                partner.setKetidakcocokan(respon.getInt("not_match"));
+                                partner.setUmur(respon.getInt("umur"));
+                                pasangan.add(partner);
+
+                            }
+                            page++;
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(),
+                                    "Error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                        adapter.notifyDataSetChanged();
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(INI, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(req);
     }
 }
 
