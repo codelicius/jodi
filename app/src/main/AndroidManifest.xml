@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
+
     <permission
         android:name="makasa.dapurkonten.jodohideal.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
@@ -101,15 +102,20 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".webView"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".successSubscribe"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="jodoh" android:host="ideal" android:path="/subscribe" />
+
+                <data
+                    android:host="ideal"
+                    android:path="/subscribe"
+                    android:scheme="jodoh" />
             </intent-filter>
         </activity>
         <activity
@@ -117,7 +123,7 @@
             android:label="@string/title_activity_all_chat"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <!--               <receiver android:name="com.parse.ParsePushBroadcastReceiver"  android:exported="false"> -->
+        <!-- <receiver android:name="com.parse.ParsePushBroadcastReceiver"  android:exported="false"> -->
         <service android:name="com.parse.PushService" />
 
         <receiver
@@ -138,13 +144,21 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <!--                   IMPORTANT: Change "com.parse.starter" to match your app's package name. -->
+                <!-- IMPORTANT: Change "com.parse.starter" to match your app's package name. -->
                 <category android:name="makasa.dapurkonten.jodohideal" />
             </intent-filter>
         </receiver>
 
-        <activity android:name=".Tos"></activity>
-        <receiver android:name=".receiver.AlarmReceiver" android:process=":remote" />
+        <activity android:name=".Tos" />
+
+        <receiver
+            android:name=".receiver.AlarmReceiver"
+            android:process=":remote" />
+
+        <activity
+            android:name=".Event"
+            android:label="@string/title_activity_event"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

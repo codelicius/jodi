@@ -121,5 +121,6 @@ Anda dapat mengakhiri keanggotaan Anda setiap saat, untuk alasan apapun, efektif
     <string name="title_activity_profile">Profile</string>
     <string name="title_activity_other_profile">Profile</string>
     <string name="title_activity_all_chat">All Chat</string>
+    <string name="title_activity_event">Event</string>
 
 </resources>

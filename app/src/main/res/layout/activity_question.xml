@@ -12,38 +12,40 @@
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
-            android:id="@+id/bgQst"
+        <ImageView
+            android:id="@+id/imgQuestion"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:orientation="horizontal"
-            android:background="@color/main_color_red">
+            android:layout_height="200dp"/>
 
-            <TextView
-                android:id="@+id/questiont"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:text="question goes here. Lorem Ipsum Dolor Sit Amet?"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_horizontal"/>
-            <TextView
-                android:id="@+id/questionid"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_horizontal"
-                android:visibility="invisible"/>
-        </LinearLayout>
+        <TextView
+            android:id="@+id/questiont"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:text="question goes here. Lorem Ipsum Dolor Sit Amet?"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_horizontal"
+            android:layout_below="@+id/imgQuestion"
+            android:layout_toRightOf="@+id/questionid"
+            android:layout_toEndOf="@+id/questionid"
+            android:layout_marginTop="20dp"/>
+        <TextView
+            android:id="@+id/questionid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_horizontal"
+            android:visibility="gone"/>
 
 
         <RadioGroup
             android:id="@+id/groupQuestion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/bgQst"
-            >
+            android:layout_below="@+id/questiont"
+            android:layout_toRightOf="@+id/questionid"
+            android:layout_toEndOf="@+id/questionid">
             <RadioButton
                 android:id="@+id/question1"
                 android:layout_width="wrap_content"

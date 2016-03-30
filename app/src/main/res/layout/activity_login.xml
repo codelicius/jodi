@@ -12,7 +12,7 @@
         android:layout_height="fill_parent"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="10dp" >oid studio
+        android:padding="10dp" >
 
         <LinearLayout
             android:id="@+id/rootLayout"
