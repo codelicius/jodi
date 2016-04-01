@@ -253,6 +253,7 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         progressDialog.dismiss();
+                        LoginManager.getInstance().logOut();
                         Log.d("error ", "error " + error.toString());
                         //Toast.makeText(Login.this, error.toString(), Toast.LENGTH_LONG).show();
                     }
@@ -273,6 +274,8 @@ public class Login extends AppCompatActivity {
     }
     public void register(View view) {
         Intent i = new Intent(Login.this, Register.class);
+        i.putExtra("source","");
+        i.putExtra("option","");
         startActivity(i);
     }
 
@@ -395,7 +398,7 @@ public class Login extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        LoginManager.getInstance().logOut();
+                        progressDialog.dismiss();
                         Toast.makeText(Login.this, error.toString(), Toast.LENGTH_LONG).show();
                     }
                 }) {

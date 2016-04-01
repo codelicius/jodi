@@ -16,7 +16,9 @@ public class AppConfig {
     public static final int NOTIFICATION_ID = 100;
 //    public static final String devid= ParseInstallation.getCurrentInstallation().get("deviceToken").toString();
 
-        public static String urlAPI = "http://jodi.licious.id/api/";
+   //     public static String urlAPI = "http://jodi.licious.id/api/";
+    public static String urlAPI = "http://103.253.112.121/jodohideal/api/index_dummy.php";
+
     //    public static String urlAPI = "http://103.253.112.121/jodohideal/api/";
     public void fbLogout(Context c){
         FacebookSdk.sdkInitialize(c);

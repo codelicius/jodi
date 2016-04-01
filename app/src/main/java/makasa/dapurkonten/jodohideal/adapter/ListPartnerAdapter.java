@@ -33,7 +33,11 @@ public class ListPartnerAdapter extends BaseAdapter {
         this.activity = activity;
         this.PartnerItem = partnerItem;
     }
-
+    public void clearAdapter()
+    {
+        PartnerItem.clear();
+        notifyDataSetChanged();
+    }
     @Override
     public int getCount(){
         return PartnerItem.size();

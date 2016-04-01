@@ -54,6 +54,7 @@ import makasa.dapurkonten.jodohideal.app.SQLiteController;
 import makasa.dapurkonten.jodohideal.object.ChatHistory;
 import makasa.dapurkonten.jodohideal.object.Partner;
 import makasa.dapurkonten.jodohideal.object.RecentChat;
+import makasa.dapurkonten.jodohideal.object.circleImage;
 import makasa.dapurkonten.jodohideal.receiver.parsePush;
 
 public class Chat extends AppCompatActivity
@@ -69,11 +70,12 @@ public class Chat extends AppCompatActivity
     private ListView listView;
     private String urlAPI,partnerID;
     private static String INI = Chat.class.getSimpleName();
-    TextView txtDrawerNama, txtDrawerEmail;
+    TextView txtDrawerNama, txtDrawerEmail,chatName;
     NetworkImageView imageView;
     private ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
     private List<RecentChat> rcArray = new ArrayList<RecentChat>();
     private RecentChatAdapter adapter;
+    private circleImage ci;
     ListView recentChatList;
     ImageButton btnTglChat;
     parsePush p = new parsePush();
@@ -104,6 +106,8 @@ public class Chat extends AppCompatActivity
         //drawer
         txtDrawerNama = (TextView)findViewById(R.id.txtDrawerNama);
         txtDrawerEmail = (TextView)findViewById(R.id.txtDrawerEmail);
+        ci = (circleImage) findViewById(R.id.chatImg);
+        chatName = (TextView) findViewById(R.id.chatName);
         imageView = (NetworkImageView)findViewById(R.id.imageView);
         txtDrawerNama.setText(firstName + " " + lastname);
         txtDrawerEmail.setText(email);
@@ -313,7 +317,14 @@ public class Chat extends AppCompatActivity
                             String  jodiStatus = jsonResponse.getString("history");
 
                             if(jodiStatus.equals("1")) {
+                                JSONArray detail = jsonResponse.getJSONArray("detail");
 
+                                for (int i=0; i<detail.length(); i++){
+                                    JSONObject dt = (JSONObject) detail.get(i);
+                                    chatName.setText(dt.getString("first_name")+" "+dt.getString("last_name"));
+                                    ci.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + dt.getString("photo_url"),mImageLoader);
+
+                                }
                                 JSONArray allChat = jsonResponse.getJSONArray("message");
 
                                 for (int i=0; i<allChat.length(); i++){

@@ -80,6 +80,8 @@ public class CariPasangan extends AppCompatActivity
     ListView recentChatList;
     ImageButton btnTglChat;
     private Spinner spinReligion, spinRace;
+    private String gendersid,userid;
+    private String urls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +104,7 @@ public class CariPasangan extends AppCompatActivity
         btnLoadMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listPasangan(page);
+                listPasangan(page,urls);
             }
         });
 
@@ -125,7 +127,9 @@ public class CariPasangan extends AppCompatActivity
         drawerName.setText(firstName + " " + lastname);
         drawerEmail = (TextView)findViewById(R.id.txtDrawerEmail);
         drawerEmail.setText(email);
-
+        HashMap<String, String> users = session.getUserDetails();
+        userid = users.get(sessionmanager.SES_USER_ID);
+        gendersid=users.get(sessionmanager.SES_GENDER);
         listView = (ListView) findViewById(R.id.listKecocokan);
         adapter = new ListPartnerAdapter(this, pasangan);
         listView.setAdapter(adapter);
@@ -177,8 +181,17 @@ public class CariPasangan extends AppCompatActivity
                 btnSearch.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String agama = spinReligion.getSelectedItem().toString(),
-                                suku = spinRace.getSelectedItem().toString();
+                        dialog.dismiss();
+                        Log.d("ras","ras "+spinReligion.getSelectedItemPosition());
+                        Log.d("ras","race "+spinRace.getSelectedItem().toString());
+                        int rel = spinReligion.getSelectedItemPosition()+1,
+                                race = spinRace.getSelectedItemPosition();
+                        String agama = String.valueOf(rel),
+                                suku = String.valueOf(race);
+                        urls = urlCaPas + "?userid="+userid+"&genderid="+gendersid+"&ras="+suku+"&religion="+agama+"&jodiPasangan";
+                        adapter.clearAdapter();
+                        listPasangan(page,urls);
+
 
 
                     }
@@ -206,31 +219,30 @@ public class CariPasangan extends AppCompatActivity
             }
         });
         getRecentPartner(userID);
-
-        listPasangan(page);
+        urls = urlCaPas + "?userid="+userid+"&genderid="+gendersid+"&jodiPasangan";
+        listPasangan(page,urls);
     }
 
-    private void listPasangan(int pages){
-        HashMap<String, String> user = session.getUserDetails();
-        String userid = user.get(sessionmanager.SES_USER_ID);
-        String genderid=user.get(sessionmanager.SES_GENDER);
+    private void listPasangan(int pages,String url){
+        url = url+"&page="+pages;
         final ProgressDialog progressDialog = new ProgressDialog(CariPasangan.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Please Wait...");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        urlCaPas = urlCaPas + "?userid="+userid+"&genderid="+genderid+"&page="+pages+"&jodiPasangan";
-        JsonArrayRequest req = new JsonArrayRequest(urlCaPas,
-                new Response.Listener<JSONArray>() {
+
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET,url,null,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(JSONArray response) {
+                    public void onResponse(JSONObject response) {
                         Log.d(INI, response.toString());
                         progressDialog.dismiss();
 
                         try {
-                            for (int i = 0; i < response.length(); i++) {
+                            JSONArray ps = response.getJSONArray("pasangan");
+                            for (int i = 0; i < ps.length(); i++) {
 
-                                JSONObject respon = (JSONObject) response.get(i);
+                                JSONObject respon = (JSONObject) ps.get(i);
 
                                 Partner partner = new Partner();
 
@@ -281,7 +293,7 @@ public class CariPasangan extends AppCompatActivity
         }
     }
     public void loadMoreEvent(View view){
-        listPasangan(page);
+        listPasangan(page,urls);
     }
 
     @Override

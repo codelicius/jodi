@@ -27,6 +27,14 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
+                <makasa.dapurkonten.jodohideal.object.circleImage
+                    android:id="@+id/chatImg"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+                <TextView
+                    android:id="@+id/chatName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
                 <ImageButton
                     android:id="@+id/tglChat"
                     android:layout_width="wrap_content"

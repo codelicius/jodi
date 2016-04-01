@@ -33,6 +33,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -314,17 +315,18 @@ public class MainActivity extends AppCompatActivity
         progressDialog.show();
         urlAPI = urlAPI + "?userid="+userid+"&genderid="+genderid+"&page=1&jodiPasangan";
         Log.d("url",urlAPI + "?userid="+userid+"&genderid="+genderid+"&page=1&jodiPasangan");
-        JsonArrayRequest req = new JsonArrayRequest(urlAPI,
-                new Response.Listener<JSONArray>() {
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET,urlAPI,null,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(JSONArray response) {
+                    public void onResponse(JSONObject response) {
                         Log.d(INI, response.toString());
                         progressDialog.dismiss();
 
                         try {
-                            for (int i = 0; i < response.length(); i++) {
+                           JSONArray pasangan = response.getJSONArray("pasangan");
+                            for (int i = 0; i < pasangan.length(); i++) {
 
-                                JSONObject respon = (JSONObject) response.get(i);
+                                JSONObject respon = (JSONObject) pasangan.get(i);
 
                                 Partner partner = new Partner();
 
