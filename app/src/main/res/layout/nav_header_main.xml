@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:src="@drawable/user_sample"
         android:id="@+id/imageView" />
 
     <TextView
