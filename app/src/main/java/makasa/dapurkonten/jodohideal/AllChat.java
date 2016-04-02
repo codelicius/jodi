@@ -108,8 +108,10 @@ public class AllChat extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 String pID = ((TextView) view.findViewById(R.id.chatID)).getText().toString();
+                String us = ((TextView)view.findViewById(R.id.chatPartner)).getText().toString();
                 Intent i = new Intent(getApplicationContext(), Chat.class);
                 i.putExtra("pID", pID);
+                i.putExtra("chatUser", us);
                 startActivity(i);
             }
         });

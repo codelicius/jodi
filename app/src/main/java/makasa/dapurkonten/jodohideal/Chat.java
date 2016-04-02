@@ -1,6 +1,8 @@
 package makasa.dapurkonten.jodohideal;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
@@ -68,7 +70,7 @@ public class Chat extends AppCompatActivity
     private boolean side = false;
     private ChatArrayAdapter chatArrayAdapter;
     private ListView listView;
-    private String urlAPI,partnerID;
+    private String urlAPI,partnerID, userChat;
     private static String INI = Chat.class.getSimpleName();
     TextView txtDrawerNama, txtDrawerEmail,chatName;
     NetworkImageView imageView;
@@ -84,10 +86,14 @@ public class Chat extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
         Bundle bundle=getIntent().getExtras();
         partnerID = bundle.getString("pID");
+        userChat = bundle.getString("chatUser");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(userChat);
+
 
         session = new sessionmanager(getApplicationContext());
         //session.checkLogin();
@@ -275,7 +281,7 @@ public class Chat extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(Chat.this,error.toString(),Toast.LENGTH_LONG).show();
+                        Toast.makeText(Chat.this,"Koneksi Anda bermasalah, silahkan cek koneksi Anda",Toast.LENGTH_LONG).show();
                     }
                 }){
             @Override
@@ -321,7 +327,8 @@ public class Chat extends AppCompatActivity
 
                                 for (int i=0; i<detail.length(); i++){
                                     JSONObject dt = (JSONObject) detail.get(i);
-                                    chatName.setText(dt.getString("first_name")+" "+dt.getString("last_name"));
+                                    //ga bisa taro di luar on create
+                                    //getSupportActionBar().setTitle(dt.get("first_name") + " " + dt.getString("last_name"));
                                     ci.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + dt.getString("photo_url"),mImageLoader);
 
                                 }
@@ -348,7 +355,23 @@ public class Chat extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(Chat.this,error.toString(),Toast.LENGTH_LONG).show();
+                        progressDialog.dismiss();
+                        AlertDialog infoPass = new AlertDialog.Builder(Chat.this).create();
+                        infoPass.setTitle("Alert");
+                        infoPass.setMessage("Gagal terhubung dengan server, silakan cek koneksi internet anda");
+                        infoPass.setButton(AlertDialog.BUTTON_POSITIVE, "Try Again",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        getChatHistory(partnerID);
+                                    }
+                                });
+                        infoPass.setButton(AlertDialog.BUTTON_NEGATIVE, "OK",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        infoPass.show();
                     }
                 }){
             @Override
@@ -406,7 +429,7 @@ public class Chat extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(Chat.this, error.toString(), Toast.LENGTH_LONG).show();
+
                     }
                 }){
             @Override
