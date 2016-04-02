@@ -7,6 +7,7 @@ package makasa.dapurkonten.jodohideal.app;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -279,7 +280,12 @@ public class SQLiteController extends SQLiteOpenHelper {
 
         return user;
     }
-
+    public long getTotalQuestion() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        long cnt  = DatabaseUtils.queryNumEntries(db, TABLE_QUESTION);
+        db.close();
+        return cnt;
+    }
     public HashMap<String,String> getIdQuestion(int id){
         HashMap<String, String> questions = new HashMap<String, String>();
         String selectQuery = "SELECT  * FROM " + TABLE_QUESTION +" where id = ?";

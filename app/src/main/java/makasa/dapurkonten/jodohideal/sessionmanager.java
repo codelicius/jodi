@@ -4,6 +4,7 @@ package makasa.dapurkonten.jodohideal;
  * Created by abay on 17/11/15.
  */
 import java.util.HashMap;
+import java.util.Map;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -14,6 +15,21 @@ import android.content.SharedPreferences.Editor;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import makasa.dapurkonten.jodohideal.app.AppConfig;
+import makasa.dapurkonten.jodohideal.app.SQLiteController;
+import makasa.dapurkonten.jodohideal.object.RecentChat;
+
 public class sessionmanager {
 
     // Shared Preferences reference
@@ -21,6 +37,7 @@ public class sessionmanager {
 
     // Editor reference for Shared preferences
     Editor editor,register;
+    SQLiteController db;
 
     // Context
     private static String INI=sessionmanager.class.getSimpleName();
@@ -46,6 +63,7 @@ public class sessionmanager {
     // Constructor
     public sessionmanager(Context context){
         this._context = context;
+        db=new SQLiteController(_context);
         pref = _context.getSharedPreferences(PREFER_NAME, PRIVATE_MODE);
         editor = pref.edit();
         prefRegister = _context.getSharedPreferences("jodiRegister", PRIVATE_MODE);
@@ -113,18 +131,100 @@ public class sessionmanager {
     public boolean checkLogin(){
         // Check login status
         if(this.isUserLoggedIn()){
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConfig.urlAPI,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d(INI, "pertanyaan "+response);
 
-            // user is not logged in redirect him to Login Activity
-            Intent i = new Intent(_context, MainActivity.class);
+                            try {
+                                JSONObject jsonResponse = new JSONObject(response);
 
-            // Closing all the Activities from stack
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                String status = jsonResponse.getString("event");
 
-            // Add new Flag to start new Activity
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                if(status.equals("true")) {
+                                    db.deleteQuestions();
+                                    JSONArray multiQuestions = jsonResponse.getJSONArray("pertanyaan");
+                                    for(int i=0;i<multiQuestions.length();i++){
+                                        JSONObject jodiQuestions = multiQuestions.getJSONObject(i);
+                                        String jodiQuestionId= jodiQuestions.getString("question_id"),
+                                                jodiQuestion= jodiQuestions.getString("question"),
+                                                jodiOps1= jodiQuestions.getString("answer_ops1"),
+                                                jodiOps2= jodiQuestions.getString("answer_ops2");
+                                        db.addQuestion(jodiQuestionId,jodiQuestion,jodiOps1,jodiOps2);
+                                    }
+                                    // user is not logged in redirect him to Login Activity
+                                    Intent i = new Intent(_context, Event.class);
 
-            // Staring Login Activity
-            _context.startActivity(i);
+                                    // Closing all the Activities from stack
+                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                                    // Add new Flag to start new Activity
+                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                                    // Staring Login Activity
+                                    _context.startActivity(i);
+                                }
+                                else{
+                                    // user is not logged in redirect him to Login Activity
+                                    Intent i = new Intent(_context, MainActivity.class);
+
+                                    // Closing all the Activities from stack
+                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                                    // Add new Flag to start new Activity
+                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                                    // Staring Login Activity
+                                    _context.startActivity(i);
+                                }
+
+                            } catch (JSONException e) {
+                                Intent i = new Intent(_context, MainActivity.class);
+
+                                // Closing all the Activities from stack
+                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                                // Add new Flag to start new Activity
+                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                                // Staring Login Activity
+                                _context.startActivity(i);
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Intent i = new Intent(_context, MainActivity.class);
+
+                            // Closing all the Activities from stack
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                            // Add new Flag to start new Activity
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                            // Staring Login Activity
+                            _context.startActivity(i);
+                            Log.d("error","sessionmanager "+error);
+                            //Toast.makeText(sessionmanager.this,error.toString(),Toast.LENGTH_LONG).show();
+                        }
+                    }){
+                @Override
+                //proses kirim parameter ke
+                protected Map<String,String> getParams(){
+                    Map<String,String> params = new HashMap<String, String>();
+                    params.put("userid",getUserDetails().get("user_id"));
+                    params.put("jodiEventCheck","");
+                    return params;
+                }
+
+            };
+            stringRequest.setShouldCache(false);
+            RequestQueue requestQueue = Volley.newRequestQueue(_context);
+            requestQueue.add(stringRequest);
+
             return false;
         }
         else{

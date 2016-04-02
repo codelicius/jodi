@@ -68,7 +68,14 @@
             android:orientation="horizontal"
             android:background="@color/main_color_red"
             android:layout_alignParentBottom="true">
-
+            <Button android:id="@+id/goto_previous_event"
+                android:layout_width="0dp"
+                android:layout_weight=".25"
+                android:layout_height="wrap_content"
+                android:text="Back"
+                android:onClick="previous_event"
+                android:background="@null"
+                android:textColor="@color/white"/>
             <Button android:id="@+id/goto_previous"
                 android:layout_width="0dp"
                 android:layout_weight=".25"
@@ -86,7 +93,14 @@
                 android:text="Question 1 of 10"
                 android:gravity="center"
                 android:textColor="@color/white"/>
-
+            <Button android:id="@+id/goto_next_event"
+                android:layout_width="0dp"
+                android:layout_weight=".25"
+                android:layout_height="wrap_content"
+                android:text="Next"
+                android:onClick="next_event"
+                android:background="@null"
+                android:textColor="@color/white"/>
             <Button android:id="@+id/goto_next"
                 android:layout_width="0dp"
                 android:layout_weight=".25"

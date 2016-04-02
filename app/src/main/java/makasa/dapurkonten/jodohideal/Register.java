@@ -127,6 +127,7 @@ public class Register extends AppCompatActivity {
                                     //ambil nilai dari JSON respon API
                                     String  jodiStatus = jsonResponse.getString("status");
                                     if(jodiStatus.equals("success")) {
+                                        db.deleteQuestions();
                                         String userid = jsonResponse.getString("userid");
                                         JSONArray multiQuestions = jsonResponse.getJSONArray("pertanyaan");
                                         for(int i=0;i<multiQuestions.length();i++){
