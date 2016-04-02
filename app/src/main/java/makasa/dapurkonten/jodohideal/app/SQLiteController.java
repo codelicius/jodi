@@ -202,6 +202,7 @@ public class SQLiteController extends SQLiteOpenHelper {
         questions.put("answer_ops1", answer_ops1);
         questions.put("answer_ops2", answer_ops2);
         long uidQuestion=db.insert(TABLE_QUESTION,null,questions);
+        db.close();
         Log.d(INI,"new question inserted into sqlite: "+uidQuestion);
     }
 

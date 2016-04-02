@@ -155,12 +155,7 @@ public class sessionmanager {
                                     }
                                     // user is not logged in redirect him to Login Activity
                                     Intent i = new Intent(_context, Event.class);
-
-                                    // Closing all the Activities from stack
-                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-                                    // Add new Flag to start new Activity
-                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
                                     // Staring Login Activity
                                     _context.startActivity(i);
@@ -168,12 +163,7 @@ public class sessionmanager {
                                 else{
                                     // user is not logged in redirect him to Login Activity
                                     Intent i = new Intent(_context, MainActivity.class);
-
-                                    // Closing all the Activities from stack
-                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-                                    // Add new Flag to start new Activity
-                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
                                     // Staring Login Activity
                                     _context.startActivity(i);
@@ -181,12 +171,8 @@ public class sessionmanager {
 
                             } catch (JSONException e) {
                                 Intent i = new Intent(_context, MainActivity.class);
+                                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                                // Closing all the Activities from stack
-                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-                                // Add new Flag to start new Activity
-                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                                 // Staring Login Activity
                                 _context.startActivity(i);

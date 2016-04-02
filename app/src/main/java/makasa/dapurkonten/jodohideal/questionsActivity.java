@@ -64,8 +64,8 @@ public class questionsActivity extends AppCompatActivity{
         question2 = (RadioButton)findViewById(R.id.question2);
         sessions = new sessionmanager(getApplicationContext());
         imageQue = (ImageView)findViewById(R.id.imgQuestion);
-        goto_prev.setVisibility(View.INVISIBLE);
-        goto_prev_event.setVisibility(View.INVISIBLE);
+        goto_prev.setVisibility(View.GONE);
+        goto_prev_event.setVisibility(View.GONE);
         db = new SQLiteController(getApplicationContext());
         totalQuestion = db.getTotalQuestion();
         HashMap<String,String> tenQuestion = db.getIdQuestion(idpertanyaan);
@@ -404,11 +404,11 @@ public class questionsActivity extends AppCompatActivity{
 
                                 db.addUser(jodiUserID, jodiFirstName, jodiLastName, jodiEmail, profileGender,
                                         profileAge, profileRace, profileReligion, profileHeight, profileLocation,
-                                        profileHoroscope, profileJob, profileDetail, profileFoto,profileMerokok,profileAlkohol,
-                                        profileTipePasangan,profileKegiatan,profileInterest,profileSatNite);
+                                        profileHoroscope, profileJob, profileDetail, profileFoto, profileMerokok, profileAlkohol,
+                                        profileTipePasangan, profileKegiatan, profileInterest, profileSatNite);
                                 Log.d("add db", jodiUserID+jodiFirstName+jodiLastName+jodiEmail+profileGender+
                                         profileAge+profileRace+profileReligion+profileHeight+profileLocation+
-                                        profileHoroscope+profileJob+profileDetail+profileFoto);
+                                        profileHoroscope+profileJob+profileDetail+profileFoto+profileMerokok+profileAlkohol+profileTipePasangan+profileKegiatan+profileInterest+profileSatNite);
                             }
 
                         } catch (JSONException e) {
