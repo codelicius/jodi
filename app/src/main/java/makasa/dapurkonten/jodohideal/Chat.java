@@ -70,7 +70,7 @@ public class Chat extends AppCompatActivity
     private boolean side = false;
     private ChatArrayAdapter chatArrayAdapter;
     private ListView listView;
-    private String urlAPI,partnerID, userChat;
+    String urlAPI,partnerID, userChat="user";
     private static String INI = Chat.class.getSimpleName();
     TextView txtDrawerNama, txtDrawerEmail,chatName;
     NetworkImageView imageView;
@@ -89,10 +89,9 @@ public class Chat extends AppCompatActivity
 
         Bundle bundle=getIntent().getExtras();
         partnerID = bundle.getString("pID");
-        userChat = bundle.getString("chatUser");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(userChat);
+
 
 
         session = new sessionmanager(getApplicationContext());
@@ -175,17 +174,18 @@ public class Chat extends AppCompatActivity
         btnSendMessage = (Button)findViewById(R.id.btnSendMessage);
         btnSendMessage.setOnClickListener(new View.OnClickListener() {
             CharSequence message;
+
             @Override
             public void onClick(View v) {
 
                 message = txtComposeMessage.getText();
-                if (message.length()>0){
+                if (message.length() > 0) {
                     HashMap<String, String> user = session.getUserDetails();
                     final String userID = user.get(sessionmanager.SES_USER_ID);
-                    final String pID= partnerID;
+                    final String pID = partnerID;
                     final String pesan = txtComposeMessage.getText().toString();
-                    sendChatMessage(userID,pID,pesan);
-                    p.sendPush(userID,pID);
+                    sendChatMessage(userID, pID, pesan);
+                    p.sendPush(userID, pID);
 
                 }
 
@@ -194,6 +194,8 @@ public class Chat extends AppCompatActivity
         getRecentPartner(userID);
         //set partner id here
         getChatHistory(partnerID);
+
+        Log.d("userchat", "user " + userChat);
     }
 
     @Override
@@ -321,17 +323,11 @@ public class Chat extends AppCompatActivity
                             JSONObject jsonResponse = new JSONObject(response);
 
                             String  jodiStatus = jsonResponse.getString("history");
-
+                            JSONObject detail = jsonResponse.getJSONObject("detail");
+                            userChat = detail.getString("first_name") + " "+ detail.getString("last_name");
+                            getSupportActionBar().setTitle(userChat);
+                            Log.d("userchat ","users "+userChat+"from db"+detail.getString("first_name") + " "+ detail.getString("last_name"));
                             if(jodiStatus.equals("1")) {
-                                JSONArray detail = jsonResponse.getJSONArray("detail");
-
-                                for (int i=0; i<detail.length(); i++){
-                                    JSONObject dt = (JSONObject) detail.get(i);
-                                    //ga bisa taro di luar on create
-                                    //getSupportActionBar().setTitle(dt.get("first_name") + " " + dt.getString("last_name"));
-                                    ci.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + dt.getString("photo_url"),mImageLoader);
-
-                                }
                                 JSONArray allChat = jsonResponse.getJSONArray("message");
 
                                 for (int i=0; i<allChat.length(); i++){
