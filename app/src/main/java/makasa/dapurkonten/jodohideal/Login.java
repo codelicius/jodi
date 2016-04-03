@@ -309,7 +309,6 @@ public class Login extends AppCompatActivity {
 
                             if (jodiStatus.equals("success")) {
                                 JSONObject dataUser = jsonResponse.getJSONObject("data");
-                                JSONObject profileUser = jsonResponse.getJSONObject("profile");
 
                                 String jodiUserID = dataUser.getString("user_id"),
                                         jodiEmail = dataUser.getString("email"),
@@ -319,26 +318,7 @@ public class Login extends AppCompatActivity {
                                         jodiBirthday = dataUser.getString("birth_date"),
                                         jodiIsFillProfile = dataUser.getString("is_fillprofile");
 
-                                JSONArray jodiPartner = jsonResponse.getJSONArray("partner");
 
-                                for (int i = 0; i < jodiPartner.length(); i++) {
-                                    JSONObject partner = (JSONObject) jodiPartner.get(i);
-                                    String partner_id = partner.getString("partner_id"),
-                                            partner_fname = partner.getString("fname"),
-                                            partner_lname = partner.getString("lname"),
-                                            partner_image = partner.getString("image"),
-                                            partner_gender = partner.getString("gender"),
-                                            partner_race = partner.getString("race"),
-                                            partner_religion = partner.getString("religion");
-                                    int partner_match = partner.getInt("match"),
-                                            partner_notmatch = partner.getInt("not_match"),
-                                            partner_age = partner.getInt("age");
-
-                                    db.addPartner(partner_id, partner_fname, partner_lname, partner_match,
-                                            partner_notmatch, partner_image, partner_age, partner_gender, partner_race, partner_religion);
-
-
-                                }
 
                                 session.buatSesiLogin(jodiUserID, jodiEmail, jodiFirstName,
                                         jodiLastName, jodiGender, jodiBirthday);
@@ -348,6 +328,8 @@ public class Login extends AppCompatActivity {
                                     startActivity(i);
                                     finish();
                                 } else {
+                                    JSONObject profileUser = jsonResponse.getJSONObject("profile");
+
                                     String profileAge = profileUser.getString("age"),
                                             profileGender = profileUser.getString("gender"),
                                             profileRace = profileUser.getString("race_name"),
@@ -369,7 +351,26 @@ public class Login extends AppCompatActivity {
                                             profileAge, profileRace, profileReligion, profileHeight, profileLocation,
                                             profileHoroscope, profileJob, profileDetail, profileFoto, profileMerokok, profileAlkohol,
                                             profileTipePasangan, profileKegiatan, profileInterest, profileSatNite);
+                                    JSONArray jodiPartner = jsonResponse.getJSONArray("partner");
 
+                                    for (int i = 0; i < jodiPartner.length(); i++) {
+                                        JSONObject partner = (JSONObject) jodiPartner.get(i);
+                                        String partner_id = partner.getString("partner_id"),
+                                                partner_fname = partner.getString("fname"),
+                                                partner_lname = partner.getString("lname"),
+                                                partner_image = partner.getString("image"),
+                                                partner_gender = partner.getString("gender"),
+                                                partner_race = partner.getString("race"),
+                                                partner_religion = partner.getString("religion");
+                                        int partner_match = partner.getInt("match"),
+                                                partner_notmatch = partner.getInt("not_match"),
+                                                partner_age = partner.getInt("age");
+
+                                        db.addPartner(partner_id, partner_fname, partner_lname, partner_match,
+                                                partner_notmatch, partner_image, partner_age, partner_gender, partner_race, partner_religion);
+
+
+                                    }
                                     Intent i = new Intent(getApplicationContext(), MainActivity.class);
                                     //shownotification();
                                     startActivity(i);
