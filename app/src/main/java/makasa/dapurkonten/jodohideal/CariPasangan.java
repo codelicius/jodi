@@ -3,12 +3,14 @@ package makasa.dapurkonten.jodohideal;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -28,6 +30,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -183,7 +186,6 @@ public class CariPasangan extends AppCompatActivity
                     public void onClick(View v) {
                         dialog.dismiss();
                         Log.d("ras","ras "+spinReligion.getSelectedItemPosition());
-                        Log.d("ras","race "+spinRace.getSelectedItem().toString());
                         int rel = spinReligion.getSelectedItemPosition()+1,
                                 race = spinRace.getSelectedItemPosition();
                         String agama = String.valueOf(rel),
@@ -224,6 +226,8 @@ public class CariPasangan extends AppCompatActivity
     }
 
     private void listPasangan(int pages,String url){
+        final int xpages = pages;
+        final String xurl = url;
         url = url+"&page="+pages;
         final ProgressDialog progressDialog = new ProgressDialog(CariPasangan.this);
         progressDialog.setIndeterminate(true);
@@ -263,9 +267,7 @@ public class CariPasangan extends AppCompatActivity
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getApplicationContext(),
-                                    "Error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG).show();
+                            Log.d("stack","stack "+e.getMessage());
                         }
                         adapter.notifyDataSetChanged();
 
@@ -273,15 +275,36 @@ public class CariPasangan extends AppCompatActivity
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                progressDialog.dismiss();
+                final AlertDialog.Builder builder = new AlertDialog.Builder(CariPasangan.this);
+                builder.setCancelable(false);
+                builder.setMessage("Please Check Your Connection");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //if user pressed "yes", then he is allowed to exit from application
+                        dialog.cancel();
+
+                    }
+                });
+                builder.setNegativeButton("TRY AGAIN", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //if user select "No", just cancel this dialog and continue with app
+                        listPasangan(xpages, xurl);
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
                 VolleyLog.d(INI, "Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.d("error","volley "+error.getMessage());
 
             }
         });
 
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(req);
+        req.setRetryPolicy(new DefaultRetryPolicy(60000,DefaultRetryPolicy.DEFAULT_MAX_RETRIES,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }
     @Override
     public void onBackPressed() {
@@ -401,7 +424,7 @@ public class CariPasangan extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(CariPasangan.this, error.toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(),"silakan cek koneksi anda",Toast.LENGTH_LONG);
                     }
                 }){
             @Override
@@ -417,6 +440,8 @@ public class CariPasangan extends AppCompatActivity
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(60000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
     }
 
     private void cekSubscribe(String ui, final String pi){
@@ -456,7 +481,22 @@ public class CariPasangan extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(CariPasangan.this,error.toString(),Toast.LENGTH_LONG).show();
+                        android.app.AlertDialog infoPass = new android.app.AlertDialog.Builder(CariPasangan.this).create();
+                        infoPass.setTitle("Perhatian");
+                        infoPass.setMessage("Gagal terhubung dengan server, silakan cek koneksi internet anda");
+                        infoPass.setButton(android.app.AlertDialog.BUTTON_POSITIVE, "Try Again",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        cekSubscribe(userIDs,pIDs);
+                                    }
+                                });
+                        infoPass.setButton(android.app.AlertDialog.BUTTON_NEGATIVE, "OK",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        infoPass.show();
                     }
                 }){
             @Override
@@ -473,6 +513,8 @@ public class CariPasangan extends AppCompatActivity
         };
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(60000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
 
         hidepDialog();
     }
@@ -533,6 +575,8 @@ public class CariPasangan extends AppCompatActivity
                 });
 
         Volley.newRequestQueue(this).add(jsonRequest);
+        jsonRequest.setRetryPolicy(new DefaultRetryPolicy(60000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
 
         spinRace.setAdapter(adapterSuku);
 

@@ -1,6 +1,7 @@
 package makasa.dapurkonten.jodohideal;
 
 import com.android.datetimepicker.Utils;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -271,6 +272,8 @@ public class Login extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(60000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
     }
     public void register(View view) {
         Intent i = new Intent(Login.this, Register.class);
@@ -400,7 +403,22 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         progressDialog.dismiss();
-                        Toast.makeText(Login.this, error.toString(), Toast.LENGTH_LONG).show();
+                        android.app.AlertDialog infoPass = new android.app.AlertDialog.Builder(Login.this).create();
+                        infoPass.setTitle("Perhatian");
+                        infoPass.setMessage("Gagal terhubung dengan server, silakan cek koneksi internet anda");
+                        infoPass.setButton(android.app.AlertDialog.BUTTON_POSITIVE, "Try Again",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        loginUser();
+                                    }
+                                });
+                        infoPass.setButton(android.app.AlertDialog.BUTTON_NEGATIVE, "OK",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        infoPass.show();
                     }
                 }) {
             @Override
@@ -417,6 +435,7 @@ public class Login extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(60000,DefaultRetryPolicy.DEFAULT_MAX_RETRIES,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }
 
 

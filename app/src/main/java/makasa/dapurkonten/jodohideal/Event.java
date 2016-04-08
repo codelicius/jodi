@@ -13,6 +13,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -96,6 +97,8 @@ public class Event extends AppCompatActivity {
         stringRequest.setShouldCache(false);
         RequestQueue requestQueue = Volley.newRequestQueue(Event.this);
         requestQueue.add(stringRequest);
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(60000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
     }
     public void joinEvent(View v){
         Intent i = new Intent(getApplicationContext(), questionsActivity.class);
@@ -159,6 +162,8 @@ public class Event extends AppCompatActivity {
         stringRequest.setShouldCache(false);
         RequestQueue requestQueue = Volley.newRequestQueue(Event.this);
         requestQueue.add(stringRequest);
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(60000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
     }
 
 }

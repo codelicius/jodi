@@ -30,6 +30,7 @@ public class IMSI {
     public final String smartfren1 = "51009";
     public final String smartfren2 = "51028";
     public final String xl = "51011";
+    public final String axis = "51008";
     Context _context;
     public IMSI(Context context){
         this._context=context;
@@ -37,7 +38,7 @@ public class IMSI {
     public boolean getProvider(final String imsi,int dur, final String userid){
         String provider = imsi.substring(0, 5);
         Log.d("provider",provider +" imsi "+imsi);
-        if(provider.equals(xl)){
+        if(provider.equals(xl) || provider.equals(axis)){
             StringRequest stringRequest = new StringRequest(Request.Method.POST, REGISTER_URL,
                     new Response.Listener<String>() {
                         @Override

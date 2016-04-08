@@ -10,7 +10,7 @@ android {
         applicationId "makasa.dapurkonten.jodohideal"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 6
+        versionCode 7
         versionName "3.0.1"
     }
     buildTypes {
@@ -31,9 +31,12 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.android.support:design:23.0.1'
     compile 'com.facebook.android:facebook-android-sdk:4.7.0'
-    compile "com.google.android.gms:play-services:8.3.0"
-    compile 'com.google.android.gms:play-services-fitness:8.3.0'
-    compile 'com.google.android.gms:play-services-wearable:8.3.0'
-    compile 'com.google.android.gms:play-services-plus:8.3.0'
-    compile 'com.google.android.gms:play-services-identity:8.3.0'
+    compile "com.google.android.gms:play-services:8.4.0"
+    compile 'com.google.android.gms:play-services-fitness:8.4.0'
+    compile 'com.google.android.gms:play-services-wearable:8.4.0'
+    compile 'com.google.android.gms:play-services-plus:8.4.0'
+    compile 'com.google.android.gms:play-services-identity:8.4.0'
+    compile 'com.google.android.gms:play-services-auth:8.4.0'
 }
+
+apply plugin: 'com.google.gms.google-services'

@@ -228,6 +228,20 @@ public class AllChat extends AppCompatActivity
                                 }
 
                             }
+                            else{
+                                final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(AllChat.this);
+                                builder.setCancelable(false);
+                                builder.setMessage("Kamu belom pernah chat dengan siapapun?");
+                                builder.setPositiveButton("Cari Pasangan", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent i = new Intent(getApplicationContext(),CariPasangan.class);
+                                        startActivity(i);
+
+                                    }
+                                });
+                                builder.create().show();
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -241,7 +255,7 @@ public class AllChat extends AppCompatActivity
                         progressDialog.dismiss();
                         VolleyLog.d(INI, "Error: " + error.getMessage());
                         AlertDialog infoPass = new AlertDialog.Builder(AllChat.this).create();
-                        infoPass.setTitle("Alert");
+                        infoPass.setTitle("Perhatian");
                         infoPass.setMessage("Gagal terhubung dengan server, silakan cek koneksi internet anda");
                         infoPass.setButton(AlertDialog.BUTTON_POSITIVE, "Try Again",
                                 new DialogInterface.OnClickListener() {

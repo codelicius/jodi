@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -148,11 +149,11 @@ public class EditProfile extends AppCompatActivity {
             Log.d("editprofile","horoskop:"+gettxtHoroscope);
             Log.d("editprofile","pekerjaan:"+gettxtJob);
             Log.d("editprofile","descdiri:"+getDeskripsi);
-            Log.d("editprofile","tipe_psg:"+getTPasangan);
-            Log.d("editprofile","kegiatan:"+getKegiatan);
-            Log.d("editprofile","lokasi:"+gettxtLocation);
-            Log.d("editprofile","suka:"+getHalSuka);
-            Log.d("editprofile","malming:"+getMalming);
+            Log.d("editprofile", "tipe_psg:" + getTPasangan);
+            Log.d("editprofile", "kegiatan:" + getKegiatan);
+            Log.d("editprofile", "lokasi:" + gettxtLocation);
+            Log.d("editprofile", "suka:" + getHalSuka);
+            Log.d("editprofile", "malming:" + getMalming);
         }
         else{
             AlertDialog infoPass = new AlertDialog.Builder(EditProfile.this).create();
@@ -177,83 +178,114 @@ public class EditProfile extends AppCompatActivity {
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Please wait...");
         progressDialog.show();
-
-        final String etns = txtRace.getSelectedItem().toString();
+        String xetns= "";
+        String xpkrj = "";
+        String xlksi = "";
+        try {
+            xetns = txtRace.getSelectedItem().toString();
+            xpkrj = txtJob.getSelectedItem().toString();
+            xlksi = txtLocation.getSelectedItem().toString();
+        }
+        catch (Exception e){
+            Log.d("error","spin "+e.getMessage());
+        }
+        final String etns = xetns;
         final String agm = txtReligion.getSelectedItem().toString();
         final String mrk = txtRokok.getSelectedItem().toString();
         final String alkh = txtAlkohol.getSelectedItem().toString();
         final String hrskp = txtHoroscope.getSelectedItem().toString();
-        final String pkrj = txtJob.getSelectedItem().toString();
-        final String lksi = txtLocation.getSelectedItem().toString();
+        final String pkrj = xpkrj;
+        final String lksi = xlksi;
+        if(etns.equals("") || pkrj.equals("") || lksi.equals("")){
+            AlertDialog infoPass = new AlertDialog.Builder(EditProfile.this).create();
+            infoPass.setTitle("Perhatian");
+            infoPass.setMessage("Silahkan cek koneksi anda");
+            infoPass.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            progressDialog.dismiss();
+                            dialog.dismiss();
+                        }
+                    });
+            infoPass.setButton(AlertDialog.BUTTON_NEGATIVE, "Coba Lagi",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            progressDialog.dismiss();
+                            editUser(userid, height, suku, agama, rokok, alkohol, horoskop, pekerjaan, descdiri, tipe_psg, kegiatan, lokasi, suka, malming);
+                        }
+                    });
+            infoPass.show();
+        }
+        else {
 
-        StringRequest requestDaftar = new StringRequest(Request.Method.POST, AppConfig.urlAPI,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        progressDialog.dismiss();
+            StringRequest requestDaftar = new StringRequest(Request.Method.POST, AppConfig.urlAPI,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            progressDialog.dismiss();
 
-                        try {
-                            JSONObject jsonResponse = new JSONObject(response);
-                            //ambil nilai dari JSON respon API
-                            String jodiStatus = jsonResponse.getString("status");
+                            try {
+                                JSONObject jsonResponse = new JSONObject(response);
+                                //ambil nilai dari JSON respon API
+                                String jodiStatus = jsonResponse.getString("status");
 
-                            if (jodiStatus.equals("success")) {
-                                sessions.changeValueRegister("edit_profile", 1);
-                                db.updateUser(userid, etns, agm, height, lksi, hrskp, pkrj,descdiri, mrk,
-                                        alkh, tipe_psg, kegiatan, suka, malming);
-                                if (fromActivity.equals("profile")){
-                                    Intent i = new Intent(getApplicationContext(), Profile.class);
-                                    startActivity(i);
-                                    finish();
+                                if (jodiStatus.equals("success")) {
+                                    sessions.changeValueRegister("edit_profile", 1);
+                                    db.updateUser(userid, etns, agm, height, lksi, hrskp, pkrj, descdiri, mrk,
+                                            alkh, tipe_psg, kegiatan, suka, malming);
+                                    if (fromActivity.equals("profile")) {
+                                        Intent i = new Intent(getApplicationContext(), Profile.class);
+                                        startActivity(i);
+                                        finish();
+                                    } else {
+                                        Intent i = new Intent(getApplicationContext(), imageUpload.class);
+                                        i.putExtra("fromActivity", "EditProfile");
+                                        startActivity(i);
+                                        finish();
+                                    }
+                                } else {
+                                    Toast.makeText(EditProfile.this, jodiStatus, Toast.LENGTH_LONG).show();
                                 }
-                                else {
-                                    Intent i = new Intent(getApplicationContext(), imageUpload.class);
-                                    i.putExtra("fromActivity","EditProfile");
-                                    startActivity(i);
-                                    finish();
-                                }
-                            } else {
-                                Toast.makeText(EditProfile.this, jodiStatus, Toast.LENGTH_LONG).show();
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+                            Toast.makeText(EditProfile.this, "Please check your connection", Toast.LENGTH_LONG).show();
                         }
                     }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        Toast.makeText(EditProfile.this, "Please check your connection", Toast.LENGTH_LONG).show();
-                    }
-                }
-        ) {
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                //parameter, nilai
-                params.put("userid",userid);
-                params.put("height", height);
-                params.put("suku", suku);
-                params.put("agama", agama);
-                params.put("rokok", rokok);
-                params.put("alkohol", alkohol);
-                params.put("horoskop", horoskop);
-                params.put("pekerjaan", pekerjaan);
-                params.put("descdiri", descdiri);
-                params.put("tipe_psg", tipe_psg);
-                params.put("kegiatan", kegiatan);
-                params.put("lokasi", lokasi);
-                params.put("suka", suka);
-                params.put("malming", malming);
-                params.put("jodiEditProfile", "");
+            ) {
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    //parameter, nilai
+                    params.put("userid", userid);
+                    params.put("height", height);
+                    params.put("suku", suku);
+                    params.put("agama", agama);
+                    params.put("rokok", rokok);
+                    params.put("alkohol", alkohol);
+                    params.put("horoskop", horoskop);
+                    params.put("pekerjaan", pekerjaan);
+                    params.put("descdiri", descdiri);
+                    params.put("tipe_psg", tipe_psg);
+                    params.put("kegiatan", kegiatan);
+                    params.put("lokasi", lokasi);
+                    params.put("suka", suka);
+                    params.put("malming", malming);
+                    params.put("jodiEditProfile", "");
 
-                return params;
-            }
-        };
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(requestDaftar);
+                    return params;
+                }
+            };
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            requestQueue.add(requestDaftar);
+            requestDaftar.setRetryPolicy(new DefaultRetryPolicy(60000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        }
 
     }
     public void getSpinner(String spin){
@@ -320,12 +352,15 @@ public class EditProfile extends AppCompatActivity {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(),"silakan cek koneksi anda",Toast.LENGTH_LONG);
                         error.printStackTrace();
                     }
                 });
 
         // Adding request to request queue
         Volley.newRequestQueue(this).add(jsonRequest);
+        jsonRequest.setRetryPolicy(new DefaultRetryPolicy(60000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         if(spin.equals("pekerjaan"))
             txtJob.setAdapter(adapter);
         else if (spin.equals("lokasi"))

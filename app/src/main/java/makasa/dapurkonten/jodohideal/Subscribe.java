@@ -16,6 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -154,6 +155,8 @@ public class Subscribe extends AppCompatActivity {
 
         // Adding request to request queue
         Volley.newRequestQueue(this).add(jsonRequest);
+        jsonRequest.setRetryPolicy(new DefaultRetryPolicy(60000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
     }
     public void sendMsg(String mdn){
         final String APISendMsg = "http://103.253.112.121/quiz_api/sms_api.php";
@@ -182,6 +185,8 @@ public class Subscribe extends AppCompatActivity {
 
         // Adding request to request queue
         Volley.newRequestQueue(this).add(jsonRequest);
+        jsonRequest.setRetryPolicy(new DefaultRetryPolicy(60000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
     }
     public void addDuration(String userid,String duration){
         final String userids = userid;
@@ -213,5 +218,7 @@ public class Subscribe extends AppCompatActivity {
             }
         };
         Volley.newRequestQueue(this).add(postRequest);
+        postRequest.setRetryPolicy(new DefaultRetryPolicy(60000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
     }
 }

@@ -14,6 +14,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -325,6 +326,8 @@ public class questionsActivity extends AppCompatActivity{
         };
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(requestDaftar);
+        requestDaftar.setRetryPolicy(new DefaultRetryPolicy(60000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
     }
     public void jawabPertanyaan(final String questionId,Integer answerId){
         final String answerIds = answerId.toString();
@@ -367,6 +370,8 @@ public class questionsActivity extends AppCompatActivity{
         };
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(requestDaftar);
+        requestDaftar.setRetryPolicy(new DefaultRetryPolicy(60000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
     }
     public void getDetail(){
         HashMap<String, String> user = sessions.getUserDetails();
@@ -434,5 +439,7 @@ public class questionsActivity extends AppCompatActivity{
         };
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(requestDaftar);
+        requestDaftar.setRetryPolicy(new DefaultRetryPolicy(60000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
     }
 }

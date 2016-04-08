@@ -30,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -159,7 +160,7 @@ public class imageUpload extends AppCompatActivity{
                         loading.dismiss();
 
                         //Showing toast
-                        Toast.makeText(imageUpload.this, volleyError.getMessage().toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(imageUpload.this, "Silakan cek koneksi anda", Toast.LENGTH_LONG).show();
                     }
                 }){
             @Override
@@ -185,6 +186,8 @@ public class imageUpload extends AppCompatActivity{
 
         //Adding request to the queue
         requestQueue.add(stringRequest);
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(60000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
 
         /** if (fromActivity.equals("Main")){
             Intent m = new Intent(this, MainActivity.class);
