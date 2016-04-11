@@ -102,7 +102,7 @@ public class Login extends AppCompatActivity {
         // Callback registration
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             private ProfileTracker mProfileTracker;
-            String idfb;
+            String idfb,fname,lname;
             @Override
             public void onSuccess(LoginResult loginResult) {
                 if(Profile.getCurrentProfile() == null) {
@@ -111,7 +111,9 @@ public class Login extends AppCompatActivity {
                         protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
                             // profile2 is the new profile
                             idfb = profile2.getId();
-                            loginFB(idfb);
+                            fname = profile2.getFirstName();
+                            lname = profile2.getLastName();
+                            loginFB(idfb,fname,lname);
                             mProfileTracker.stopTracking();
                         }
                     };
@@ -121,7 +123,9 @@ public class Login extends AppCompatActivity {
                     Profile profile = Profile.getCurrentProfile();
                     Log.d("baru","lama "+profile.getId());
                     idfb = profile.getId();
-                    loginFB(idfb);
+                    fname = profile.getFirstName();
+                    lname = profile.getLastName();
+                    loginFB(idfb,fname,lname);
 
                 }
             }
@@ -151,7 +155,7 @@ public class Login extends AppCompatActivity {
     }
 
     // link menuju register
-    protected void loginFB(final String id){
+    protected void loginFB(final String id,final String fname,final String lname){
         final ProgressDialog progressDialog = new ProgressDialog(Login.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
@@ -239,6 +243,8 @@ public class Login extends AppCompatActivity {
                                 }
                             } else {
                                 Intent i = new Intent(getApplicationContext(),Register.class);
+                                i.putExtra("fname",fname);
+                                i.putExtra("lname",lname);
                                 i.putExtra("source","fb");
                                 i.putExtra("option",id);
                                 startActivity(i);

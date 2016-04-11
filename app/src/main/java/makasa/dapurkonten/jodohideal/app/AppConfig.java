@@ -20,7 +20,7 @@ public class AppConfig {
    //public static String urlAPI = "http://103.253.112.121/jodohideal/api/index_dummy.php";
     //public static String urlAPI = "http://192.168.1.234/jodi/api/";
     //public static String urlAPI = "http://192.168.31.214/jodi/api/";
-        public static String urlAPI = "http://103.253.112.121/jodohideal/api/";
+       public static String urlAPI = "http://103.253.112.121/jodohideal/api/";
     public void fbLogout(Context c){
         FacebookSdk.sdkInitialize(c);
         LoginManager.getInstance().logOut();

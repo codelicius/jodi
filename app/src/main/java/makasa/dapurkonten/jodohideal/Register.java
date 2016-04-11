@@ -91,6 +91,10 @@ public class Register extends AppCompatActivity {
             String option = i.getStringExtra("option");
             src.setText(source);
             opt.setText(option);
+            if(source.equals("fb")){
+                inputFirstName.setText(i.getStringExtra("fname"));
+                inputLastName.setText(i.getStringExtra("lname"));
+            }
             Log.d("src", "source " + option);
             Log.d("src","source "+source);
 
