@@ -150,6 +150,7 @@ public class imageUpload extends AppCompatActivity{
                             session.changeValueRegister("upload",1);
                             Intent q = new Intent(imageUpload.this, questionsActivity.class);
                             startActivity(q);
+                            finish();
                         }
                     }
                 },

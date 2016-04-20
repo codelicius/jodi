@@ -76,7 +76,9 @@ public class ListPartnerAdapter extends BaseAdapter {
         Partner p = PartnerItem.get(position);
 
         // thumbnail image
-        thumbNail.setImageUrl(p.getUrlFoto(), imageLoader);
+        int time = (int) (System.currentTimeMillis());
+        thumbNail.setDefaultImageResId(R.drawable.avatar);
+        thumbNail.setImageUrl(p.getUrlFoto()+"?time="+time, imageLoader);
 
         fullName.setText(p.getFullName());
 

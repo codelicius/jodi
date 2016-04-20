@@ -9,6 +9,7 @@ public class Partner {
     private String firstName, lastName, fullName, gender, suku, agama, urlFoto;
     private int pID, kecocokan, ketidakcocokan, umur;
 
+
     public Partner(){
 
     }

@@ -122,5 +122,6 @@ Anda dapat mengakhiri keanggotaan Anda setiap saat, untuk alasan apapun, efektif
     <string name="title_activity_other_profile">Profile</string>
     <string name="title_activity_all_chat">All Chat</string>
     <string name="title_activity_event">Event</string>
+    <string name="server_client_id">324950661641-9go5k7j8ui2ab3o3jpt6vtdu79e720mq.apps.googleusercontent.com</string>
 
 </resources>

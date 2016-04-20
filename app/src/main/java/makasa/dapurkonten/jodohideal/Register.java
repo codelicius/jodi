@@ -72,7 +72,11 @@ public class Register extends AppCompatActivity {
 
         db = new SQLiteController(getApplicationContext());
         tel = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        checkNumber();
+        try{
+            checkNumber();
+        }catch (Exception e){
+            Log.d("error","exeption "+e.getMessage());
+        }
         session = new sessionmanager(getApplicationContext());
         inputFirstName = (EditText)findViewById(R.id.firstName);
         inputLastName = (EditText)findViewById(R.id.lastName);
@@ -94,6 +98,11 @@ public class Register extends AppCompatActivity {
             if(source.equals("fb")){
                 inputFirstName.setText(i.getStringExtra("fname"));
                 inputLastName.setText(i.getStringExtra("lname"));
+            }
+            else if(source.equals("gplus")){
+                inputFirstName.setText(i.getStringExtra("fname"));
+                inputLastName.setText(i.getStringExtra("lname"));
+                inputEmail.setText(i.getStringExtra("email"));
             }
             Log.d("src", "source " + option);
             Log.d("src","source "+source);
@@ -211,7 +220,7 @@ public class Register extends AppCompatActivity {
         int selectedID = rgSex.getCheckedRadioButtonId();
         rbGender = (RadioButton)findViewById(selectedID);
         String gender = rbGender.getText().toString().trim();
-        if(gender.equals("Male"))
+        if(gender.equals("Pria"))
             gender = "0";
         else
             gender = "1";

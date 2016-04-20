@@ -37,6 +37,7 @@ public class webView extends AppCompatActivity {
             int durasi=bundle.getInt("durasi");
             String userid = bundle.getString("userid");
             if(provider.equals("xl")){
+                //String url = "http://www.gudangapp.com";
                 String url = "http://www.gudangapp.com/xlp/?kc=REG JODOH"+durasi+" "+imsi+" "+userid+"&sdc=93827&cb=jodoh://ideal/subscribe&desc=Berlangganan Layanan Aplikasi Jodoh Ideal&img=http://103.253.112.121/2/scjodoh.jpg&eid=b8f16";
                 wv1.loadUrl(url);
             }
@@ -51,8 +52,16 @@ public class webView extends AppCompatActivity {
     private class MyBrowser extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            if(url.equals("http://www.gudangapp.com/store/wap/portalone")){
+                Intent i = new Intent(webView.this, successSubscribe.class);
+                i.putExtra("success","false");
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                Log.d("s", "s" + url);
+                startActivity(i);
+            }
             if(url.startsWith("jodoh:")) {
                 Intent i = new Intent(webView.this, successSubscribe.class);
+                i.putExtra("success","true");
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 Log.d("s", "s" + url);
                 startActivity(i);

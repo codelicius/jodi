@@ -87,12 +87,14 @@
                 android:paddingBottom="12dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"/>
-            <!--<com.google.android.gms.common.SignInButton
+            <com.google.android.gms.common.SignInButton
+                android:visibility="gone"
                 android:id="@+id/sign_in_button"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="10dp"
-                />-->
+                />
+
 
 
         </LinearLayout>

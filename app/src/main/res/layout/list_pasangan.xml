@@ -19,6 +19,7 @@
             android:scaleType="fitCenter"
             android:layout_alignParentLeft="true"
             android:layout_marginRight="8dp"
+            android:src="@drawable/avatar"
             />
 
         <TextView
