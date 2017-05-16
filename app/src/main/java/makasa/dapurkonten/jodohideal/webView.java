@@ -3,13 +3,20 @@ package makasa.dapurkonten.jodohideal;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
 import java.net.URLDecoder;
 
@@ -20,17 +27,35 @@ public class webView extends AppCompatActivity {
     private WebView wv1;
     String provider,imsi;
     Integer durasi;
+    ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
         Bundle bundle=getIntent().getExtras();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+
+        getSupportActionBar().setTitle("Loading ...");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        progressBar = (ProgressBar)findViewById(R.id.progressbar);
+
         wv1=(WebView)findViewById(R.id.webview);
 
 
         wv1.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         wv1.setWebViewClient(new MyBrowser());
         wv1.getSettings().setLoadsImagesAutomatically(true);
+        wv1.getSettings().setJavaScriptEnabled(true);
+        wv1.setWebChromeClient(new WebChromeClient(){
+            public void onProgressChanged(WebView view, int progress)
+            {
+                progressBar.setProgress(progress);
+            }
+        });
         if(bundle.getString("activity").equals("charge")){
             provider = bundle.getString("provider");
             imsi = bundle.getString("imsi");
@@ -39,6 +64,11 @@ public class webView extends AppCompatActivity {
             if(provider.equals("xl")){
                 //String url = "http://www.gudangapp.com";
                 String url = "http://www.gudangapp.com/xlp/?kc=REG JODOH"+durasi+" "+imsi+" "+userid+"&sdc=93827&cb=jodoh://ideal/subscribe&desc=Berlangganan Layanan Aplikasi Jodoh Ideal&img=http://103.253.112.121/2/scjodoh.jpg&eid=b8f16";
+                wv1.loadUrl(url);
+            }
+            else if(provider.equals("indosat")){
+                //String url = "http://www.gudangapp.com";
+                String url = "http://202.152.162.239/isatlp/lpallsdpe/?kc=REG+JODOH"+durasi+"&sdc=93827&cb=jodoh://ideal/subscribe&desc=Layanan+Jodoh+Ideal&price=3300&servicename=JODOH"+durasi+"&img=&eid=a6610";
                 wv1.loadUrl(url);
             }
             else{
@@ -59,7 +89,7 @@ public class webView extends AppCompatActivity {
                 Log.d("s", "s" + url);
                 startActivity(i);
             }
-            if(url.startsWith("jodoh:")) {
+            else if(url.startsWith("jodoh")) {
                 Intent i = new Intent(webView.this, successSubscribe.class);
                 i.putExtra("success","true");
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -72,5 +102,22 @@ public class webView extends AppCompatActivity {
             }
             return true;
         }
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+        }
+        public void onPageFinished(WebView view, String url) {
+            getSupportActionBar().setTitle(view.getTitle());
+            super.onPageFinished(view, url);
+        }
+
+    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            onBackPressed();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -120,7 +120,7 @@ public class sessionmanager {
             }
         }
         else{
-            checkLogin();
+            this.checkLogin();
         }
         Log.d("cek daftar","ok" +isUserRegister());
     }
@@ -137,6 +137,7 @@ public class sessionmanager {
                         @Override
                         public void onResponse(String response) {
                             Log.d(INI, "pertanyaan "+response);
+
 
                             try {
                                 JSONObject jsonResponse = new JSONObject(response);
@@ -195,7 +196,7 @@ public class sessionmanager {
                             // Staring Login Activity
                             _context.startActivity(i);
                             Log.d("error","sessionmanager "+error);
-                            //Toast.makeText(sessionmanager.this,error.toString(),Toast.LENGTH_LONG).show();
+                            Toast.makeText(_context,error.toString(),Toast.LENGTH_LONG).show();
                         }
                     }){
                 @Override

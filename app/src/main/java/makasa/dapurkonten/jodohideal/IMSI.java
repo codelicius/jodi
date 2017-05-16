@@ -31,6 +31,9 @@ public class IMSI {
     public final String smartfren2 = "51028";
     public final String xl = "51011";
     public final String axis = "51008";
+    public final String indosat = "51001";
+    public final String indosat2 = "51021";
+    public final String test = "31026";
     Context _context;
     public IMSI(Context context){
         this._context=context;
@@ -71,6 +74,51 @@ public class IMSI {
             int durasi;
             i.putExtra("activity","charge");
             i.putExtra("provider","xl");
+            i.putExtra("imsi",imsi);
+            i.putExtra("userid", userid);
+            if(dur == 1)
+                durasi = 7;
+            else
+                durasi = 14;
+            i.putExtra("durasi",durasi);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            _context.startActivity(i);
+
+            return false;
+        }
+        else if(provider.equals(indosat) || provider.equals(indosat2)){
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, REGISTER_URL,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d("update","ok");
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(_context, error.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    }) {
+                @Override
+                //proses kirim parameter ke
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("userid", userid);
+                    params.put("mdn", imsi);
+                    params.put("jodiMdn", "");
+                    Log.d("userid",userid +" imsi "+imsi);
+                    return params;
+                }
+
+            };
+
+            RequestQueue requestQueue = Volley.newRequestQueue(_context);
+            requestQueue.add(stringRequest);
+            Intent i=new Intent(_context,webView.class);
+            int durasi;
+            i.putExtra("activity","charge");
+            i.putExtra("provider","indosat");
             i.putExtra("imsi",imsi);
             i.putExtra("userid", userid);
             if(dur == 1)
