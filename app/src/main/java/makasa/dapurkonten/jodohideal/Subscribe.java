@@ -1,10 +1,16 @@
 package makasa.dapurkonten.jodohideal;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
@@ -51,19 +57,63 @@ public class Subscribe extends AppCompatActivity {
     TextView message;
     IMSI getimsi;
     TelephonyManager tel;
+    String mTelephonyManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subscribe);
         session = new sessionmanager(getApplicationContext());
-        tel = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            checkPermission();
+        else
+            tel = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         paket = (RadioGroup) findViewById(R.id.rgCharge);
         submitPaket = (Button)findViewById(R.id.submitPaket);
         message = (TextView)findViewById(R.id.message);
         getimsi = new IMSI(getApplicationContext());
+    }
+    @TargetApi(Build.VERSION_CODES.M)
+    protected void checkPermission(){
+        if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE},
+                    0);
+        } else {
+            setDeviceImei();
+        }
+    }
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        if (requestCode == 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            setDeviceImei();
+        }
+        else{
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+            builder.setCancelable(false);
+            builder.setMessage("Anda tidak dapat melanjutkan jika tidak mengizinkan permission");
+            builder.setTitle("Warning");
+            builder.setPositiveButton("Tutup", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finish();
+                }
+            });
+            builder.setNegativeButton("Lanjutkan", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    checkPermission();
+                }
+            });
+            AlertDialog ad = builder.create();
+            ad.show();
+        }
+    }
+    private void setDeviceImei() {
+        tel = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
     }
     public void submit(View v){
         paketID=paket.getCheckedRadioButtonId();

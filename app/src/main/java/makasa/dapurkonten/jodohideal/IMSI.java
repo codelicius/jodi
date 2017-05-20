@@ -1,8 +1,10 @@
 package makasa.dapurkonten.jodohideal;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -131,8 +133,12 @@ public class IMSI {
 
             return false;
         }
-        else{
+        else if(provider.equals(smartfren1) || provider.equals(smartfren2)){
             return true;
+        }
+        else{
+            Toast.makeText(_context, "Maaf layanan kami hanya mendukung provider XL, INDOSAT, SMARTFREN", Toast.LENGTH_LONG).show();
+            return false;
         }
     }
 }
