@@ -88,7 +88,7 @@ public class IMSI {
 
             return false;
         }
-        else if(!provider.equals(indosat) || !provider.equals(indosat2)){
+        else if(provider.equals(indosat) || provider.equals(indosat2)){
             StringRequest stringRequest = new StringRequest(Request.Method.POST, REGISTER_URL,
                     new Response.Listener<String>() {
                         @Override
