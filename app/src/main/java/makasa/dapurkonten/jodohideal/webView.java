@@ -68,7 +68,7 @@ public class webView extends AppCompatActivity {
             }
             else if(provider.equals("indosat")){
                 //String url = "http://www.gudangapp.com";
-                String url = "http://202.152.162.239/isatlp/lpallsdpe/?kc=REG+JODOH"+durasi+"&sdc=93827&cb=jodoh://ideal/subscribe&desc=Layanan+Jodoh+Ideal&price=3300&servicename=JODOH"+durasi+"&img=&eid=a6610";
+                String url = "http://asik.indosatooredoo.com:8014/mcp/?kc=REG+JODOH"+durasi+"+"+imsi+"&sdc=93827&cb=jodoh://ideal/subscribe&desc=Layanan+Jodoh+Ideal&price=3300&servicename=JODOH"+durasi+"&img=&eid=a6610";
                 wv1.loadUrl(url);
             }
             else{
