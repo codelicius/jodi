@@ -68,7 +68,7 @@ public class webView extends AppCompatActivity {
             }
             else if(provider.equals("indosat")){
                 //String url = "http://www.gudangapp.com";
-                String url = "http://asik.indosatooredoo.com:8014/mcp/?kc=REG+JODOH"+durasi+"+"+imsi+"&sdc=93827&cb=jodoh://ideal/subscribe&desc=Layanan+Jodoh+Ideal&price=3300&servicename=JODOH"+durasi+"&img=&eid=a6610";
+                String url = "http://asik.indosatooredoo.com:8014/mcp/?kc=REG JODOH"+durasi+" "+imsi+" "+userid+"&sdc=93827&cb=jodoh://ideal/subscribe&desc=Layanan+Jodoh+Ideal&price=3300&servicename=JODOH"+durasi+"&img=&eid=a6610";
                 wv1.loadUrl(url);
             }
             else{
@@ -85,6 +85,13 @@ public class webView extends AppCompatActivity {
             if(url.equals("http://www.gudangapp.com/store/wap/portalone")){
                 Intent i = new Intent(webView.this, successSubscribe.class);
                 i.putExtra("success","false");
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                Log.d("s", "s" + url);
+                startActivity(i);
+            }
+            else if(url.equals("http://202.152.162.239/ad/crossmcp/crossx.php")){
+                Intent i = new Intent(webView.this, successSubscribe.class);
+                i.putExtra("success","true");
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 Log.d("s", "s" + url);
                 startActivity(i);

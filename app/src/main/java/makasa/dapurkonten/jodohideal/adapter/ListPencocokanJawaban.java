@@ -77,22 +77,29 @@ public class ListPencocokanJawaban extends BaseAdapter {
         TextView lblCocok = (TextView) convertView.findViewById(R.id.lblCocok);
 
         // getting movie data for the row
-        PencocokanJawaban pj = ItemJawaban.get(position);
+        try {
+            PencocokanJawaban pj = ItemJawaban.get(position);
+            txtPertanyaan.setText(pj.getPertanyaan());
+            txtSelfAnswer.setText(pj.getJawabanKamu());
+            txtOtherAnswer.setText(pj.getJawabanDia());
+            lblOther.setText(pj.getNamaDia());
+            thmbOther.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + pj.getFotoDia(), imageLoader);
+            thmbSelf.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + pj.getFotoKamu(), imageLoader);
 
-        txtPertanyaan.setText(pj.getPertanyaan());
-        txtSelfAnswer.setText(pj.getJawabanKamu());
-        txtOtherAnswer.setText(pj.getJawabanDia());
-        lblOther.setText(pj.getNamaDia());
-        thmbOther.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + pj.getFotoDia(), imageLoader);
-        thmbSelf.setImageUrl("http://103.253.112.121/jodohidealxl/upload/" + pj.getFotoKamu(), imageLoader);
+            if (pj.getJawabanKamu().equals(pj.getJawabanDia())){
+                lblCocok.setText("Cocok");
+            } else {
+                lblCocok.setText("Tidak Cocok");
+            }
+            Log.d(INI, "ok di adapter");
 
-        if (pj.getJawabanKamu().equals(pj.getJawabanDia())){
-            lblCocok.setText("Cocok");
-        } else {
-            lblCocok.setText("Tidak Cocok");
+        }
+        catch (Exception e){
+            Log.d("error","err "+e.getMessage());
         }
 
-        Log.d(INI, "ok di adapter");
+
+
 
         return convertView;
     }
