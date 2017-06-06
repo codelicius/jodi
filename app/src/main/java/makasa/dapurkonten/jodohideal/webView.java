@@ -69,8 +69,14 @@ public class webView extends AppCompatActivity {
                 wv1.loadUrl(url);
             }
             else if(provider.equals("indosat")){
+                String harga;
+                if(durasi == 14)
+                    harga = "5500";
+                else
+                    harga = "3300";
                 //String url = "http://www.gudangapp.com";
-                String url = "http://asik.indosatooredoo.com:8014/mcp/?kc=REG JODOH"+durasi+" "+imsi+" "+userid+"&sdc=93827&cb=jodoh://ideal/subscribe&desc=Layanan+Jodoh+Ideal&price=3300&servicename=JODOH"+durasi+"&img=&eid=a6610";
+                String url = "http://asik.indosatooredoo.com:8014/mcp/?kc=REG JODOH"+durasi+" "+imsi+" "+userid+"&sdc=93827&cb=jodoh://ideal/subscribe&desc=Layanan+Jodoh+Ideal&price="+harga+"&servicename=JODOH"+durasi+"&img=&eid=a6610";
+                Log.d("url","url "+url);
                 wv1.loadUrl(url);
             }
             else{
