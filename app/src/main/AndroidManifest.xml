@@ -98,6 +98,12 @@
             android:name=".webView"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".promo"
+            android:label="@string/title_activity_profile"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+        <activity
             android:name=".successSubscribe"
             android:theme="@style/AppTheme">
             <intent-filter>

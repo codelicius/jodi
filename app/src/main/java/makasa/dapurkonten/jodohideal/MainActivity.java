@@ -109,7 +109,6 @@ public class MainActivity extends AppCompatActivity
         //session.checkLogin();
         session.checkLoginMain();
 
-
         // tarik data user dari sqlite
         HashMap<String, String> profile = db.getUserDetails();
         String id = profile.get("id");

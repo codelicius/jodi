@@ -129,6 +129,62 @@ public class sessionmanager {
      * If false it will redirect user to login page
      * Else do anything
      * */
+    private void cekSub(String ui){
+
+        final String userIDs = ui;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConfig.urlAPI,
+
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            //ambil nilai dari JSON respon API
+                            String  subscribe_status = jsonResponse.getString("subscribe_status");
+
+                            if(subscribe_status.equals("false")) {
+                                Intent i = new Intent(_context, promo.class);
+                                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                _context.startActivity(i);
+                            }
+                            else{
+                                Intent i = new Intent(_context, MainActivity.class);
+                                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                                // Staring Login Activity
+                                _context.startActivity(i);
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(_context,"silakan cek koneksi anda",Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            //proses kirim parameter ke
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("jodiSubscribe", "");
+                params.put("userid",userIDs);
+                return params;
+            }
+
+
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(_context);
+        requestQueue.add(stringRequest);
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(60000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+
+    }
     public boolean checkLogin(){
         // Check login status
         if(this.isUserLoggedIn()){
@@ -164,11 +220,9 @@ public class sessionmanager {
                                 }
                                 else{
                                     // user is not logged in redirect him to Login Activity
-                                    Intent i = new Intent(_context, MainActivity.class);
-                                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                                    // Staring Login Activity
-                                    _context.startActivity(i);
+                                    HashMap<String,String> det = getUserDetails();
+                                    String userid = det.get(SES_USER_ID);
+                                    cekSub(userid);
                                 }
 
                             } catch (JSONException e) {
