@@ -7,17 +7,23 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -44,8 +50,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 import makasa.dapurkonten.jodohideal.app.AppConfig;
@@ -96,6 +104,8 @@ public class imageUpload extends AppCompatActivity{
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            checkPermission();
         try {
             URL thumb_u = new URL("http://103.253.112.121/jodohidealxl/upload/" + foto);
             Drawable thumb_d = Drawable.createFromStream(thumb_u.openStream(), "src");
@@ -105,6 +115,50 @@ public class imageUpload extends AppCompatActivity{
             Log.d("imageview","error "+e);
         }
         uid = id;
+    }
+    @TargetApi(Build.VERSION_CODES.M)
+    protected void checkPermission(){
+        if (checkSelfPermission(Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA},
+                    0);
+        }
+//        if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+//                != PackageManager.PERMISSION_GRANTED) {
+//            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+//                    1);
+//        }
+//        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//                != PackageManager.PERMISSION_GRANTED) {
+//            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+//                    2);
+//        }
+    }
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        if (requestCode == 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        }
+        else{
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+            builder.setCancelable(false);
+            builder.setMessage("Anda tidak dapat melanjutkan jika tidak mengizinkan permission");
+            builder.setTitle("Warning");
+            builder.setPositiveButton("Tutup", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finish();
+                }
+            });
+            builder.setNegativeButton("Lanjutkan", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    checkPermission();
+                }
+            });
+            AlertDialog ad = builder.create();
+            ad.show();
+        }
     }
     public String getStringImage(Uri imgUri) {
         try {

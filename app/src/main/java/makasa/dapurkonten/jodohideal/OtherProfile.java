@@ -200,6 +200,7 @@ public class OtherProfile extends AppCompatActivity
                                 HashMap<String, String> profile = db.getUserDetails();
                                 String myFoto = profile.get("foto");
                                 Log.d("Other profile", "Proses berhasil masuk ke tahap parsing");
+                                Log.d("tes","res "+response);
                                 JSONObject pd = jsonResponse.getJSONObject("partner_detail");
                                 String apiFullName = pd.getString("fname") + " " +pd.getString("lname");
                                 String apiId = pd.getString("id_pasangan");
