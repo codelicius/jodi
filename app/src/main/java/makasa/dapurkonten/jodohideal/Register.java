@@ -136,18 +136,25 @@ public class Register extends AppCompatActivity {
             requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE},
                     0);
         }
-    }
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults) {
-        if (requestCode == 0
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        else{
             tel = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
             try {
                 checkNumber();
             } catch (Exception e) {
                 Log.d("error", "exeption " + e.getMessage());
             }
-            checkNumber();
+        }
+    }
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        if (requestCode == 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            tel = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+
+            try {
+                checkNumber();
+            } catch (Exception e) {
+                Log.d("error", "exeption " + e.getMessage());
+            }
         }
         else{
             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
@@ -314,11 +321,13 @@ public class Register extends AppCompatActivity {
     public void checkNumber(){
         final String IMSI = tel.getSubscriberId();
         final String url = APIIMSI+"?imsi="+IMSI+"&user="+userIMSI+"&pass="+passIMSI;
+        Log.d("res","res "+url);
         JsonObjectRequest jsonRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         // the response is already constructed as a JSONObject!
+                        Log.d("res","res "+response.toString());
                         try {
                             String mdn = response.getString("mdn");
                             if(!mdn.equals("null")) {
@@ -326,6 +335,7 @@ public class Register extends AppCompatActivity {
                                 inputPhoneNumber.setEnabled(false);
                             }
                         } catch (JSONException e) {
+                            Log.d("res","res "+e.toString());
                             e.printStackTrace();
                         }
                     }
@@ -334,6 +344,8 @@ public class Register extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
+                        Log.d("rese","res "+error.toString());
+
                     }
                 });
 
