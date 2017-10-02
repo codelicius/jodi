@@ -10,8 +10,8 @@ android {
         applicationId "makasa.dapurkonten.jodohideal"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 10
-        versionName "3.0.1"
+        versionCode 11
+        versionName "3.0.2"
         multiDexEnabled true
     }
     buildTypes {
