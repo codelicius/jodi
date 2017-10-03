@@ -144,7 +144,8 @@ public class sessionmanager {
                             String  subscribe_status = jsonResponse.getString("subscribe_status");
 
                             if(subscribe_status.equals("false")) {
-                                Intent i = new Intent(_context, promo.class);
+//                                Intent i = new Intent(_context, promo.class);
+                                Intent i = new Intent(_context, MainActivity.class);
                                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 _context.startActivity(i);
                             }
